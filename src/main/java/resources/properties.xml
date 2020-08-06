@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<pages>
+    <pageType name="Login">
+        <page name="queryLogin" url="queryLogin">
+            <form name="login" action="www.abc.com">
+                <input type="text" name="userId"/>0
+                <input type="text" name="days"/>0
+                <input type="submit"/>提交
+            </form>
+        </page>
+        <page name="queryChest" url="queryChest">
+            <form name="queryDisc">
+                <input type="text" name="userId">0</input>
+                <input type="text" name="days">0</input>
+                <input type="submit">提交</input>
+            </form>
+            <form name="queryMatch">
+                <input type="text" name="userId"></input>
+                <input type="text" name="days">0</input>
+                <input type="text" name="tour">0</input>
+                <input type="submit">提交</input>
+            </form>
+        </page>
+    </pageType>
+    <pageType name="Trophies">
+        <page name="queryTrophies" url="queryTrophies">
+            <form name="queryAsset">
+                <input type="text" name="userId">0</input>
+                <input type="text" name="days">0</input>
+
+                <select name="sel">
+                    <option value="1">广州</option>
+                    <option value="2">深圳</option>
+                    <option value="3">山东</option>
+                    <option value="4">北京</option>
+                </select>
+                <input type="submit" name="ttt">提交</input>
+            </form>
+        </page>
+    </pageType>
+</pages>

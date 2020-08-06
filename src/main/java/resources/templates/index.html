@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+    <p>index</p>
+    <a onclick="logout()">Logout</a>
+    <script src="../webroot/vendors/bundle.js"></script>
+
+<script>
+
+    function logout() {
+        localStorage.setItem("token", "token");
+        window.location.href="/login";
+    }
+
+    $(document).ready(function() {
+        if (localStorage.getItem("token") != null) {
+            $.ajax({
+                type: "POST",
+                dataType: "text",
+                url: "/login/authenticity",
+                headers: {
+                    Authorization: "Bearer " + localStorage.getItem("token").toString()
+                }, error: function () {
+                    window.location.href = "/login";
+                }
+            });
+        } else {
+            window.location.href = "/login";
+        }
+    })
+</script>
+</body>
+</html>
