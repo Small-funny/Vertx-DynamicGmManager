@@ -1,17 +1,17 @@
 <!doctype html>
-<html lang="en" xmlns:th="www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title></title>
+    <title>login</title>
+    <link rel="icon" href="../webroot/assets/media/image/logo.png">
 
     <!-- Favicon -->
 <!--    <link rel="shortcut icon" href="webroot/assets/media/image/favicon.png"/>-->
 
     <!-- Plugin styles -->
     <link rel="stylesheet" href="../webroot/vendors/bundle.css" type="text/css">
-
     <!-- App styles -->
     <link rel="stylesheet" href="../webroot/assets/css/app.min.css" type="text/css">
 </head>
@@ -69,21 +69,38 @@
 
 <!-- App scripts -->
 <script src="../webroot/assets/js/app.min.js"></script>
-
+<script src="../webroot/assets/js/jsencrypt.js"></script>
 <!-- Token -->
 <script>
+
   function btn() {
-    $.ajax({
+      let encrypt = new JSEncrypt();
+      $.ajax({
+          type: "GET",
+          data: "test",
+          url: "/login/publicKey",
+          success: function (data) {
+              alert(data);
+              encrypt.setPublicKey(data);
+          }
+      })
+
+      let usernameEncrypted = encrypt.encrypt(JSON.stringify($('#username').val()))
+      let passwordEncrypted = encrypt.encrypt(JSON.stringify($('#password').val()))
+
+      alert("加密后账号："+usernameEncrypted);
+
+      $.ajax({
       type: "POST",
       dataType: "text",
       url: "/login/createToken",
-      data: JSON.stringify({'username':$('#username').val(),'password':$('#password').val()}),
+      data: JSON.stringify({'username':usernameEncrypted,'password':passwordEncrypted}),
       success:function (data, result, xhr) {
           // alert(data);
-          if (xhr.status == 200) {
-              var token = data;
+          if (xhr.status === 200) {
+              let token = data;
               window.localStorage.setItem("token", token);
-              if (document.getElementById("remember").checked == true) {
+              if (document.getElementById("remember").checked === true) {
                   localStorage.setItem("username", $("#username").val());
                   localStorage.setItem("password", $("#password").val());
               } else {
@@ -113,7 +130,7 @@
       })
     }
 
-    if(localStorage.getItem("username") != "" && localStorage.getItem("password") != "")
+    if(localStorage.getItem("username") !== "" && localStorage.getItem("password") !== "")
     {
         //alert("读取账号密码:\n username:"+ localStorage.getItem("username").toString() + "\n"+"password:"+localStorage.getItem("password").toString());
         $("#username").val(localStorage.getItem("username"));
@@ -125,6 +142,7 @@
         document.getElementById("remember").checked = false;
     }
   }
+
 </script>
 </body>
 </html>

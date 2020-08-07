@@ -1,13 +1,11 @@
 package Server;
 
+import Server.Resources.*;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
-import Server.Resources.LoginResources;
-import Server.Resources.MainResources;
-import Server.Resources.ManagerResources;
 
 public class ServerVerticle extends AbstractVerticle {
 
@@ -33,5 +31,6 @@ public class ServerVerticle extends AbstractVerticle {
         new LoginResources().registerResources(router);
         new MainResources().registerResources(router, vertx);
         new ManagerResources().registerResources(router);
+        new FailureResources().resgisterResources(router);
     }
 }
