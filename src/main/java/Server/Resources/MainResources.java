@@ -1,6 +1,6 @@
 package Server.Resources;
 
-import Server.XmlMapping;
+import Server.Automation.XmlMapping;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
