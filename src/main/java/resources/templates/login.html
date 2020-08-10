@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -69,48 +69,46 @@
 
 <!-- App scripts -->
 <script src="../webroot/assets/js/app.min.js"></script>
-<script src="../webroot/assets/js/jsencrypt.js"></script>
+<script src="../webroot/assets/js/jsencrypt.min.js"></script>
 <!-- Token -->
 <script>
 
-  function btn() {
-      let encrypt = new JSEncrypt();
+    function btn() {
+      var encrypt = new JSEncrypt();
+
       $.ajax({
           type: "GET",
-          data: "test",
+          datatype: "text",
           url: "/login/publicKey",
           success: function (data) {
               alert(data);
               encrypt.setPublicKey(data);
+              let usernameEncrypted = encrypt.encrypt($('#username').val())
+              let passwordEncrypted = encrypt.encrypt($('#password').val())
+
+              $.ajax({
+                  type: "POST",
+                  dataType: "text",
+                  url: "/login/createToken",
+                  data: JSON.stringify({'username':usernameEncrypted,'password':passwordEncrypted}),
+                  success:function (data, result, xhr) {
+                      alert(123);
+                      if (xhr.status === 200) {
+                          let token = data;
+                          window.localStorage.setItem("token", token);
+                          if (document.getElementById("remember").checked === true) {
+                              localStorage.setItem("username", $("#username").val());
+                              localStorage.setItem("password", $("#password").val());
+                          } else {
+                              localStorage.setItem("username", "");
+                              localStorage.setItem("password", "");
+                          }
+                          window.location.href="/main/queryLogin";
+                      }
+                  }
+              })
           }
       })
-
-      let usernameEncrypted = encrypt.encrypt(JSON.stringify($('#username').val()))
-      let passwordEncrypted = encrypt.encrypt(JSON.stringify($('#password').val()))
-
-      alert("加密后账号："+usernameEncrypted);
-
-      $.ajax({
-      type: "POST",
-      dataType: "text",
-      url: "/login/createToken",
-      data: JSON.stringify({'username':usernameEncrypted,'password':passwordEncrypted}),
-      success:function (data, result, xhr) {
-          // alert(data);
-          if (xhr.status === 200) {
-              let token = data;
-              window.localStorage.setItem("token", token);
-              if (document.getElementById("remember").checked === true) {
-                  localStorage.setItem("username", $("#username").val());
-                  localStorage.setItem("password", $("#password").val());
-              } else {
-                  localStorage.setItem("username", "");
-                  localStorage.setItem("password", "");
-              }
-              window.location.href="/main/queryLogin";
-          }
-      }
-    })
   }
 
   window.onload = function() {
@@ -118,7 +116,6 @@
     if (localStorage.getItem("token") != null) {
       $.ajax({
         type: "POST",
-        dataType: "text",
         url: "/login/authenticity",
         headers: {
           Authorization: "Bearer " + localStorage.getItem("token").toString()

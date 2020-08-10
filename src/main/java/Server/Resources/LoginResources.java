@@ -13,13 +13,12 @@ import Server.DatabaseHelper.JdbcMysqlHelper;
 
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
-import java.util.Base64;
 
 public class LoginResources extends AbstractVerticle {
 
     public void registerResources(Router router){
         router.get("/login").handler(this::login);
-        router.get("/login/publicKey").handler(this::publicKey);
+        router.get("/login/publicKey").handler(this::sendPublicKey);
         router.post("/login/createToken").handler(this::createToken);
         router.post("/login/authenticity").handler(this::authenticity);
     }
@@ -28,7 +27,8 @@ public class LoginResources extends AbstractVerticle {
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("templates/login.html");
     }
 
-    private void publicKey(RoutingContext routingContext) {
+    private void sendPublicKey(RoutingContext routingContext) {
+        System.out.println("fa chu gong yao");
         String publicKey = "";
         publicKey = getKeys("publicKey");
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(publicKey);
@@ -45,24 +45,18 @@ public class LoginResources extends AbstractVerticle {
 
         JWTAuth jwtAuth = JWTAuth.create(routingContext.vertx(), config);
 
-        var username = routingContext.getBodyAsJson().getString("username").replaceAll("\n", "");
-        var password = routingContext.getBodyAsJson().getString("password").replaceAll("\n", "");
+        var username = routingContext.getBodyAsJson().getString("username");
+        var password = routingContext.getBodyAsJson().getString("password");
 
-        System.out.println("账号密码：");
-        System.out.println("账号:（加密后）"+username);
+//        System.out.println("账号密码：");
+//        System.out.println("账号:（加密后）"+username);
+//        System.out.println("账号:（加密后）"+password);
 
         String privateKey = null;
         privateKey = getKeys("privateKey");
 
-        byte[] usernameByte = Base64.getDecoder().decode(username);
-        byte[] passwordByte = Base64.getDecoder().decode(password);
-
-        try {
-            username = new String(RSAUtil.privateDecrypt(usernameByte, RSAUtil.string2Privatekey(privateKey)), "utf-8");
-            password = new String(RSAUtil.privateDecrypt(passwordByte, RSAUtil.string2Privatekey(privateKey)), "utf-8");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        username = RSAUtil.decrypt(privateKey, username);
+        password = RSAUtil.decrypt(privateKey, password);
 
         System.out.println(username + " " + password);
 

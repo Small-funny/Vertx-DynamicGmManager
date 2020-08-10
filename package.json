@@ -1,0 +1,7 @@
+{
+  "name": "GameManagerDemo",
+  "version": "1.0.0",
+  "dependencies": {
+    "node-rsa": "^1.1.1"
+  }
+}
