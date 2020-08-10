@@ -52,10 +52,10 @@ public class MysqlHelper extends AbstractVerticle {
     private void initMysql(RoutingContext routingContext) {
         connectOptions = new MySQLConnectOptions()
                 .setPort(3306)
-                .setHost("49.51.178.56")
+                .setHost("xxxx")
                 .setDatabase("test")
-                .setUser("BettaDisc")
-                .setPassword("BettaFotoab1e");
+                .setUser("xxxx")
+                .setPassword("xxxx");
         client = MySQLPool.pool(routingContext.vertx(), connectOptions, poolOptions);
     }
 
