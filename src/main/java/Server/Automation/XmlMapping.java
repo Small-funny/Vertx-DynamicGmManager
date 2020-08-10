@@ -58,7 +58,7 @@ public class XmlMapping {
 
             iconString = iconTiList.poll();
             //iconTiList.remove(order);
-        }else{
+        } else {
             int order = random.nextInt(iconFaList.size());
             iconString = iconFaList.poll();
             //iconFaList.remove(order);
@@ -70,6 +70,7 @@ public class XmlMapping {
     //创建页面的字符串
     public String createElementString(Element element) {
         StringBuilder stringBuilder = new StringBuilder();
+
         Iterator it = element.getContent().iterator();
         while (true) {
             Content child;
@@ -80,20 +81,29 @@ public class XmlMapping {
                 child = (Content) it.next();
             } while (!(child instanceof Element) && !(child instanceof Text));
             if (child instanceof Element) {
+                //当前标签外层所需要的标签和类
                 if (((Element) child).getName().equals("form")) {
                     stringBuilder.append("<div class=\"card-body card-block\">");
-                } else if ((((Element) child).getName().equals("input") && ((Element) child).getAttribute("type").getValue().equals("text")) || ((Element) child).getName().equals("select")) {
-                    stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">" +
-                            ((Element) child).getAttribute("name").getValue() +
-                            "</label></div><div class=\"col-12 col-md-9\">");
                 }
-                //添加标签头
-                stringBuilder.append("<" + ((Element) child).getName());
-                //添加属性
-                for (Attribute attribute : ((Element) child).getAttributes()) {
-                    stringBuilder.append(" " + attribute.getName() + "=");
-                    stringBuilder.append("\"" + attribute.getValue() + "\"");
+//                else if (((Element) child).getName().equals("checkbox")) {
+//                    stringBuilder.append(" <div class=\"checkbox\">");
+                else if (((Element) child).getName().equals("formcheck")) {
+                    stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\"><div class=\"form-check\">");
+                    //不是option这种小标签的通用类 input select会用
+                } else if (!(((Element) child).getName().equals("option")||((Element) child).getName().equals("checkbox"))) {
+                    stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\">");
 
+                }
+
+                //添加标签头 checkbox 不用写属性 有特殊写法
+                if (!((Element) child).getName().equals("checkbox")) {
+                    stringBuilder.append("<").append(((Element) child).getName());
+                    //添加属性
+                    for (Attribute attribute : ((Element) child).getAttributes()) {
+                        stringBuilder.append(" ").append(attribute.getName()).append("=");
+                        stringBuilder.append("\"").append(attribute.getValue()).append("\"");
+
+                    }
                 }
                 ///////根据不同的元素添加特别的属性
 
@@ -104,29 +114,43 @@ public class XmlMapping {
                     //输入框的特殊属性
                 } else if (((Element) child).getName().equals("input") || ((Element) child).getName().equals("select")) {
                     stringBuilder.append("class=\"form-control\">");
+                    //复选框的特殊情况 不需要读属性 写标签头 直接添加整个div
+                } else if (((Element) child).getName().equals("checkbox")) {
+
+                    stringBuilder.append("<div class=\"checkbox\">\n" + "<label for=\"checkbox1\" class=\"form-check-label \">\n" + "<input type=\"checkbox\" ").append(((Element) child).getAttribute("value").getValue()).append(" class=\"form-check-input\">").append(child.getValue()).append("\n").append("</label>\n").append("</div>");
                 } else if (((Element) child).getName().equals("option")) {
                     stringBuilder.append(">");
                     stringBuilder.append(child.getValue());
+                } else if (((Element) child).getName().equals("formcheck")) {
+                    stringBuilder.append("class=\"form-check\">");
                 }
+
 
                 //添加标签头完毕 进入递归
                 stringBuilder.append(createElementString((Element) child));
                 //添加标签尾
-                if (!((Element) child).getName().equals("input")) {
-                    stringBuilder.append("</" + ((Element) child).getName() + " >");
+                //如果不是input就意味着是那种小标签 直接加尾部就行
+                if (!(((Element) child).getName().equals("input")||((Element) child).getName().equals("checkbox"))) {
+                    stringBuilder.append("</").append(((Element) child).getName()).append(" >");
                 }
+
+
+                //这里加结束的div
                 if (((Element) child).getName().equals("form")) {
                     stringBuilder.append("</div>");
-                } else if (!(((Element) child).getName().equals("input") && ((Element) child).getAttribute("type").getValue().equals("submit")) && !((Element) child).getName().equals("option")) {
+                } else if (((Element) child).getName().equals("formcheck")) {
+                    stringBuilder.append("</div></div></div>");
+                } else if (!(((Element) child).getName().equals("input") && ((Element) child).getAttribute("type").getValue().equals("submit")) && !((Element) child).getName().equals("option") && !((Element) child).getName().equals("checkbox")) {
                     stringBuilder.append("</div>");
                     stringBuilder.append("</div>");
                 }
 
             }
-            if (child instanceof Text) {
-                //stringBuilder.append(createTextString((Text) child));
-            }
+//            if (child instanceof Text) {
+//                //stringBuilder.append(createTextString((Text) child));
+//            }
         }
+
     }
 
     //生成text类型对象的字符串
@@ -150,10 +174,10 @@ public class XmlMapping {
         //这里的外层是一个div，从这里是ul开始
         stringBuilder.append("<ul class=\"nav navbar-nav\" style=\"width: 280px\" > ");
         //类别使用name作为序号
-        int name=1;
+        int name = 1;
         for (Map.Entry<String, Element> entry : typeElement.entrySet()) {
             //添加种类名称 每一个种类是li
-            stringBuilder.append("<li class=\"menu-item-has-children dropdown  name= \""+name+"\" \" >");
+            stringBuilder.append("<li class=\"menu-item-has-children dropdown  name= \"" + name + "\" \" >");
             name++;
             stringBuilder.append("<a href=\"#\" class=\"dropdown-toggle\" data-toggle=\"dropdown\" aria-haspopup=\"true\"\n" +
                     "aria-expanded=\"false\" ><i class=\"menu-icon fa " + createIconString("fa") + "\"></i>" + entry.getKey() + "</a>");
@@ -162,10 +186,10 @@ public class XmlMapping {
             //System.out.println(entry.getKey());style="padding-left: 0px"
             int ID = 1;
             for (Element element : entry.getValue().getChildren()) {
-                if(element.getAttribute("url")!=null) {
+                if (element.getAttribute("url") != null) {
                     stringBuilder.append("<li id><i class=\"menu-icon " + createIconString("ti") + "\"></i><a href=\"" + element.getAttribute("url").getValue() + "\">" + element.getAttribute("name").getValue() + "</a></li>");
                     //System.out.println(element.getAttribute("name").getValue());
-                }else{
+                } else {
                     stringBuilder.append("<li id><i class=\"menu-icon " + createIconString("ti") + "\"></i><a href=\"#\">" + element.getAttribute("name").getValue() + "</a></li>");
 
                 }
@@ -176,25 +200,25 @@ public class XmlMapping {
         stringBuilder.append("</ul>");
         return stringBuilder.toString();
     }
-    public String createAsideString(String string){
+
+    public String createAsideString(String string) {
         StringBuilder stringBuilder = new StringBuilder();
         //从外层div开始 div类是navigation-menu-body
         //这是最外层的ul
         stringBuilder.append("<ul>");
         //这个是最大类别 暂时没什么用
         stringBuilder.append("<li class=\"navigation-divider\">最大类别</li>");
-        for(Map.Entry<String,Element>entry:typeElement.entrySet()){
+        for (Map.Entry<String, Element> entry : typeElement.entrySet()) {
             stringBuilder.append("<li> <a href=\"");
-            if(entry.getValue().getAttribute("url")!=null){
-                stringBuilder.append(entry.getValue().getAttribute("url")+"\">");
-            }
-            else{
+            if (entry.getValue().getAttribute("url") != null) {
+                stringBuilder.append(entry.getValue().getAttribute("url") + "\">");
+            } else {
                 stringBuilder.append("#\">");
             }
-            stringBuilder.append(entry.getKey()+"</a>");
+            stringBuilder.append(entry.getKey() + "</a>");
             stringBuilder.append("<ul>");
-            for(Element element :entry.getValue().getChildren()){
-                stringBuilder.append("<li id =\" "+element.getAttribute("name").getValue()+"\"><a href=\""+element.getAttribute("url").getValue()+"\">"+ element.getAttribute("name").getValue() + "</a></li>");
+            for (Element element : entry.getValue().getChildren()) {
+                stringBuilder.append("<li id =\" " + element.getAttribute("name").getValue() + "\"><a href=\"" + element.getAttribute("url").getValue() + "\">" + element.getAttribute("name").getValue() + "</a></li>");
 
             }
             stringBuilder.append("</ul>");
@@ -205,6 +229,7 @@ public class XmlMapping {
 
         return stringBuilder.toString();
     }
+
     public List<String> createPageNameList() {
         List<String> nameList = new ArrayList<>();
         nameList.addAll(pageElement.keySet());
