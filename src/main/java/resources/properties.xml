@@ -5,20 +5,31 @@
             <form name="login" action="www.abc.com">
                 <input type="text" name="userId"/>0
                 <input type="text" name="days"/>0
-                <input type="submit"/>提交
+                <select name="sel">
+                    <option value="1">广州</option>
+                    <option value="2">深圳</option>
+                    <option value="3">山东</option>
+                    <option value="4">北京</option>
+                </select>
+                <formcheck name="numberselect">
+                    <checkbox value="11">11</checkbox>
+                    <checkbox value="22">22</checkbox>
+                    <checkbox value="33">33</checkbox>
+                </formcheck>
+                <input type="submit" name="submit"/>提交
             </form>
         </page>
         <page name="queryChest" url="queryChest">
             <form name="queryDisc">
                 <input type="text" name="userId">0</input>
                 <input type="text" name="days">0</input>
-                <input type="submit">提交</input>
+                <input type="submit" name="submit">提交</input>
             </form>
             <form name="queryMatch">
                 <input type="text" name="userId"></input>
                 <input type="text" name="days">0</input>
                 <input type="text" name="tour">0</input>
-                <input type="submit">提交</input>
+                <input type="submit" name="submit">提交</input>
             </form>
         </page>
     </pageType>

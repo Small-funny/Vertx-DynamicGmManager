@@ -75,13 +75,12 @@
 
     function btn() {
       var encrypt = new JSEncrypt();
-
       $.ajax({
           type: "GET",
           datatype: "text",
           url: "/login/publicKey",
           success: function (data) {
-              alert(data);
+              // alert(data);
               encrypt.setPublicKey(data);
               let usernameEncrypted = encrypt.encrypt($('#username').val())
               let passwordEncrypted = encrypt.encrypt($('#password').val())
@@ -92,7 +91,6 @@
                   url: "/login/createToken",
                   data: JSON.stringify({'username':usernameEncrypted,'password':passwordEncrypted}),
                   success:function (data, result, xhr) {
-                      alert(123);
                       if (xhr.status === 200) {
                           let token = data;
                           window.localStorage.setItem("token", token);
