@@ -21,15 +21,17 @@ public class MainResources extends AbstractVerticle {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        String asideString = xmlMapping.createAsideString("ssss");
         thymeleafTemplateEngine = ThymeleafTemplateEngine.create(vertx);
         router.route().handler(StaticHandler.create());
         List<String> pageList = xmlMapping.createPageNameList();
         for(String pageRouter: pageList ){
-            router.get("/main/"+pageRouter).handler(ctx->{
+            router.route("/main/"+pageRouter).handler(ctx->{
                 var obj = new JsonObject();
-                obj.put("sidePanal", xmlMapping.createAsideString());
+                obj.put("sidePanal", asideString);
+                obj.put("pagename",pageRouter);
                 obj.put("name", xmlMapping.createElementString(xmlMapping.getElement(pageRouter)));
-                thymeleafTemplateEngine.render(obj, "templates/queryLogin.html", bufferAsyncResult -> {
+                thymeleafTemplateEngine.render(obj, "Templates/queryLogin.html", bufferAsyncResult -> {
                     ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
                 });
             });
