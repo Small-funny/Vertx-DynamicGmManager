@@ -31,7 +31,7 @@ public class MainResources extends AbstractVerticle {
                 obj.put("sidePanal", asideString);
                 obj.put("pagename",pageRouter);
                 obj.put("name", xmlMapping.createElementString(xmlMapping.getElement(pageRouter)));
-                thymeleafTemplateEngine.render(obj, "Templates/queryLogin.html", bufferAsyncResult -> {
+                thymeleafTemplateEngine.render(obj, "templates/queryLogin.html", bufferAsyncResult -> {
                     ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
                 });
             });
