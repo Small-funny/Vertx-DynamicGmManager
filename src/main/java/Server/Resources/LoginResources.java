@@ -40,7 +40,7 @@ public class LoginResources extends AbstractVerticle {
 
         JWTAuthOptions config = new JWTAuthOptions()
                 .setKeyStore(new KeyStoreOptions()
-                        .setPath("k")
+                        .setPath("keystore.jceks")
                         .setPassword("secret"));
 
         JWTAuth jwtAuth = JWTAuth.create(routingContext.vertx(), config);
