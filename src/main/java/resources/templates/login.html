@@ -101,7 +101,7 @@
                               localStorage.setItem("username", "");
                               localStorage.setItem("password", "");
                           }
-                          window.location.href="/main/queryLogin";
+                          window.location.href="/main/index?name="+$("#username").val();
                       }
                   }
               })
@@ -120,7 +120,7 @@
         },
         success: function (data) {
             // alert(data);
-            window.location.href="/main/queryLogin";
+            window.location.href="/main/index?name="+$("#username").val();
         },
       })
     }
