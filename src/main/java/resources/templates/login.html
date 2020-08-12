@@ -102,9 +102,9 @@
                               localStorage.setItem("username", "");
                               localStorage.setItem("password", "");
                           }
-                          let Authorization = "Bearer " + localStorage.getItem("token").toString()
-                          let Auth_param = {'Authorization': Authorization}
-                          post("/main/queryLogin", Auth_param)
+
+                          let Authorization = localStorage.getItem("token").toString()
+                          window.location.href = "/main/queryLogin?Authorization=" + Authorization
                       }
                   }
               })
@@ -112,18 +112,6 @@
       })
   }
 
-  function post(URL, PARAMS) {
-      let temp_form = document.createElement("form");
-      temp_form .action = URL;
-      temp_form .method = "post";
-      temp_form .style.display = "none";
-      let opt = document.createElement("textarea");
-      opt.name = 'Authorization';
-      opt.value = PARAMS['Authorization'];
-      temp_form .appendChild(opt);
-      document.body.appendChild(temp_form);
-      temp_form .submit();
-  }
 
   window.onload = function() {
 
@@ -140,11 +128,9 @@
           document.getElementById("remember").checked = false;
       }
 
-      let Authorization = "Bearer " + localStorage.getItem("token").toString()
-
-      if (Authorization !== "Bearer token") {
-          let Auth_param = {'Authorization': Authorization}
-          post("/main/queryLogin", Auth_param)
+      let Authorization = localStorage.getItem("token").toString()
+      if (Authorization !== "token") {
+          window.location.href = "/main/queryLogin?Authorization=" + Authorization
       }
   }
 

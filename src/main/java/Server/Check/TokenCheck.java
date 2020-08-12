@@ -15,7 +15,7 @@ public class TokenCheck implements Handler<RoutingContext> {
         System.out.println("Receive request: authenticity token");
         System.out.println("进入拦截器");
         try {
-            var token = routingContext.request().getFormAttribute("Authorization");
+            var token = routingContext.request().getParam("Authorization");
             System.out.println(token);
             if (token == null) {
                 routingContext.reroute("/login");
@@ -34,11 +34,9 @@ public class TokenCheck implements Handler<RoutingContext> {
 
             System.out.println("程序运行时间：" + (endtime - starttime) + "ms");
 
-            String token_jwt = token.split(" ")[1];
+            System.out.println("Only token = " + token);
 
-            System.out.println("Only token = " + token_jwt);
-
-            JsonObject config = new JsonObject().put("jwt", token_jwt);
+            JsonObject config = new JsonObject().put("jwt", token);
 
             jwtAuth.authenticate(config, res -> {
                 if (!res.succeeded()) {
