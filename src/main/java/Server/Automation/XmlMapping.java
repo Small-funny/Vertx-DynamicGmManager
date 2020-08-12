@@ -1,9 +1,11 @@
 package Server.Automation;
 
+import Server.DatabaseHelper.JdbcMysqlHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.util.*;
 
@@ -16,17 +18,18 @@ public class XmlMapping {
     private static final HashMap<String, Element> typeElement = new HashMap<>();
     private static final Queue<String> iconTiList = new LinkedList<>();
     private static final Queue<String> iconFaList = new LinkedList<>();
+    JdbcMysqlHelper jdbcMysqlHelper;
 
     public XmlMapping() throws JDOMException, IOException {
         SAXBuilder saxBuilder = new SAXBuilder();
+        //Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
         Element root = saxBuilder.build("properties.xml").getDocument().getRootElement();
-
         List<Element> typeList = root.getChildren();
         for (Element typeE : typeList) {
             typeElement.put(typeE.getAttribute("name").getValue(), typeE);
             List<Element> pageList = typeE.getChildren();
             for (Element pageE : pageList) {
-                pageElement.put(pageE.getAttribute("name").getValue(), pageE);
+                pageElement.put(pageE.getAttribute("url").getValue(), pageE);
             }
         }
         iconTiList.add("ti-heart");
@@ -49,6 +52,7 @@ public class XmlMapping {
         iconFaList.add("fa-vimeo");
         iconFaList.add("fa-edge");
         iconFaList.add("fa-modx");
+        jdbcMysqlHelper = new JdbcMysqlHelper();
     }
 
     private String createIconString(String str) {
@@ -90,11 +94,9 @@ public class XmlMapping {
                 else if (((Element) child).getName().equals("formcheck")) {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\"><div class=\"form-check\">");
                     //不是option这种小标签的通用类 input select会用
-                } else if (!(((Element) child).getName().equals("option")||((Element) child).getName().equals("checkbox"))) {
+                } else if (!(((Element) child).getName().equals("option") || ((Element) child).getName().equals("checkbox"))) {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\">");
-
                 }
-
                 //添加标签头 checkbox 不用写属性 有特殊写法
                 if (!((Element) child).getName().equals("checkbox")) {
                     stringBuilder.append("<").append(((Element) child).getName());
@@ -130,7 +132,7 @@ public class XmlMapping {
                 stringBuilder.append(createElementString((Element) child));
                 //添加标签尾
                 //如果不是input就意味着是那种小标签 直接加尾部就行
-                if (!(((Element) child).getName().equals("input")||((Element) child).getName().equals("checkbox"))) {
+                if (!(((Element) child).getName().equals("input") || ((Element) child).getName().equals("checkbox"))) {
                     stringBuilder.append("</").append(((Element) child).getName()).append(" >");
                 }
 
@@ -140,11 +142,11 @@ public class XmlMapping {
                     stringBuilder.append("</div>");
                 } else if (((Element) child).getName().equals("formcheck")) {
                     stringBuilder.append("</div></div></div>");
-                } else if (!(((Element) child).getName().equals("input") && ((Element) child).getAttribute("type").getValue().equals("submit")) && !((Element) child).getName().equals("option") && !((Element) child).getName().equals("checkbox")) {
+                } else if ( !((Element) child).getName().equals("option") && !((Element) child).getName().equals("checkbox")) {
                     stringBuilder.append("</div>");
                     stringBuilder.append("</div>");
                 }
-
+                //!(((Element) child).getName().equals("input") && ((Element) child).getAttribute("type").getValue().equals("submit")) &&
             }
 //            if (child instanceof Text) {
 //                //stringBuilder.append(createTextString((Text) child));
@@ -201,7 +203,10 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public String createAsideString(String string) {
+    public String createAsideString(String pageName) {
+        List<String> urlList = jdbcMysqlHelper.selectAuthority(pageName);
+
+
         StringBuilder stringBuilder = new StringBuilder();
         //从外层div开始 div类是navigation-menu-body
         //这是最外层的ul
@@ -209,15 +214,25 @@ public class XmlMapping {
         //这个是最大类别 暂时没什么用
         stringBuilder.append("<li class=\"navigation-divider\">最大类别</li>");
         for (Map.Entry<String, Element> entry : typeElement.entrySet()) {
+            boolean flag = true;
+            if (!urlList.contains(entry.getValue().getAttribute("authorization").getValue())) {
+                flag = false;
+                continue;
+            }
             stringBuilder.append("<li> <a href=\"");
             if (entry.getValue().getAttribute("url") != null) {
-                stringBuilder.append(entry.getValue().getAttribute("url") + "\">");
+                stringBuilder.append(entry.getValue().getAttribute("authorization") + "\">");
             } else {
                 stringBuilder.append("#\">");
             }
             stringBuilder.append(entry.getKey() + "</a>");
             stringBuilder.append("<ul>");
             for (Element element : entry.getValue().getChildren()) {
+                if (!flag) {
+                    if (!urlList.contains(element.getAttribute("url").getValue())) {
+                        continue;
+                    }
+                }
                 stringBuilder.append("<li id =\" " + element.getAttribute("name").getValue() + "\"><a href=\"" + element.getAttribute("url").getValue() + "\">" + element.getAttribute("name").getValue() + "</a></li>");
 
             }
@@ -236,12 +251,24 @@ public class XmlMapping {
         return nameList;
     }
 
-//    public static void main(String[] args) throws JAXBException, JDOMException, IOException {
-//        System.out.println("\"");
-//        new Beans.XmlMapping();
-//        Beans.XmlMapping xmlMapping = new Beans.XmlMapping();
+    public List<String> createPageURLList() {
+        List<String> URLList = new ArrayList<>();
+        for (String string : pageElement.keySet()) {
+            URLList.add(pageElement.get(string).getAttribute("url").getValue());
+        }
+        return URLList;
+    }
+
+    public static void main(String[] args) throws JDOMException, IOException {
+        System.out.println("\"");
+
+
+        XmlMapping xmlMapping = new XmlMapping();
 //        System.out.println("//////////////////////////////////////////////////////////////////////");
 //        System.out.println(xmlMapping.createPageString("queryLogin"));
 //        System.out.println(xmlMapping.createAsideString());
-//    }
+        System.out.println(xmlMapping.createAsideString("root"));
+        System.out.println(xmlMapping.createPageURLList());
+        System.out.println(xmlMapping.jdbcMysqlHelper.selectAuthority("username"));
+    }
 }
