@@ -1,5 +1,6 @@
 package Server;
 
+import Server.Check.TokenCheck;
 import Server.Resources.*;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
@@ -15,11 +16,13 @@ public class ServerVerticle extends AbstractVerticle {
     }
 
     @Override
-    public void start() throws Exception {
+    public void start() {
 
         final Router router = Router.router(vertx);
 
         router.route().handler(BodyHandler.create());
+        router.route("/main/*").handler(new TokenCheck());
+        router.route("/manager/*").handler(new TokenCheck());
         router.route("/webroot/*").handler(StaticHandler.create());
 
         registerResources(router);
@@ -31,6 +34,6 @@ public class ServerVerticle extends AbstractVerticle {
         new LoginResources().registerResources(router);
         new MainResources().registerResources(router, vertx);
         new ManagerResources().registerResources(router);
-        new FailureResources().resgisterResources(router);
+        new FailureResources().registerResources(router);
     }
 }

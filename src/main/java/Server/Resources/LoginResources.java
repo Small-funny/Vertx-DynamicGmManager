@@ -14,6 +14,9 @@ import Server.DatabaseHelper.JdbcMysqlHelper;
 import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 
+/**
+ * 用户验证相关路由
+ */
 public class LoginResources extends AbstractVerticle {
 
     public void registerResources(Router router){
@@ -28,7 +31,6 @@ public class LoginResources extends AbstractVerticle {
     }
 
     private void sendPublicKey(RoutingContext routingContext) {
-        System.out.println("fa chu gong yao");
         String publicKey = "";
         publicKey = getKeys("publicKey");
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(publicKey);
@@ -60,7 +62,7 @@ public class LoginResources extends AbstractVerticle {
 
         System.out.println(username + " " + password);
 
-        if (new JdbcMysqlHelper().isExisted(username, password)) {
+        if (JdbcMysqlHelper.isExisted(username, password)) {
             String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(3600));
             System.out.println("Username or password right, Verification succeed!");
             routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(newToken);
@@ -70,6 +72,7 @@ public class LoginResources extends AbstractVerticle {
         }
     }
 
+    //带有token的请求验证方法
     private void authenticity(RoutingContext routingContext) {
 
         System.out.println("Receive request: authenticity token");
@@ -124,5 +127,4 @@ public class LoginResources extends AbstractVerticle {
         }
         return key;
     }
-
 }

@@ -4,14 +4,18 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 基于JDBC的数据库帮助类
+ */
 public class JdbcMysqlHelper{
 
-    private Connection initJdbc() {
+    //数据库连接初始化方法
+    private static Connection initJdbc() {
         Connection conn = null;
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("连接数据库...");
-            conn = DriverManager.getConnection("xxxxx", "xxxxx", "xxxx");
+            conn = DriverManager.getConnection("jdbc:mysql://cdb-jpp9dqkf.usw.cdb.myqcloud.com:23055/game_manager_test?useSSL=false", "game", "Pxh130529disc-123");
             return conn;
         } catch (Exception e) {
             e.printStackTrace();
@@ -19,9 +23,10 @@ public class JdbcMysqlHelper{
         return null;
     }
 
-    public boolean isExisted(String username, String password) {
+    //登录查询，是否允许用户登录
+    public static boolean isExisted(String username, String password) {
         boolean result = false;
-        Connection conn = this.initJdbc();
+        Connection conn = initJdbc();
         try {
             System.out.println("实例化PreparedStatement对象...");
             PreparedStatement stmt = conn.prepareStatement("select username from user where password = '" + password
@@ -30,6 +35,7 @@ public class JdbcMysqlHelper{
             if (rs.next()) {
                 result = true;
             }
+            stmt.close();
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -37,9 +43,10 @@ public class JdbcMysqlHelper{
         return result;
     }
 
-    public List<String> selectAuthority(String username) {
+    //查询用户对应的权限
+    public static List<String> selectAuthority(String username) {
         List<String> result = new ArrayList<>();
-        Connection conn = this.initJdbc();
+        Connection conn = initJdbc();
         try {
             System.out.println("实例化PreparedStatement对象...");
             PreparedStatement stmt = conn.prepareStatement("select auth.name from auth, role_auth, user_role, user where" +
@@ -50,10 +57,24 @@ public class JdbcMysqlHelper{
             while (rs.next()) {
                 result.add(rs.getString("auth.name"));
             }
+            stmt.close();
             conn.close();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return result;
+    }
+
+    // 适合增删改三种操作
+    public static void execute(String sql) {
+        Connection conn = initJdbc();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.execute();
+            stmt.close();
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
