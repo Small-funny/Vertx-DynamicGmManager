@@ -21,6 +21,7 @@ public class MainResources extends AbstractVerticle {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        System.out.println("正在组织页面...");
         String asideString = xmlMapping.createAsideString("ssss");
         thymeleafTemplateEngine = ThymeleafTemplateEngine.create(vertx);
         router.route().handler(StaticHandler.create());

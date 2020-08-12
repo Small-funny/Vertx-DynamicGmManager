@@ -1,14 +1,17 @@
 package Server.SecretKey;
 
 import java.io.BufferedOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.security.KeyPair;
-import java.security.PrivateKey;
-import java.security.PublicKey;
 
 import static Server.SecretKey.RSAUtil.generateKeyPair;
 import static Server.SecretKey.RSAUtil.getKeyString;
 
+/**
+ * 基于RSA非对称加密算法
+ * 在resources目录下生成一对秘钥
+ */
 public class WriteRSAKeys {
     public static void main(String[] args){
        try {
@@ -21,7 +24,10 @@ public class WriteRSAKeys {
            } catch (Exception e) {
                e.printStackTrace();
            }
-
+           File file = new File("src/main/java/resources/publicKey");
+           if (!file.exists()) {
+               file.createNewFile();
+           }
            System.out.println("公钥开始写入...");
            FileOutputStream publicFileStream = new FileOutputStream("src/main/java/resources/publicKey");
            BufferedOutputStream publicBuffer =new BufferedOutputStream(publicFileStream);

@@ -59,7 +59,7 @@
             </div>
 <!--            <a href="recover-password.html">Reset password</a>-->
         </div>
-        <button class="btn btn-primary btn-block" onclick="btn()">Sign in</button>
+        <button class="btn btn-primary btn-block" onclick="btn('/main/queryLogin')">Sign in</button>
     </form>
 
 </div>
@@ -74,7 +74,8 @@
 <script>
 
     function btn() {
-      var encrypt = new JSEncrypt();
+
+      let encrypt = new JSEncrypt();
       $.ajax({
           type: "GET",
           datatype: "text",
@@ -101,7 +102,9 @@
                               localStorage.setItem("username", "");
                               localStorage.setItem("password", "");
                           }
-                          window.location.href="/main/queryLogin";
+                          let Authorization = "Bearer " + localStorage.getItem("token").toString()
+                          let Auth_param = {'Authorization': Authorization}
+                          post("/main/queryLogin", Auth_param)
                       }
                   }
               })
@@ -109,33 +112,40 @@
       })
   }
 
+  function post(URL, PARAMS) {
+      let temp_form = document.createElement("form");
+      temp_form .action = URL;
+      temp_form .method = "post";
+      temp_form .style.display = "none";
+      let opt = document.createElement("textarea");
+      opt.name = 'Authorization';
+      opt.value = PARAMS['Authorization'];
+      temp_form .appendChild(opt);
+      document.body.appendChild(temp_form);
+      temp_form .submit();
+  }
+
   window.onload = function() {
 
-    if (localStorage.getItem("token") != null) {
-      $.ajax({
-        type: "POST",
-        url: "/login/authenticity",
-        headers: {
-          Authorization: "Bearer " + localStorage.getItem("token").toString()
-        },
-        success: function (data) {
-            // alert(data);
-            window.location.href="/main/queryLogin";
-        },
-      })
-    }
+      history.pushState(null, null, "/login");  //将网址设置
 
-    if(localStorage.getItem("username") !== "" && localStorage.getItem("password") !== "")
-    {
-        //alert("读取账号密码:\n username:"+ localStorage.getItem("username").toString() + "\n"+"password:"+localStorage.getItem("password").toString());
-        $("#username").val(localStorage.getItem("username"));
-        $("#password").val(localStorage.getItem("password"));
-        document.getElementById("remember").checked = true;
-    } else {
-        $("#username").val("");
-        $("#password").val("");
-        document.getElementById("remember").checked = false;
-    }
+      if (localStorage.getItem("username") !== "" && localStorage.getItem("password") !== "") {
+          //alert("读取账号密码:\n username:"+ localStorage.getItem("username").toString() + "\n"+"password:"+localStorage.getItem("password").toString());
+          $("#username").val(localStorage.getItem("username"));
+          $("#password").val(localStorage.getItem("password"));
+          document.getElementById("remember").checked = true;
+      } else {
+          $("#username").val("");
+          $("#password").val("");
+          document.getElementById("remember").checked = false;
+      }
+
+      let Authorization = "Bearer " + localStorage.getItem("token").toString()
+
+      if (Authorization !== "Bearer token") {
+          let Auth_param = {'Authorization': Authorization}
+          post("/main/queryLogin", Auth_param)
+      }
   }
 
 </script>

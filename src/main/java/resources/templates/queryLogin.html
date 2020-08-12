@@ -169,22 +169,22 @@
         window.location.href="/login";
     }
 
-    $(document).ready(function() {
-        if (localStorage.getItem("token") != null) {
-            $.ajax({
-                type: "POST",
-                dataType: "text",
-                url: "/login/authenticity",
-                headers: {
-                    Authorization: "Bearer " + localStorage.getItem("token").toString()
-                }, error: function () {
-                    window.location.href = "/login";
-                }
-            });
-        } else {
-            window.location.href = "/login";
-        }
-    })
+    // window.onload = function() {
+    //     if (localStorage.getItem("token") != null) {
+    //         $.ajax({
+    //             type: "POST",
+    //             dataType: "text",
+    //             url: "/login/authenticity",
+    //             headers: {
+    //                 Authorization: "Bearer " + localStorage.getItem("token").toString()
+    //             }, error: function () {
+    //                 window.location.href = "/login";
+    //             }
+    //         });
+    //     } else {
+    //         window.location.href = "/login";
+    //     }
+    // }
 </script>
 </body>
 </html>
