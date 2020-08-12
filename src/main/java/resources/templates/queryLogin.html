@@ -163,12 +163,22 @@
 
     })
 
-
     function logout() {
         localStorage.setItem("token", "token");
         window.location.href="/login";
     }
 
+    function btn(url) {
+        let Authorization = localStorage.getItem("token").toString()
+        if (Authorization !== "token") {
+            window.location.href = "/main/"+ url +"?Authorization=" + Authorization
+        }
+    }
+
+    window.onload = function () {
+        let url = window.location.href;
+        history.pushState(null, null, url.split("?")[0]);  //将网址设置
+    }
     // window.onload = function() {
     //     if (localStorage.getItem("token") != null) {
     //         $.ajax({
