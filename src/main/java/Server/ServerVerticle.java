@@ -1,6 +1,6 @@
 package Server;
 
-import Server.Check.TokenCheck;
+import Server.Authorization.TokenCheck;
 import Server.Resources.*;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
@@ -34,6 +34,6 @@ public class ServerVerticle extends AbstractVerticle {
         new LoginResources().registerResources(router);
         new MainResources().registerResources(router, vertx);
         new ManagerResources().registerResources(router);
-        new FailureResources().registerResources(router);
+//        new FailureResources().registerResources(router);
     }
 }
