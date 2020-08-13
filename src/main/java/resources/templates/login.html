@@ -59,7 +59,7 @@
             </div>
 <!--            <a href="recover-password.html">Reset password</a>-->
         </div>
-        <button class="btn btn-primary btn-block" onclick="btn('/main/queryLogin')">Sign in</button>
+        <button class="btn btn-primary btn-block" onclick="btn()">Sign in</button>
     </form>
 
 </div>
@@ -131,7 +131,7 @@
           type: "GET",
           url: "/login/authenticity",
           success:function () {
-              alert("token验证通过")
+              // alert("token验证通过")
               window.location.href = "/main/queryLogin"
           }
       })
