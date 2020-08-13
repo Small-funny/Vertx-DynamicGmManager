@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<pages>
-    <pageType name="Login">
-        <page name="queryLogin" url="queryLogin">
+<pages >
+    <pageType name="角色管理" authorization="playerManage">
+        <page name="用户信息查看" url="checkUserInfo" authorization="checkUserInfo">
             <form name="login" action="www.abc.com">
                 <input type="text" name="userId"/>0
                 <input type="text" name="days"/>0
@@ -19,7 +19,7 @@
                 <input type="submit" name="submit"/>提交
             </form>
         </page>
-        <page name="queryChest" url="queryChest">
+        <page name="封禁用户" url="banUser" authorizqation="banUser">
             <form name="queryDisc">
                 <input type="text" name="userId">0</input>
                 <input type="text" name="days">0</input>
@@ -33,12 +33,11 @@
             </form>
         </page>
     </pageType>
-    <pageType name="Trophies">
-        <page name="queryTrophies" url="queryTrophies">
+    <pageType name="操作管理" authorization="operationManage">
+        <page name="订单查询" url="checkOrders" authorization="checkOrders">
             <form name="queryAsset">
                 <input type="text" name="userId">0</input>
                 <input type="text" name="days">0</input>
-
                 <select name="sel">
                     <option value="1">广州</option>
                     <option value="2">深圳</option>
@@ -47,6 +46,54 @@
                 </select>
                 <input type="submit" name="ttt">提交</input>
             </form>
+        </page>
+
+    </pageType>
+    <pageType name="游戏服务管理" authorization="gameServerManage">
+        <page name="开关游戏服" url="operateServer" authorization="">
+            <form name="queryAsset">
+                <input type="text" name="userId">0</input>
+                <input type="text" name="days">0</input>
+                <select name="sel">
+                    <option value="1">广州</option>
+                    <option value="2">深圳</option>
+                    <option value="3">山东</option>
+                    <option value="4">北京</option>
+                </select>
+                <input type="submit" name="ttt">提交</input>
+            </form>
+        </page>
+    </pageType>
+    <pageType name="系统管理"  authorization="systemManage">
+        <page name="基础信息管理" url="basicInfoManage" authorization="basicInfoManage">
+            <form name="queryMatch">
+                <input type="text" name="userId"></input>
+                <input type="text" name="days">0</input>
+                <input type="text" name="tour">0</input>
+                <input type="submit" name="submit">提交</input>
+            </form>
+        </page>
+        <page name="操作员管理" url="operatorManage" authorization="operatorManage">
+            <form name="queryMatch">
+                <input type="text" name="userId"></input>
+                <input type="text" name="days">0</input>
+                <input type="text" name="tour">0</input>
+
+                <input type="text" name="days"></input>
+                <select name="sel">
+                    <option value="1">广州</option>
+                    <option value="2">深圳</option>
+                    <option value="3">山东</option>
+                    <option value="4">北京</option>
+                </select>
+                <formcheck name="numberselect">
+                    <radio value="11">11</radio>
+                    <radio value="22">22</radio>
+                    <radio value="33">33</radio>
+                </formcheck>
+                <input type="submit" name="submit">提交</input>
+            </form>
+
         </page>
     </pageType>
 </pages>
