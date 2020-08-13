@@ -104,7 +104,7 @@
                               localStorage.setItem("password", "");
                           }
 
-                          window.location.href = "/main/queryLogin"
+                          window.location.href = "/main/home?name="+$("#username").val()
                       }
                   }
               })
@@ -132,7 +132,7 @@
           url: "/login/authenticity",
           success:function () {
               // alert("token验证通过")
-              window.location.href = "/main/queryLogin"
+              window.location.href = "/main/home?name="+$("#username").val()
           }
       })
   }
