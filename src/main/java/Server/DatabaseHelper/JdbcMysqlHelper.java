@@ -15,7 +15,7 @@ public class JdbcMysqlHelper{
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             System.out.println("连接数据库...");
-            conn = DriverManager.getConnection("jdbc:mysql://cdb-jpp9dqkf.usw.cdb.myqcloud.com:23055/game_manager_test?useSSL=false", "game", "Pxh130529disc-123");
+            conn = DriverManager.getConnection("", "", "");
             return conn;
         } catch (Exception e) {
             e.printStackTrace();
