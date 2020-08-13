@@ -87,9 +87,9 @@
                     <option value="4">北京</option>
                 </select>
                 <formcheck name="numberselect">
-                    <checkbox value="11">11</checkbox>
-                    <checkbox value="22">22</checkbox>
-                    <checkbox value="33">33</checkbox>
+                    <radio value="11">11</radio>
+                    <radio value="22">22</radio>
+                    <radio value="33">33</radio>
                 </formcheck>
                 <input type="submit" name="submit">提交</input>
             </form>
