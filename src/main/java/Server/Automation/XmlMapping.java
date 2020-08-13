@@ -18,7 +18,7 @@ public class XmlMapping {
     private static final HashMap<String, Element> typeElement = new HashMap<>();
     private static final Queue<String> iconTiList = new LinkedList<>();
     private static final Queue<String> iconFaList = new LinkedList<>();
-    JdbcMysqlHelper jdbcMysqlHelper;
+
 
     public XmlMapping() throws JDOMException, IOException {
         SAXBuilder saxBuilder = new SAXBuilder();
@@ -52,7 +52,6 @@ public class XmlMapping {
         iconFaList.add("fa-vimeo");
         iconFaList.add("fa-edge");
         iconFaList.add("fa-modx");
-        jdbcMysqlHelper = new JdbcMysqlHelper();
     }
 
     private String createIconString(String str) {
@@ -208,7 +207,7 @@ public class XmlMapping {
     }
 
     public String createAsideString(String pageName) {
-        List<String> urlList = jdbcMysqlHelper.selectAuthority(pageName);
+        List<String> urlList = JdbcMysqlHelper.selectAuthority(pageName);
 
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -274,6 +273,6 @@ public class XmlMapping {
         System.out.println(xmlMapping.createAsideString("root"));
         System.out.println(xmlMapping.createPageURLList());
         System.out.println(xmlMapping.createPageString("operatorManage"));
-        System.out.println(xmlMapping.jdbcMysqlHelper.selectAuthority("username"));
+
     }
 }
