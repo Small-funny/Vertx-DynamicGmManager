@@ -1,5 +1,6 @@
 package Server.Resources;
 
+import Server.Authorization.JwtUtils;
 import Server.SecretKey.RSAUtil;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.AbstractVerticle;
@@ -22,8 +23,8 @@ public class LoginResources extends AbstractVerticle {
     public void registerResources(Router router){
         router.get("/login").handler(this::login);
         router.get("/login/publicKey").handler(this::sendPublicKey);
+        router.get("/login/authenticity").handler(this::authenticity);
         router.post("/login/createToken").handler(this::createToken);
-//        router.post("/login/authenticity").handler(this::authenticity);
     }
 
     private void login(RoutingContext routingContext) {
@@ -72,42 +73,24 @@ public class LoginResources extends AbstractVerticle {
         }
     }
 
-//    //带有token的请求验证方法
-//    private void authenticity(RoutingContext routingContext) {
-//
-//        System.out.println("Receive request: authenticity token");
-//
-//        var token = "";
-//
-//        token = routingContext.request().getHeader("Authorization");
-//
-//        JWTAuthOptions jwtAuthOptions = new JWTAuthOptions()
-//                .setKeyStore(new KeyStoreOptions()
-//                                .setPath("Keystore.jceks")
-//                                .setPassword("secret"));
-//
-//        long starttime = System.currentTimeMillis();
-//        System.out.println("验证令牌计时开始");
-//
-//        JWTAuth jwtAuth = JWTAuth.create(routingContext.vertx(), jwtAuthOptions);
-//        long endtime = System.currentTimeMillis();
-//
-//        System.out.println("程序运行时间：" + (endtime - starttime) + "ms");
-//
-//        String token_jwt = token.split(" ")[1];
-//
-//        System.out.println("Only token = " + token_jwt);
-//
-//        JsonObject config = new JsonObject().put("jwt", token_jwt);
-//
-//        jwtAuth.authenticate(config, res -> {
-//            if (res.succeeded()) {
-//                routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end("Verification succeeded!");
-//            } else {
-//                routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Token expired, Verification failed!");
-//            }
-//        });
-//    }
+    private void authenticity(RoutingContext routingContext) {
+        System.out.println("Receive request: authenticity token");
+
+        String token = JwtUtils.findToken(routingContext);
+        System.out.println("登录验证收到的token:"+token);
+
+        JWTAuth jwtAuth =  JwtUtils.createJwt(routingContext);
+
+        JsonObject config = new JsonObject().put("jwt", token);
+
+        jwtAuth.authenticate(config, res -> {
+            if (res.succeeded()) {
+                routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end("Verification succeeded!");
+            } else {
+                routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Token expired, Verification failed!");
+            }
+        });
+    }
 
     private String getKeys(String fileName) {
         String key = "";

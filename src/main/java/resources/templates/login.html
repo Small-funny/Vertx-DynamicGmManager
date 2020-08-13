@@ -82,7 +82,9 @@
           url: "/login/publicKey",
           success: function (data) {
               // alert(data);
+
               encrypt.setPublicKey(data);
+
               let usernameEncrypted = encrypt.encrypt($('#username').val())
               let passwordEncrypted = encrypt.encrypt($('#password').val())
 
@@ -93,8 +95,7 @@
                   data: JSON.stringify({'username':usernameEncrypted,'password':passwordEncrypted}),
                   success:function (data, result, xhr) {
                       if (xhr.status === 200) {
-                          let token = data;
-                          window.localStorage.setItem("token", token);
+                          document.cookie = "Token="+data+";Path=/"
                           if (document.getElementById("remember").checked === true) {
                               localStorage.setItem("username", $("#username").val());
                               localStorage.setItem("password", $("#password").val());
@@ -103,8 +104,7 @@
                               localStorage.setItem("password", "");
                           }
 
-                          let Authorization = localStorage.getItem("token").toString()
-                          window.location.href = "/main/queryLogin?Authorization=" + Authorization
+                          window.location.href = "/main/queryLogin"
                       }
                   }
               })
@@ -112,10 +112,9 @@
       })
   }
 
-
   window.onload = function() {
 
-      history.pushState(null, null, "/login");  //将网址设置
+      history.pushState(null, null, "/login");
 
       if (localStorage.getItem("username") !== "" && localStorage.getItem("password") !== "") {
           //alert("读取账号密码:\n username:"+ localStorage.getItem("username").toString() + "\n"+"password:"+localStorage.getItem("password").toString());
@@ -128,10 +127,14 @@
           document.getElementById("remember").checked = false;
       }
 
-      let Authorization = localStorage.getItem("token").toString()
-      if (Authorization !== "token") {
-          window.location.href = "/main/queryLogin?Authorization=" + Authorization
-      }
+      $.ajax({
+          type: "GET",
+          url: "/login/authenticity",
+          success:function () {
+              alert("token验证通过")
+              window.location.href = "/main/queryLogin"
+          }
+      })
   }
 
 </script>
