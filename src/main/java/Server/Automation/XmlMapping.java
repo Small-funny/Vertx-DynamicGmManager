@@ -125,7 +125,7 @@ public class XmlMapping {
                 } else if (((Element) child).getName().equals("formcheck")) {
                     stringBuilder.append("class=\"form-check\">");
                     for(Element childElement :((Element) child).getChildren()){
-                        stringBuilder.append("<div class=\""+childElement.getName()+"\"><label  class=\"form-check-label \"><input type=\"radio\" value=\"").append(((Element) childElement).getAttribute("value").getValue()).append("\" class=\"form-check-input\">").append(childElement.getValue()).append("</label></div>");
+                        stringBuilder.append("<div class=\""+childElement.getName()+"\"><label  class=\"form-check-label \"><input type=\"radio\" value=\"").append(((Element) childElement).getAttribute("value").getValue()).append("\""+((Element) child).getAttribute("name")+" class=\"form-check-input\">").append(childElement.getValue()).append("</label></div>");
 
                     }
                 }
