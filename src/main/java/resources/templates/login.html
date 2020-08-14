@@ -47,19 +47,27 @@
     <!-- form -->
     <form id="login" onsubmit="return false" method="post">
         <div class="form-group">
-            <input type="text" id="username" class="form-control" placeholder="Username" name="username" required autofocus>
+            <input type="text" id="username" class="form-control" placeholder="用户名" name="username" required autofocus>
         </div>
         <div class="form-group">
-            <input type="password" id="password" class="form-control" placeholder="Password" name="password" required>
+            <input type="password" id="password" class="form-control" placeholder="密码" name="password" required>
+        </div>
+        <div class="form-inline">
+            <input type="text" class="form-control"  placeholder="验证码" id="verifyCode" style="width: 230px;" required autofocus>
+            <img data-v-26c78af1 src="/login/verifyCodePic"  id="verifyCodePic" alt style="cursor: pointer;" onclick="changeUrl()" >
         </div>
         <div class="form-group d-flex justify-content-between">
             <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="remember">
+                <input type="checkbox" class="custom-control-input" id="remember"  style="width:100px">
                 <label class="custom-control-label" for="remember">Remember me</label>
             </div>
 <!--            <a href="recover-password.html">Reset password</a>-->
         </div>
-        <button class="btn btn-primary btn-block" onclick="btn()">Sign in</button>
+
+
+        <button class="btn btn-primary btn-block" id="sign in" onclick="btn()">Sign in</button>
+
+        </button>
     </form>
 
 </div>
@@ -73,70 +81,111 @@
 <!-- Token -->
 <script>
 
+    // window.alert = function (str) {
+    //     let shield = document.createElement("div");
+    //     shield.className = "alert alert-danger";
+    //     shield.role = "alert";
+    //     shield.innerText = str
+    //     document.body.appendChild(shield);
+    // }
+
     function btn() {
 
-      let encrypt = new JSEncrypt();
-      $.ajax({
-          type: "GET",
-          datatype: "text",
-          url: "/login/publicKey",
-          success: function (data) {
-              // alert(data);
+        document.getElementById("sign in").innerHTML =
+            "<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n" +
+            "            <span class=\"sr-only\">Loading...</span>"
 
-              encrypt.setPublicKey(data);
 
-              let usernameEncrypted = encrypt.encrypt($('#username').val())
-              let passwordEncrypted = encrypt.encrypt($('#password').val())
+        $.ajax({
+            type: "GET",
+            datatype: "text",
+            url: "/login/verifyCode",
+            success: function (data) {
+                if (($('#verifyCode').val() !== "")) {
+                    if ($('#verifyCode').val().toLowerCase() === data.toLowerCase()) {
+                        let encrypt = new JSEncrypt();
 
-              $.ajax({
-                  type: "POST",
-                  dataType: "text",
-                  url: "/login/createToken",
-                  data: JSON.stringify({'username':usernameEncrypted,'password':passwordEncrypted}),
-                  success:function (data, result, xhr) {
-                      if (xhr.status === 200) {
-                          document.cookie = "Token="+data+";Path=/"
-                          if (document.getElementById("remember").checked === true) {
-                              localStorage.setItem("username", $("#username").val());
-                              localStorage.setItem("password", $("#password").val());
-                          } else {
-                              localStorage.setItem("username", "");
-                              localStorage.setItem("password", "");
-                          }
+                        $.ajax({
+                            type: "GET",
+                            datatype: "text",
+                            url: "/login/publicKey",
+                            success: function (data) {
+                                // alert(data);
 
-                          window.location.href = "/main/home?name="+$("#username").val()
-                      }
-                  }
-              })
-          }
-      })
-  }
+                                encrypt.setPublicKey(data);
 
-  window.onload = function() {
+                                let usernameEncrypted = encrypt.encrypt($('#username').val())
+                                let passwordEncrypted = encrypt.encrypt($('#password').val())
 
-      history.pushState(null, null, "/login");
+                                $.ajax({
+                                    type: "POST",
+                                    dataType: "text",
+                                    url: "/login/createToken",
+                                    data: JSON.stringify({
+                                        'username': usernameEncrypted,
+                                        'password': passwordEncrypted
+                                    }), success: function (data, result, xhr) {
+                                        if (xhr.status === 200) {
+                                            document.cookie = "Token=" + data + ";Path=/"
+                                            if (document.getElementById("remember").checked === true) {
+                                                localStorage.setItem("username", $("#username").val());
+                                                localStorage.setItem("password", $("#password").val());
+                                            } else {
+                                                $("#password")
+                                                localStorage.setItem("username", "");
+                                                localStorage.setItem("password", "");
+                                            }
+                                            window.location.href = "/main/home?name=" + $("#username").val()
+                                        }
+                                    }, error: function () {
+                                        document.getElementById("sign in").innerHTML = "Sign in"
+                                    }
+                                })
+                            }, error: function () {
+                                document.getElementById("sign in").innerHTML = "Sign in"
+                            }
+                        })
+                    } else if ($('#verifyCode').val().toLowerCase() !== data.toLowerCase()) {
+                        alert("验证码错误！")
+                        document.getElementById("sign in").innerHTML = "Sign in"
+                    }
+                } else {
+                    document.getElementById("sign in").innerHTML = "Sign in"
+                }
+                changeUrl()
+            }
+        })
 
-      if (localStorage.getItem("username") !== "" && localStorage.getItem("password") !== "") {
-          //alert("读取账号密码:\n username:"+ localStorage.getItem("username").toString() + "\n"+"password:"+localStorage.getItem("password").toString());
-          $("#username").val(localStorage.getItem("username"));
-          $("#password").val(localStorage.getItem("password"));
-          document.getElementById("remember").checked = true;
-      } else {
-          $("#username").val("");
-          $("#password").val("");
-          document.getElementById("remember").checked = false;
-      }
+    }
 
-      $.ajax({
-          type: "GET",
-          url: "/login/authenticity",
-          success:function () {
-              // alert("token验证通过")
-              window.location.href = "/main/home?name="+$("#username").val()
-          }
-      })
-  }
+    function changeUrl() {
+        document.getElementById('verifyCodePic').src = "/login/verifyCodePic" + "?time=" + Date.now();
+    }
 
+    window.onload = function () {
+
+        history.pushState(null, null, "/login");
+
+        if (localStorage.getItem("username") !== "" && localStorage.getItem("password") !== "") {
+            //alert("读取账号密码:\n username:"+ localStorage.getItem("username").toString() + "\n"+"password:"+localStorage.getItem("password").toString());
+            $("#username").val(localStorage.getItem("username"));
+            $("#password").val(localStorage.getItem("password"));
+            document.getElementById("remember").checked = true;
+        } else {
+            $("#username").val("");
+            $("#password").val("");
+            document.getElementById("remember").checked = false;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: "/login/authenticity",
+            success: function () {
+                // alert("token验证通过")
+                window.location.href = "/main/home?name=" + $("#username").val()
+            }
+        })
+    }
 </script>
 </body>
 </html>

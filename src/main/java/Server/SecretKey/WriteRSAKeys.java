@@ -24,20 +24,26 @@ public class WriteRSAKeys {
            } catch (Exception e) {
                e.printStackTrace();
            }
-           File file = new File("src/main/java/resources/publicKey");
+           File file = new File("verifies/publicKey");
            if (!file.exists()) {
+               System.out.println("创建公钥文件...");
                file.createNewFile();
            }
            System.out.println("公钥开始写入...");
-           FileOutputStream publicFileStream = new FileOutputStream("src/main/java/resources/publicKey");
+           FileOutputStream publicFileStream = new FileOutputStream("verifies/publicKey");
            BufferedOutputStream publicBuffer =new BufferedOutputStream(publicFileStream);
            publicBuffer.write(publicKey.getBytes(),0,publicKey.getBytes().length);
            publicBuffer.flush();
            publicBuffer.close();
            System.out.println("公钥写入完成...");
 
+           file = new File("verifies/privateKey");
+           if (!file.exists()) {
+               System.out.println("创建私钥文件...");
+               file.createNewFile();
+           }
            System.out.println("私钥开始写入...");
-           FileOutputStream privateFileStream = new FileOutputStream("src/main/java/resources/privateKey");
+           FileOutputStream privateFileStream = new FileOutputStream("verifies/privateKey");
            BufferedOutputStream privateBuffer =new BufferedOutputStream(privateFileStream);
            privateBuffer.write(privateKey.getBytes(),0,privateKey.getBytes().length);
            privateBuffer.flush();
