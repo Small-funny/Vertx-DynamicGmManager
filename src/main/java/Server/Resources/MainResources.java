@@ -1,6 +1,8 @@
 package Server.Resources;
 
 import Server.Automation.XmlMapping;
+import Server.DatabaseHelper.JdbcMysqlHelper;
+import Server.Verify.JwtUtils;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -28,8 +30,8 @@ public class MainResources extends AbstractVerticle {
         router.route().handler(StaticHandler.create());
         List<String> pageList = xmlMapping.createPageURLList();
         router.route("/main/home").handler(ctx->{
-            var userName = ctx.request().getParam("name");
-            asideString = xmlMapping.createAsideString(userName);
+            String token = JwtUtils.findToken(ctx);
+            asideString = xmlMapping.createAsideString(token);
             var obj = new JsonObject();
             obj.put("sidePanal", asideString);
             obj.put("name", "");
@@ -39,7 +41,6 @@ public class MainResources extends AbstractVerticle {
         });
         for(String pageRouter: pageList ){
             router.route("/main/"+pageRouter).handler(ctx->{
-                var userName = ctx.request().getParam("userName");
                 //asideString = xmlMapping.createAsideString(userName);
                 var obj = new JsonObject();
                 obj.put("sidePanal", asideString);
