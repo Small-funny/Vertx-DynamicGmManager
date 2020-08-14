@@ -1,5 +1,6 @@
 package Server.Verify;
 
+import Server.DatabaseHelper.JdbcMysqlHelper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
@@ -26,8 +27,14 @@ public class TokenCheck implements Handler<RoutingContext> {
                     routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code());
                     routingContext.reroute("/login");
                 } else {
-                    System.out.println("有效token，验证成功");
-                    routingContext.next();
+                    if (JdbcMysqlHelper.tokenIsExisted(token)) {
+                        System.out.println("有效token，验证成功");
+                        routingContext.next();
+                    } else {
+                        System.out.println("token无效");
+                        routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code());
+                        routingContext.reroute("/login");
+                    }
                 }
             });
         } catch (Exception e) {

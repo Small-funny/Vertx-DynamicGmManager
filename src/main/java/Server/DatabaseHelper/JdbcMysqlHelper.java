@@ -44,18 +44,36 @@ public class JdbcMysqlHelper{
     }
 
     //查询用户对应的权限
-    public static List<String> selectAuthority(String username) {
+    public static List<String> selectAuthority(String token) {
         List<String> result = new ArrayList<>();
         Connection conn = initJdbc();
         try {
             System.out.println("实例化PreparedStatement对象...");
             PreparedStatement stmt = conn.prepareStatement("select auth.name from auth, role_auth, user_role, user where" +
                     " auth.id = role_auth.auth_id and user_role.role_id = role_auth.role_id" +
-                    " and user_role.user_id = user.id and user.username = '" + username + "'");
+                    " and user_role.user_id = user.id and user.token = '" + token + "'");
 
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 result.add(rs.getString("auth.name"));
+            }
+            stmt.close();
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static boolean tokenIsExisted(String token) {
+        boolean result = false;
+        Connection conn = initJdbc();
+        try {
+            PreparedStatement stmt = conn.prepareStatement("select token from user where token = '" + token
+                    + "'");
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                result = true;
             }
             stmt.close();
             conn.close();

@@ -171,6 +171,11 @@
     })
 
     function logout() {
+        // $.ajax({
+        //     type: "GET",
+        //     datatype: "text",
+        //     url: "/login/logout"
+        // })
         document.cookie = "Token=token;Path=/"
         window.location.href="/login";
     }

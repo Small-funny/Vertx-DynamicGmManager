@@ -206,8 +206,8 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public String createAsideString(String pageName) {
-        List<String> urlList = JdbcMysqlHelper.selectAuthority(pageName);
+    public String createAsideString(String token) {
+        List<String> urlList = JdbcMysqlHelper.selectAuthority(token);
 
 
         StringBuilder stringBuilder = new StringBuilder();

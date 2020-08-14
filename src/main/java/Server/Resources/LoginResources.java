@@ -22,6 +22,7 @@ public class LoginResources extends AbstractVerticle {
 
     public void registerResources(Router router){
         router.get("/login").handler(this::login);
+        router.get("/login/logout").handler(this::logout);
         router.get("/login/verifyCode").handler(this::verifyCode);
         router.get("/login/publicKey").handler(this::sendPublicKey);
         router.get("/login/authenticity").handler(this::authenticity);
@@ -33,6 +34,13 @@ public class LoginResources extends AbstractVerticle {
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("templates/login.html");
     }
 
+    private void logout(RoutingContext routingContext) {
+        System.out.println("token置空");
+        String token = JwtUtils.findToken(routingContext);
+        JdbcMysqlHelper.execute("Update user set token='token' where token='"+token+"'");
+        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end();
+    }
+
     private void sendPublicKey(RoutingContext routingContext) {
         String publicKey = "";
         publicKey = getString("verifies/publicKey");
@@ -40,7 +48,6 @@ public class LoginResources extends AbstractVerticle {
     }
 
     private void createToken(RoutingContext routingContext){
-
         System.out.println("Receive request: create token");
 
         JWTAuth jwtAuth = JwtUtils.createJwt(routingContext);
@@ -64,6 +71,8 @@ public class LoginResources extends AbstractVerticle {
             String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(3600));
             System.out.println("Username or password right, Verification succeed!");
             routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(newToken);
+            System.out.println("token写入数据库...");
+            JdbcMysqlHelper.execute("Update user set token='"+ newToken +"' where username='"+ username +"'");
         } else {
             System.out.println("Username or password error, Verification failed!");
             routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Username or password error, Verification failed!");
@@ -71,7 +80,7 @@ public class LoginResources extends AbstractVerticle {
     }
 
     private void authenticity(RoutingContext routingContext) {
-        System.out.println("Receive request: authenticity token");
+        System.out.println("开始登录验证");
 
         String token = JwtUtils.findToken(routingContext);
         System.out.println("登录验证收到的token:"+token);
@@ -82,7 +91,11 @@ public class LoginResources extends AbstractVerticle {
 
         jwtAuth.authenticate(config, res -> {
             if (res.succeeded()) {
-                routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end("Verification succeeded!");
+                if (JdbcMysqlHelper.tokenIsExisted(token)) {
+                    routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end("Verification succeeded!");
+                } else {
+                    routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Token expired, Verification failed!");
+                }
             } else {
                 routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Token expired, Verification failed!");
             }
@@ -90,7 +103,6 @@ public class LoginResources extends AbstractVerticle {
     }
 
     private void verifyCodePic(RoutingContext routingContext) {
-
         File dir = new File("verifies");
         if (!dir.exists()) {
             System.out.println("创建图片存储目录...");
