@@ -1,4 +1,4 @@
-package Server.Authorization;
+package Server.Verify;
 
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;

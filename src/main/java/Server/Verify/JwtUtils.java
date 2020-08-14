@@ -1,4 +1,4 @@
-package Server.Authorization;
+package Server.Verify;
 
 import io.vertx.ext.auth.KeyStoreOptions;
 import io.vertx.ext.auth.jwt.JWTAuth;
@@ -14,11 +14,11 @@ public class JwtUtils {
 
         JWTAuthOptions jwtAuthOptions = new JWTAuthOptions()
                 .setKeyStore(new KeyStoreOptions()
-                        .setPath("Keystore.jceks")
+                        .setPath("verifies/Keystore.jceks")
                         .setPassword("secret"));
 
         long starttime = System.currentTimeMillis();
-        System.out.println("验证令牌计时开始");
+        System.out.println("令牌程序计时开始");
 
         JWTAuth jwtAuth = JWTAuth.create(routingContext.vertx(), jwtAuthOptions);
         long endtime = System.currentTimeMillis();

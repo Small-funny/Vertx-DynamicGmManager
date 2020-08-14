@@ -1,6 +1,6 @@
 package Server;
 
-import Server.Authorization.TokenCheck;
+import Server.Verify.TokenCheck;
 import Server.Resources.*;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
