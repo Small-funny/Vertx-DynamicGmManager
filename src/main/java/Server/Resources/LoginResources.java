@@ -69,14 +69,16 @@ public class LoginResources extends AbstractVerticle {
 
         if (JdbcMysqlHelper.isExisted(username, password)) {
             String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(3600));
-            System.out.println("Username or password right, Verification succeed!");
             routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(newToken);
             System.out.println("token写入数据库...");
             JdbcMysqlHelper.execute("Update user set token='"+ newToken +"' where username='"+ username +"'");
+            System.out.println("Username or password right, Verification succeed!");
+
         } else {
             System.out.println("Username or password error, Verification failed!");
             routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Username or password error, Verification failed!");
         }
+
     }
 
     private void authenticity(RoutingContext routingContext) {

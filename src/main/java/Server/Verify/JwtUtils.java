@@ -21,8 +21,8 @@ public class JwtUtils {
         System.out.println("令牌程序计时开始");
 
         JWTAuth jwtAuth = JWTAuth.create(routingContext.vertx(), jwtAuthOptions);
-        long endtime = System.currentTimeMillis();
 
+        long endtime = System.currentTimeMillis();
         System.out.println("程序运行时间：" + (endtime - starttime) + "ms");
 
         return jwtAuth;
