@@ -70,6 +70,12 @@
     </dependency>
 
     <dependency>
+      <groupId>com.alibaba</groupId>
+      <artifactId>druid</artifactId>
+      <version>1.0.18</version>
+    </dependency>
+
+    <dependency>
       <groupId>io.vertx</groupId>
       <artifactId>vertx-web</artifactId>
       <version>3.5.3</version>
@@ -116,6 +122,16 @@
           <artifactId>jdom2</artifactId>
           <version>2.0.6</version>
       </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-auth-common</artifactId>
+      <version>3.9.2</version>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-auth-jwt</artifactId>
+      <version>3.5.0</version>
+    </dependency>
   </dependencies>
 
   <build>
