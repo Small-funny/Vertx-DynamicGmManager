@@ -25,6 +25,8 @@
     <!-- App styles -->
     <link rel="stylesheet" href="../webroot/assets/css/app.min.css" type="text/css">
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
+    <link rel="stylesheet" href="../vendors/clockpicker/bootstrap-clockpicker.min.css" type="text/css">
+    <link rel="stylesheet" href="../webroot/vendors/datepicker/daterangepicker.css" type="text/css">
 
 </head>
 <body>
@@ -92,6 +94,19 @@
 
             </div>
         </div>
+        <div class="top-right">
+            <div class="row form-group">
+                <form name="queryMatch" class="form-horizontal">
+                    <div class="col-12 col-md-9" style="width: 300px"><select name="sel" class="form-control">
+                        <option value="1">广州</option>
+                        <option value="2">深圳</option>
+                        <option value="3">山东</option>
+                        <option value="4">北京</option>
+                    </select></div>
+
+                </form>
+            </div>
+        </div>
     </header><!-- /header -->
     <!-- Header-->
 
@@ -142,6 +157,8 @@
 
 <script src="../webroot/assets/js/main.js"></script>
 <script src="../webroot/vendors/bundle.js"></script>
+<script src="../vendors/clockpicker/bootstrap-clockpicker.min.js"></script>
+<script type="text/javascript" src="../webroot/vendors/datepicker/daterangepicker.js"></script>
 
 <script type="text/javascript" th:inline="javascript">
     var pageName = [[${pagename}]]
@@ -149,15 +166,25 @@
     $(function () {
         console.log(pageName.t);
 
-        $("[href="+pageName+"]").addClass("active");
-        $("[href="+pageName+"]").parent().parent().parent().addClass("open")
+        $("[href=" + pageName + "]").addClass("active");
+        $("[href=" + pageName + "]").parent().parent().parent().addClass("open")
         console.log(pageName);
     })
 
     function logout() {
         document.cookie = "Token=token;Path=/"
-        window.location.href="/login";
+        window.location.href = "/login";
     }
+
+    $('#Clock').clockpicker()
+        .find('input').change(function () {
+        // console.log(this.value);
+    });
+    $(document).ready(function () {
+        $('#Date').daterangepicker({
+            singleDatePicker: true
+        })
+    })
 
 </script>
 </body>
