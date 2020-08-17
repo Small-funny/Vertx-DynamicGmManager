@@ -90,16 +90,17 @@ public class XmlMapping {
                     stringBuilder.append("<div class=\"card-header\"><strong>"+((Element) child).getAttribute("name").getValue()+"</strong></div>");
                     stringBuilder.append("<div class=\"card-body card-block\">");
                 }
-//                else if (((Element) child).getName().equals("checkbox")) {
-//                    stringBuilder.append(" <div class=\"checkbox\">");
                 else if (((Element) child).getName().equals("formcheck")) {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\"><div class=\"form-check\">");
                     //不是option这种小标签的通用类 input select会用
                 } else if (!(((Element) child).getName().equals("option") || ((Element) child).getName().equals("checkbox") || ((Element) child).getName().equals("radio"))) {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\">");
                 }
-                //添加标签头 checkbox 不用写属性 有特殊写法
-                if (!(((Element) child).getName().equals("checkbox") || ((Element) child).getName().equals("radio"))) {
+
+
+
+                //添加标签头 checkbox 和radio 不用写属性 有特殊写法 clock也不写 date 也不写
+                if (!(((Element) child).getName().equals("checkbox") || ((Element) child).getName().equals("radio")||((Element) child).getName().equals("clock")||((Element) child).getName().equals("date"))) {
                     stringBuilder.append("<").append(((Element) child).getName());
                     //添加属性
                     for (Attribute attribute : ((Element) child).getAttributes()) {
@@ -113,20 +114,33 @@ public class XmlMapping {
 
                 //表单特殊属性
                 if (((Element) child).getName().equals("form")) {
-                    stringBuilder.append("class=\"form-horizontal\">");
+                    stringBuilder.append(" method=\"post\" class=\"form-horizontal\">");
                     //输入框的特殊属性
                 } else if (((Element) child).getName().equals("input") || ((Element) child).getName().equals("select")) {
                     stringBuilder.append("class=\"form-control\">");
-                    //复选框的特殊情况 不需要读属性 写标签头 直接添加整个div
                 } else if (((Element) child).getName().equals("option")) {
                     stringBuilder.append(">");
                     stringBuilder.append(child.getValue());
                 } else if (((Element) child).getName().equals("formcheck")) {
                     stringBuilder.append("class=\"form-check\">");
                     for(Element childElement :((Element) child).getChildren()){
-                        stringBuilder.append("<div class=\""+childElement.getName()+"\"><label  class=\"form-check-label \"><input type=\"radio\" value=\"").append(((Element) childElement).getAttribute("value").getValue()).append("\""+((Element) child).getAttribute("name")+" class=\"form-check-input\">").append(childElement.getValue()).append("</label></div>");
+                        stringBuilder.append("<div class=\"")
+                                .append(childElement.getName())
+                                .append("\"><label  class=\"form-check-label \"><input type=\"radio\" value=\"")
+                                .append(((Element) childElement).getAttribute("value").getValue())
+                                .append("\"").append(((Element) child).getAttribute("name"))
+                                .append(" class=\"form-check-input\">")
+                                .append(childElement.getValue()).append("</label></div>");
 
                     }
+                }else if(((Element) child).getName().equals("clock")){
+                    stringBuilder.append("<div class=\"input-group clockpicker\" >")
+                            .append("<input type=\"text\" id=\"Clock\"  autocomplete=\"off\" data-autoclose=\"true\" class=\"form-control\" name=\"")
+                            .append(((Element) child).getAttribute("name").getValue()).append("\">")
+                            .append("</div>");
+                }
+                else if (((Element) child).getName().equals("date")){
+                   stringBuilder.append("<input autocomplete=\"off\" type=\"text\"").append(((Element) child).getAttribute("name").getValue()).append(" id=\"Date\" class=\"form-control\">");
                 }
 
 
@@ -151,9 +165,7 @@ public class XmlMapping {
                 }
                 //!(((Element) child).getName().equals("input") && ((Element) child).getAttribute("type").getValue().equals("submit")) &&
             }
-//            if (child instanceof Text) {
-//                //stringBuilder.append(createTextString((Text) child));
-//            }
+
         }
 
     }

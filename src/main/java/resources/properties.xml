@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<pages >
+
+<pages>
     <pageType name="角色管理" authorization="playerManage">
         <page name="用户信息查看" url="checkUserInfo" authorization="checkUserInfo">
             <form name="login" action="www.abc.com">
@@ -27,8 +28,10 @@
             </form>
             <form name="queryMatch">
                 <input type="text" name="userId"></input>
-                <input type="text" name="days">0</input>
+                <input type="text" name="days"></input>
                 <input type="text" name="tour">0</input>
+                <clock name="clock"></clock>
+                <date name="date"></date>
                 <input type="submit" name="submit">提交</input>
             </form>
         </page>
