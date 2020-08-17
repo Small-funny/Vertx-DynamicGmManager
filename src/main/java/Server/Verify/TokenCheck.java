@@ -27,6 +27,8 @@ public class TokenCheck implements Handler<RoutingContext> {
                     routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code());
                     routingContext.reroute("/login");
                 } else {
+//                    long starttime = System.currentTimeMillis();
+//                    System.out.println("拦截器数据库验证程序计时开始");
                     if (JdbcMysqlHelper.tokenIsExisted(token)) {
                         System.out.println("有效token，验证成功");
                         routingContext.next();
@@ -35,6 +37,8 @@ public class TokenCheck implements Handler<RoutingContext> {
                         routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code());
                         routingContext.reroute("/login");
                     }
+//                    long endtime = System.currentTimeMillis();
+//                    System.out.println("程序运行时间：" + (endtime - starttime) + "ms");
                 }
             });
         } catch (Exception e) {
