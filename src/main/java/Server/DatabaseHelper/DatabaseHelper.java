@@ -40,19 +40,21 @@ public class DatabaseHelper {
         return result;
     }
 
-    public static HashMap<String, List<String>> selectAuthority(String token, String server) {
-        HashMap<String, List<String>> result = new HashMap<>();
+    public static List<String> selectAuthority(String token, String server) {
+        List<String> result = new ArrayList<>();
         List<Element> data = loadDatabase().getChildren();
         try {
-            for (Element user: data) {
-                if (token.equals(user.getChildren().get(2).getAttributeValue("value"))) {
-                    for (Element serverAuth: user.getChildren().get(4).getChildren()) {
-                        for (Element list: serverAuth.getChildren()) {
-                            List<String> authList = new ArrayList<>();
-                            for (Element auth: list.getChildren()) {
-                                authList.add(auth.getAttributeValue("value"));
+            for (Element user: data) {  //遍历所有record
+                if (token.equals(user.getChildren().get(2).getAttributeValue("value"))) {  //根据token定位
+                    for (Element serverAuth: user.getChildren().get(4).getChildren()) {  //遍历用户所有权限
+                        if (server.equals(serverAuth.getAttributeValue("value"))) {   //定位server级别的权限
+                            //取出该server级别权限下的所有子权限
+                            for (Element list : serverAuth.getChildren()) {
+                                for (Element auth : list.getChildren()) {
+                                    result.add(auth.getAttributeValue("value"));
+                                }
                             }
-                            result.put(list.getAttributeValue("value"), authList);
+                            break;
                         }
                     }
                     break;
@@ -101,7 +103,7 @@ public class DatabaseHelper {
 
     }
 
-//    public static void main(String[] args) {
-//
-//    }
+    public static void main(String[] args) {
+        System.out.println(selectAuthority("token", "sandbox"));
+    }
 }
