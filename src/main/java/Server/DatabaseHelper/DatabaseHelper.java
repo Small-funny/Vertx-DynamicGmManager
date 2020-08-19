@@ -7,7 +7,6 @@ import org.jdom2.output.XMLOutputter;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class DatabaseHelper {
@@ -66,13 +65,13 @@ public class DatabaseHelper {
         return result;
     }
 
-    public static void updateToken(String token) {
+    public static void updateToken(String username, String token) {
         Element rootData = loadDatabase();
         List<Element> data = rootData.getChildren();
         try {
             for (Element record: data) {
-                if (token.equals(record.getChildren().get(2).getAttributeValue("value"))) {
-                    record.getChildren().get(2).setAttribute("value", "token");
+                if (username.equals(record.getChildren().get(0).getAttributeValue("value"))) {
+                    record.getChildren().get(2).setAttribute("value", token);
                     XMLOutputter outPutter = new XMLOutputter();
                     outPutter.output(rootData, new FileOutputStream("Database.xml"));
                     break;
@@ -104,6 +103,6 @@ public class DatabaseHelper {
     }
 
     public static void main(String[] args) {
-        System.out.println(selectAuthority("token", "sandbox"));
+        updateToken("root", "123456");
     }
 }
