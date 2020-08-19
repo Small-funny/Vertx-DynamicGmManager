@@ -1,0 +1,124 @@
+<database>
+    <record>
+        <column name="username" value="root" />
+        <column name="password" value="root" />
+        <column name="token" value="token" />
+        <column name="enable" value="1" />
+        <column name="auth">
+            <auth1 name="server" value="sandbox">
+                <auth2 name="list" value="playerManage">
+                    <auth3 name="list" value="banUser" />
+                    <auth3 name="list" value="checkUserInfo" />
+                </auth2>
+                <auth2 name="list" value="operationManage">
+                    <auth3 name="list" value="checkOrders" />
+                </auth2>
+                <auth2 name="list" value="gameServerManage">
+                    <auth3 name="list" value="operateServer" />
+                </auth2>
+                <auth2 name="list" value="systemManage">
+                    <auth3 name="list" value="basicInfoManage" />
+                    <auth3 name="list" value="operatorManage" />
+                </auth2>
+            </auth1>
+            <auth1 name="server" value="test">
+                <auth2 name="list" value="playerManage">
+                    <auth3 name="list" value="banUser" />
+                    <auth3 name="list" value="checkUserInfo" />
+                </auth2>
+                <auth2 name="list" value="operationManage">
+                    <auth3 name="list" value="checkOrders" />
+                </auth2>
+                <auth2 name="list" value="gameServerManage">
+                    <auth3 name="list" value="operateServer" />
+                </auth2>
+                <auth2 name="list" value="systemManage">
+                    <auth3 name="list" value="basicInfoManage" />
+                    <auth3 name="list" value="operatorManage" />
+                </auth2>
+            </auth1>
+            <auth1 name="server" value="master">
+                <auth2 name="list" value="playerManage">
+                    <auth3 name="list" value="banUser" />
+                    <auth3 name="list" value="checkUserInfo" />
+                </auth2>
+                <auth2 name="list" value="operationManage">
+                    <auth3 name="list" value="checkOrders" />
+                </auth2>
+                <auth2 name="list" value="gameServerManage">
+                    <auth3 name="list" value="operateServer" />
+                </auth2>
+                <auth2 name="list" value="systemManage">
+                    <auth3 name="list" value="basicInfoManage" />
+                    <auth3 name="list" value="operatorManage" />
+                </auth2>
+            </auth1>
+        </column>
+    </record>
+    <record>
+        <column name="username" value="admin" />
+        <column name="password" value="admin" />
+        <column name="token" value="token" />
+        <column name="enable" value="1" />
+        <column name="auth">
+            <auth1 name="server" value="sandbox">
+                <auth2 name="list" value="playerManage">
+                    <auth3 name="list" value="banUser" />
+                    <auth3 name="list" value="checkUserInfo" />
+                </auth2>
+                <auth2 name="list" value="operationManage">
+                    <auth3 name="list" value="checkOrders" />
+                </auth2>
+                <auth2 name="list" value="systemManage">
+                    <auth3 name="list" value="basicInfoManage" />
+                    <auth3 name="list" value="operatorManage" />
+                </auth2>
+            </auth1>
+            <auth1 name="server" value="test">
+                <auth2 name="list" value="playerManage">
+                    <auth3 name="list" value="banUser" />
+                </auth2>
+                <auth2 name="list" value="operationManage">
+                    <auth3 name="list" value="checkOrders" />
+                </auth2>
+                <auth2 name="list" value="systemManage">
+                    <auth3 name="list" value="basicInfoManage" />
+                </auth2>
+            </auth1>
+            <auth1 name="server" value="master">
+                <auth2 name="list" value="playerManage">
+                    <auth3 name="list" value="banUser" />
+                    <auth3 name="list" value="checkUserInfo" />
+                </auth2>
+                <auth2 name="list" value="systemManage">
+                    <auth3 name="list" value="basicInfoManage" />
+                </auth2>
+            </auth1>
+        </column>
+    </record>
+    <record>
+        <column name="username" value="username" />
+        <column name="password" value="password" />
+        <column name="token" value="token" />
+        <column name="enable" value="1" />
+        <column name="auth">
+            <auth1 name="server" value="sandbox">
+                <auth2 name="list" value="playerManage">
+                    <auth3 name="list" value="checkUserInfo" />
+                </auth2>
+                <auth2 name="list" value="operationManage">
+                    <auth3 name="list" value="checkOrders" />
+                </auth2>
+            </auth1>
+            <auth1 name="server" value="test">
+                <auth2 name="list" value="playerManage">
+                    <auth3 name="list" value="banUser" />
+                    <auth3 name="list" value="checkUserInfo" />
+                </auth2>
+                <auth2 name="list" value="operationManage">
+                    <auth3 name="list" value="checkOrders" />
+                </auth2>
+            </auth1>
+        </column>
+    </record>
+</database>
