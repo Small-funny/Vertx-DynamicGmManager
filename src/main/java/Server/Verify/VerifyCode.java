@@ -4,6 +4,7 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class VerifyCode {
@@ -109,9 +110,12 @@ public class VerifyCode {
 
     /** 获取随机颜色 */
     private Color getRandomColor() {
-        int r = getRandomNumber(255);
-        int g = getRandomNumber(255);
-        int b = getRandomNumber(255);
+        int r = getRandomNumber(200);
+        int g = getRandomNumber(200);
+        int b = getRandomNumber(200);
+//        System.out.println(r);
+//        System.out.println(g);
+//        System.out.println(b);
         return new Color(r, g, b);
     }
 
