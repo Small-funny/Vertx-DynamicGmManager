@@ -1,5 +1,6 @@
 package Server.Verify;
 
+import Server.DatabaseHelper.DatabaseHelper;
 import Server.DatabaseHelper.JdbcMysqlHelper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
@@ -29,7 +30,7 @@ public class TokenCheck implements Handler<RoutingContext> {
                 } else {
 //                    long starttime = System.currentTimeMillis();
 //                    System.out.println("拦截器数据库验证程序计时开始");
-                    if (JdbcMysqlHelper.tokenIsExisted(token)) {
+                    if (DatabaseHelper.isTokenExisted(token)) {
                         System.out.println("有效token，验证成功");
                         routingContext.next();
                     } else {
