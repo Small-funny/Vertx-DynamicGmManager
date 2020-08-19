@@ -38,7 +38,7 @@ public class LoginResources extends AbstractVerticle {
         System.out.println("token置空");
         String token = JwtUtils.findToken(routingContext);
 //        JdbcMysqlHelper.execute("Update user set token='token' where token='"+token+"'");
-        DatabaseHelper.updateToken(token);
+//        DatabaseHelper.updateToken(token);
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end();
     }
 
@@ -72,7 +72,7 @@ public class LoginResources extends AbstractVerticle {
             String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(3600L));
             routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(newToken);
             System.out.println("token写入数据库...");
-            DatabaseHelper.updateToken(newToken);
+            DatabaseHelper.updateToken(username, newToken);
             System.out.println("Username or password right, Verification succeed!");
 
         } else {
