@@ -1,5 +1,6 @@
 package Server.Resources;
 
+import Server.DatabaseHelper.DatabaseHelper;
 import Server.Verify.VerifyCode;
 import Server.Verify.JwtUtils;
 import Server.SecretKey.RSAUtil;
@@ -7,10 +8,9 @@ import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.jwt.JWTAuth;
-import io.vertx.ext.auth.*;
+import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import Server.DatabaseHelper.JdbcMysqlHelper;
 
 import javax.imageio.ImageIO;
 import java.io.*;
@@ -37,7 +37,8 @@ public class LoginResources extends AbstractVerticle {
     private void logout(RoutingContext routingContext) {
         System.out.println("token置空");
         String token = JwtUtils.findToken(routingContext);
-        JdbcMysqlHelper.execute("Update user set token='token' where token='"+token+"'");
+//        JdbcMysqlHelper.execute("Update user set token='token' where token='"+token+"'");
+        DatabaseHelper.updateToken(token);
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end();
     }
 
@@ -67,11 +68,11 @@ public class LoginResources extends AbstractVerticle {
 
         System.out.println(username + " " + password);
 
-        if (JdbcMysqlHelper.isExisted(username, password)) {
-            String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(3600));
+        if (DatabaseHelper.isExisted(username, password)) {
+            String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(3600L));
             routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(newToken);
             System.out.println("token写入数据库...");
-            JdbcMysqlHelper.execute("Update user set token='"+ newToken +"' where username='"+ username +"'");
+            DatabaseHelper.updateToken(newToken);
             System.out.println("Username or password right, Verification succeed!");
 
         } else {
@@ -93,7 +94,7 @@ public class LoginResources extends AbstractVerticle {
 
         jwtAuth.authenticate(config, res -> {
             if (res.succeeded()) {
-                if (JdbcMysqlHelper.tokenIsExisted(token)) {
+                if (DatabaseHelper.isTokenExisted(token)) {
                     routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end("Verification succeeded!");
                 } else {
                     routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Token expired, Verification failed!");

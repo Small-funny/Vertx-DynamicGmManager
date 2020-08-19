@@ -13,7 +13,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
-public class DBPool {
+public class MysqlDBPool {
 
     private static DruidDataSource dbpool;
     private static boolean isInited = false;
