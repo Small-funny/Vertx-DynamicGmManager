@@ -49,6 +49,7 @@ public class DatabaseHelper {
                         if (server.equals(serverAuth.getAttributeValue("value"))) {   //定位server级别的权限
                             //取出该server级别权限下的所有子权限
                             for (Element list : serverAuth.getChildren()) {
+                                result.add(list.getAttributeValue("value"));
                                 for (Element auth : list.getChildren()) {
                                     result.add(auth.getAttributeValue("value"));
                                 }
@@ -103,6 +104,6 @@ public class DatabaseHelper {
     }
 
     public static void main(String[] args) {
-        updateToken("root", "123456");
+        System.out.println(selectAuthority("token", "sandbox"));
     }
 }
