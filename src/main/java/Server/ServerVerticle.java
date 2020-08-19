@@ -1,6 +1,6 @@
 package Server;
 
-import Server.DatabaseHelper.DBPool;
+import Server.DatabaseHelper.MysqlDBPool;
 import Server.Verify.TokenCheck;
 import Server.Resources.*;
 import io.vertx.core.AbstractVerticle;
@@ -26,7 +26,6 @@ public class ServerVerticle extends AbstractVerticle {
         router.route("/manager/*").handler(new TokenCheck());
         router.route("/webroot/*").handler(StaticHandler.create());
 
-        DBPool.init("dbpool.xml");
         registerResources(router);
 
         vertx.createHttpServer().requestHandler(router::accept).listen(8001);
