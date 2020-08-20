@@ -1,102 +1,107 @@
 <?xml version="1.0" encoding="utf-8" ?>
+<system>
+    <servers>
+        <server value="sandbox">沙箱</server>
+        <server value="test">测试服</server>
+        <server value="master">主服</server>
+    </servers>
+    <pages>
+        <pageType name="角色管理" authorization="playerManage" icon="anchor">
+            <page name="用户信息查看" url="checkUserInfo" authorization="checkUserInfo">
+                <form name="login" action="www.abc.com">
+                    <input type="text" name="userId"/>
+                    <input type="text" name="days"/>
+                    <select name="sel">
+                        <option value="1">广州</option>
+                        <option value="2">深圳</option>
+                        <option value="3">山东</option>
+                        <option value="4">北京</option>
+                    </select>
+                    <formcheck name="numberselect">
+                        <checkbox value="11">11</checkbox>
+                        <checkbox value="22">22</checkbox>
+                        <checkbox value="33">33</checkbox>
+                    </formcheck>
+                    <input type="submit" name="submit"/>提交
+                </form>
+            </page>
+            <page name="封禁用户" url="banUser" authorizqation="banUser" >
+                <form name="queryDisc">
+                    <input type="text" name="userId">0</input>
+                    <input type="text" name="days">0</input>
+                    <input type="submit" name="submit">提交</input>
+                </form>
+                <form name="queryMatch">
+                    <input type="text" name="userId"></input>
+                    <input type="text" name="days"></input>
+                    <input type="text" name="tour">0</input>
+                    <input type="submit" name="submit">提交</input>
+                </form>
+            </page>
+        </pageType>
+        <pageType name="操作管理" authorization="operationManage" icon="archive">
+            <page name="订单查询" url="checkOrders" authorization="checkOrders" icon="calendar">
+                <form name="queryAsset">
+                    <input type="text" name="userId">0</input>
+                    <input type="text" name="days">0</input>
+                    <time name="time"/>
+                    <select name="sel">
+                        <option value="1">广州</option>
+                        <option value="2">深圳</option>
+                        <option value="3">山东</option>
+                        <option value="4">北京</option>
+                    </select>
+                    <input type="submit" name="ttt">提交</input>
+                </form>
+            </page>
 
-<pages>
-    <pageType name="角色管理" authorization="playerManage">
-        <page name="用户信息查看" url="checkUserInfo" authorization="checkUserInfo">
-            <form name="login" action="www.abc.com">
-                <input type="text" name="userId"/>0
-                <input type="text" name="days"/>0
-                <select name="sel">
-                    <option value="1">广州</option>
-                    <option value="2">深圳</option>
-                    <option value="3">山东</option>
-                    <option value="4">北京</option>
-                </select>
-                <formcheck name="numberselect">
-                    <checkbox value="11">11</checkbox>
-                    <checkbox value="22">22</checkbox>
-                    <checkbox value="33">33</checkbox>
-                </formcheck>
-                <input type="submit" name="submit"/>提交
-            </form>
-        </page>
-        <page name="封禁用户" url="banUser" authorizqation="banUser">
-            <form name="queryDisc">
-                <input type="text" name="userId">0</input>
-                <input type="text" name="days">0</input>
-                <input type="submit" name="submit">提交</input>
-            </form>
-            <form name="queryMatch">
-                <input type="text" name="userId"></input>
-                <input type="text" name="days"></input>
-                <input type="text" name="tour">0</input>
-                <clock name="clock"></clock>
-                <date name="date"></date>
-                <input type="submit" name="submit">提交</input>
-            </form>
-        </page>
-    </pageType>
-    <pageType name="操作管理" authorization="operationManage">
-        <page name="订单查询" url="checkOrders" authorization="checkOrders">
-            <form name="queryAsset">
-                <input type="text" name="userId">0</input>
-                <input type="text" name="days">0</input>
-                <select name="sel">
-                    <option value="1">广州</option>
-                    <option value="2">深圳</option>
-                    <option value="3">山东</option>
-                    <option value="4">北京</option>
-                </select>
-                <input type="submit" name="ttt">提交</input>
-            </form>
-        </page>
+        </pageType>
+        <pageType name="游戏服务管理" authorization="gameServerManage" icon="calendar">
+            <page name="开关游戏服" url="operateServer" authorization="operateServer" >
+                <form name="queryAsset">
+                    <input type="text" name="userId">0</input>
+                    <input type="text" name="days">0</input>
+                    <select name="sel">
+                        <option value="1">广州</option>
+                        <option value="2">深圳</option>
+                        <option value="3">山东</option>
+                        <option value="4">北京</option>
+                    </select>
+                    <input type="submit" name="ttt">提交</input>
+                </form>
+            </page>
+        </pageType>
+        <pageType name="系统管理" authorization="systemManage" icon="clock">
+            <page name="基础信息管理" url="basicInfoManage" authorization="basicInfoManage">
+                <form name="queryMatch">
+                    <input type="text" name="userId"></input>
+                    <input type="text" name="days">0</input>
+                    <input type="text" name="tour">0</input>
+                    <input type="submit" name="submit">提交</input>
+                </form>
+            </page>
+            <page name="操作员管理" url="operatorManage" authorization="operatorManage" >
+                <form name="queryMatch">
+                    <input type="text" name="userId"></input>
+                    <input type="text" name="days">0</input>
+                    <input type="text" name="tour">0</input>
 
-    </pageType>
-    <pageType name="游戏服务管理" authorization="gameServerManage">
-        <page name="开关游戏服" url="operateServer" authorization="">
-            <form name="queryAsset">
-                <input type="text" name="userId">0</input>
-                <input type="text" name="days">0</input>
-                <select name="sel">
-                    <option value="1">广州</option>
-                    <option value="2">深圳</option>
-                    <option value="3">山东</option>
-                    <option value="4">北京</option>
-                </select>
-                <input type="submit" name="ttt">提交</input>
-            </form>
-        </page>
-    </pageType>
-    <pageType name="系统管理"  authorization="systemManage">
-        <page name="基础信息管理" url="basicInfoManage" authorization="basicInfoManage">
-            <form name="queryMatch">
-                <input type="text" name="userId"></input>
-                <input type="text" name="days">0</input>
-                <input type="text" name="tour">0</input>
-                <input type="submit" name="submit">提交</input>
-            </form>
-        </page>
-        <page name="操作员管理" url="operatorManage" authorization="operatorManage">
-            <form name="queryMatch">
-                <input type="text" name="userId"></input>
-                <input type="text" name="days">0</input>
-                <input type="text" name="tour">0</input>
+                    <input type="text" name="days"></input>
+                    <select name="sel">
+                        <option value="1">广州</option>
+                        <option value="2">深圳</option>
+                        <option value="3">山东</option>
+                        <option value="4">北京</option>
+                    </select>
+                    <formcheck name="numberselect">
+                        <radio value="11">11</radio>
+                        <radio value="22">22</radio>
+                        <radio value="33">33</radio>
+                    </formcheck>
+                    <input type="submit" name="submit">提交</input>
+                </form>
 
-                <input type="text" name="days"></input>
-                <select name="sel">
-                    <option value="1">广州</option>
-                    <option value="2">深圳</option>
-                    <option value="3">山东</option>
-                    <option value="4">北京</option>
-                </select>
-                <formcheck name="numberselect">
-                    <radio value="11">11</radio>
-                    <radio value="22">22</radio>
-                    <radio value="33">33</radio>
-                </formcheck>
-                <input type="submit" name="submit">提交</input>
-            </form>
-
-        </page>
-    </pageType>
-</pages>
+            </page>
+        </pageType>
+    </pages>
+</system>
