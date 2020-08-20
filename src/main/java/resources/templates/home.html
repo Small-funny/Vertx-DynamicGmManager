@@ -12,21 +12,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Game Manager</title>
 
-    <link rel="icon" href="../webroot/assets/media/image/logo.png">
-    <link rel="stylesheet" href="../webroot/assets/css/cs-skin-elastic.css">
-    <link rel="stylesheet" href="../webroot/assets/css/style.css">
+    <link rel="icon" href="/webroot/assets/media/image/logo.png">
+    <link rel="stylesheet" href="/webroot/assets/css/cs-skin-elastic.css">
+    <link rel="stylesheet" href="/webroot/assets/css/style.css">
 
     <!-- Plugin styles -->
-    <link rel="stylesheet" href="../webroot/vendors/bundle.css" type="text/css">
+    <link rel="stylesheet" href="/webroot/vendors/bundle.css" type="text/css">
 
     <!-- Prism -->
-    <link rel="stylesheet" href="../webroot/vendors/prism/prism.css" type="text/css">
+    <link rel="stylesheet" href="/webroot/vendors/prism/prism.css" type="text/css">
 
     <!-- App styles -->
-    <link rel="stylesheet" href="../webroot/assets/css/app.min.css" type="text/css">
+    <link rel="stylesheet" href="/webroot/assets/css/app.min.css" type="text/css">
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
-    <link rel="stylesheet" href="../vendors/clockpicker/bootstrap-clockpicker.min.css" type="text/css">
-    <link rel="stylesheet" href="../webroot/vendors/datepicker/daterangepicker.css" type="text/css">
+    <link rel="stylesheet" href="/endors/clockpicker/bootstrap-clockpicker.min.css" type="text/css">
+    <link rel="stylesheet" href="/webroot/vendors/datepicker/daterangepicker.css" type="text/css">
 
 </head>
 <body class="form-membership">
@@ -52,9 +52,9 @@
     <!-- begin::logo -->
     <div id="logo">
 
-        <img class="logo" src="../webroot/assets/media/image/logo.png" alt="logo">
-        <img class="logo-sm" src="../webroot/assets/media/image/logo-sm.png" alt="small logo">
-        <img class="logo-dark" src="../webroot/assets/media/image/logo-dark.png" alt="dark logo">
+        <img class="logo" src="/webroot/assets/media/image/logo.png" alt="logo">
+        <img class="logo-sm" src="/webroot/assets/media/image/logo-sm.png" alt="small logo">
+        <img class="logo-dark" src="/webroot/assets/media/image/logo-dark.png" alt="dark logo">
     </div>
     <!-- end::logo -->
 
@@ -77,21 +77,6 @@
     <!-- begin::navigation menu -->
     <div class="navigation-menu-body" th:utext="${sidePanal}">
 
-        <!--        <ul>-->
-        <!--            <li class="navigation-divider">最大类别</li>-->
-        <!--            <li><a href="#">Trophies</a>-->
-        <!--                <ul>-->
-        <!--                    <li><a href="queryTrophies">queryTrophies</a></li>-->
-        <!--                </ul>-->
-        <!--            </li>-->
-        <!--            <li><a href="#">Login</a>-->
-        <!--                <ul>-->
-        <!--                    <li><a href="queryLogin">queryLogin</a></li>-->
-        <!--                    <li><a href="queryChest">queryChest</a></li>-->
-        <!--                </ul>-->
-        <!--            </li>-->
-        <!--        </ul>-->
-
     </div>
     <!-- end::navigation menu -->
 
@@ -112,16 +97,16 @@
         </div>
         <div class="top-right">
             <div class="row form-group">
-                <form name="queryMatch" class="form-horizontal">
-                    <div class="col-12 col-md-9" style="width: 300px"><select name="sel" class="form-control">
-                        <option value="1">广州</option>
-                        <option value="2">深圳</option>
-                        <option value="3">山东</option>
-                        <option value="4">北京</option>
-                    </select></div>
+                <form id="serverSelect" class="form-horizontal" method="get">
+                    <div class="col-12 col-md-9" style="width: 300px;padding-top: 15px">
+                        <select id="selServer" class="form-control" th:utext="${servers}" onchange="submitForm();">
+
+                        </select>
+                    </div>
 
                 </form>
             </div>
+
         </div>
     </header><!-- /header -->
     <!-- Header-->
@@ -133,80 +118,98 @@
             <div class="row">
 
 
-                <div class="col-lg-6" style="flex: 0 0 auto;max-width: 100%" th:utext="${name}">
+                <div class="col-lg-6" style="flex: 0 0 auto;max-width: 100%" th:utext="${content}">
 
 
                 </div>
+                <!--                <div class="col-lg-6" style="flex: 0 0 auto;max-width: 100%" >-->
+                <!--                    <input type="text" id="test1">-->
+                <!--                </div>-->
 
             </div>
 
         </div>
-
     </div>
-</div>
 
 
-<script src="../webroot/vendors/bundle.js"></script>
+    <script src="/webroot/vendors/bundle.js"></script>
 
-<!-- Select2 -->
-<script src="../webroot/vendors/select2/js/select2.min.js"></script>
-<script src="../webroot/assets/js/examples/select2.js"></script>
+    <!-- Select2 -->
+    <script src="/webroot/vendors/select2/js/select2.min.js"></script>
+    <script src="/webroot/assets/js/examples/select2.js"></script>
 
-<!-- Range slider -->
-<script src="../webroot/vendors/range-slider/js/ion.rangeSlider.min.js"></script>
-<script src="../webroot/assets/js/examples/range-slider.js"></script>
+    <!-- Range slider -->
+    <script src="/webroot/vendors/range-slider/js/ion.rangeSlider.min.js"></script>
+    <script src="/webroot/assets/js/examples/range-slider.js"></script>
 
-<!-- Input mask -->
-<script src="../webroot/vendors/input-mask/jquery.mask.js"></script>
-<script src="../webroot/assets/js/examples/input-mask.js"></script>
+    <!-- Input mask -->
+    <script src="/webroot/vendors/input-mask/jquery.mask.js"></script>
+    <script src="/webroot/assets/js/examples/input-mask.js"></script>
 
-<!-- Tagsinput -->
-<script src="../webroot/vendors/tagsinput/bootstrap-tagsinput.js"></script>
-<script src="../webroot/assets/js/examples/tagsinput.js"></script>
+    <!-- Tagsinput -->
+    <script src="/webroot/vendors/tagsinput/bootstrap-tagsinput.js"></script>
+    <script src="/webroot/assets/js/examples/tagsinput.js"></script>
 
-<!-- Prism -->
-<script src="../webroot/vendors/prism/prism.js"></script>
+    <!-- Prism -->
+    <script src="/webroot/vendors/prism/prism.js"></script>
 
-<!-- App scripts -->
-<script src="../webroot/assets/js/app.min.js"></script>
-<!-- Prism -->
+    <!-- App scripts -->
+    <script src="/webroot/assets/js/app.min.js"></script>
+    <!-- Prism -->
 
-<script src="../webroot/assets/js/main.js"></script>
-<script src="../webroot/vendors/bundle.js"></script>
-<script src="../vendors/clockpicker/bootstrap-clockpicker.min.js"></script>
-<script type="text/javascript" src="../webroot/vendors/datepicker/daterangepicker.js"></script>
+    <script src="/webroot/assets/js/main.js"></script>
+    <script src="/webroot/vendors/bundle.js"></script>
+    <script src="/vendors/clockpicker/bootstrap-clockpicker.min.js"></script>
+    <script type="text/javascript" src="/webroot/vendors/datepicker/daterangepicker.js"></script>
 
-<script type="text/javascript" th:inline="javascript">
-    var pageName = [[${pagename}]]
+    <script src="/webroot/laydate/laydate.js"></script>
+    <script>
+        lay('#version').html('-v' + laydate.v);
 
-    $(function () {
-        console.log(pageName.t);
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#TIMESTAMP' //指定元素
+            , type: 'datetime'
 
-        $("[href=" + pageName + "]").addClass("active");
-        $("[href=" + pageName + "]").parent().parent().parent().addClass("open")
-        console.log(pageName);
-    })
+        });
+    </script>
+    <script type="text/javascript" th:inline="javascript">
+        var pageName = [[${pagename}]]
 
-    function logout() {
-        // $.ajax({
-        //     type: "GET",
-        //     datatype: "text",
-        //     url: "/login/logout"
-        // })
-        document.cookie = "Token=token;Path=/"
-        window.location.href = "/login";
-    }
+        $(function () {
+            console.log(pageName.t);
 
-    $('#Clock').clockpicker()
-        .find('input').change(function () {
-        // console.log(this.value);
-    });
-    $(document).ready(function () {
-        $('#Date').daterangepicker({
-            singleDatePicker: true
+            $("[href=" + pageName + "]").addClass("active");
+            $("[href=" + pageName + "]").parent().parent().parent().addClass("open")
+            console.log(pageName);
         })
-    })
 
-</script>
+        function logout() {
+
+            document.cookie = "Token=token;Path=/"
+            window.location.href = "/login";
+        }
+
+        $('#Clock').clockpicker()
+            .find('input').change(function () {
+            // console.log(this.value);
+        });
+        $(document).ready(function () {
+            $('#Date').daterangepicker({
+                singleDatePicker: true
+            })
+        })
+
+        function submitForm() {
+            var server = $("#selServer").val();
+            if (server !== "0") {
+                window.location.href = "/main/" + server + "/0"
+            }
+        }
+
+    </script>
+
+
+</div>
 </body>
 </html>
