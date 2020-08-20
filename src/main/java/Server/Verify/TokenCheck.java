@@ -1,7 +1,6 @@
 package Server.Verify;
 
 import Server.DatabaseHelper.DatabaseHelper;
-import Server.DatabaseHelper.JdbcMysqlHelper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
