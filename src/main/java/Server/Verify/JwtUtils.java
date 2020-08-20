@@ -23,7 +23,7 @@ public class JwtUtils {
         JWTAuth jwtAuth = JWTAuth.create(routingContext.vertx(), jwtAuthOptions);
 
         long endtime = System.currentTimeMillis();
-        System.out.println("程序运行时间：" + (endtime - starttime) + "ms");
+        System.out.println("验证过程时间：" + (endtime - starttime) + "ms");
 
         return jwtAuth;
     }
