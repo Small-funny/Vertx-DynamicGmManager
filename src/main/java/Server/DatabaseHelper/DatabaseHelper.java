@@ -50,9 +50,6 @@ public class DatabaseHelper {
                             //取出该server级别权限下的所有子权限
                             for (Element list : serverAuth.getChildren()) {
                                 result.add(list.getAttributeValue("value"));
-                                for (Element auth : list.getChildren()) {
-                                    result.add(auth.getAttributeValue("value"));
-                                }
                             }
                             break;
                         }
