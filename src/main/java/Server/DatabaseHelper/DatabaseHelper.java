@@ -7,6 +7,7 @@ import org.jdom2.output.XMLOutputter;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class DatabaseHelper {
@@ -100,7 +101,34 @@ public class DatabaseHelper {
 
     }
 
+    public static List<HashMap<String, String>> selectManagerInfo(List<String> Attributes) {
+        List<HashMap<String, String>> result = new ArrayList<>();
+        List<Element> data = loadDatabase().getChildren();
+        try {
+            for (Element record: data) {
+                HashMap<String, String> map = new HashMap<>();
+                for (String key: Attributes) {
+                    for (int i = 0; i < record.getChildren().size(); i++) {
+                        if (key.equals(record.getChildren().get(i).getAttributeValue("name"))) {
+                            map.put(key, record.getChildren().get(i).getAttributeValue("value"));
+                        }
+                    }
+                }
+                result.add(map);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
+    }
+
     public static void main(String[] args) {
-        System.out.println(selectAuthority("token", "sandbox"));
+        List<String> test = new ArrayList<>();
+        test.add("username");
+        test.add("password");
+        test.add("token");
+        test.add("enable");
+        System.out.println(selectManagerInfo(test));
     }
 }
