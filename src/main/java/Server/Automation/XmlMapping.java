@@ -1,7 +1,6 @@
 package Server.Automation;
 
 import Server.DatabaseHelper.DatabaseHelper;
-import Server.DatabaseHelper.JdbcMysqlHelper;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;

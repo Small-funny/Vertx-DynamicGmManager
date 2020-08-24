@@ -1,6 +1,5 @@
 package Server;
 
-import Server.DatabaseHelper.MysqlDBPool;
 import Server.Verify.TokenCheck;
 import Server.Resources.*;
 import io.vertx.core.AbstractVerticle;
