@@ -6,6 +6,10 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
 
+import java.net.URLDecoder;
+import java.util.HashMap;
+import java.util.List;
+
 public class ForwardResources {
 
     private WebClient webClient;
@@ -15,19 +19,31 @@ public class ForwardResources {
 
         webClient = WebClient.create(vertx, options);
 
-        router.post("/forward").handler(this::sendConfigs);
+        router.post("/forward").handler(this::forward);
     }
 
-    private void sendConfigs(RoutingContext routingContext) {
-        System.out.println(routingContext.request().getFormAttribute("data"));
-        webClient.head(8000, "", "").send(ar -> {
-            if (ar.succeeded()) {
-                System.out.println(ar.result().body());
-                routingContext.response().end(ar.result().bodyAsBuffer());
-            } else {
-                System.out.println("Wrong :" +ar.cause().getMessage());
+    private void forward(RoutingContext routingContext) {
+        HashMap<String, String> data = new HashMap<>();
+        try {
+            System.out.println(URLDecoder.decode(routingContext.getBodyAsString(), "UTF-8"));
+            for (String str : URLDecoder.decode(routingContext.getBodyAsString(), "UTF-8").split("&")) {
+                data.put(str.split("=")[0], str.split("=")[1]);
             }
-        });
+            data.remove("submit");
+            System.out.println(data);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        routingContext.reroute("/main"+data.get("route"));
+        data.remove("route");
+//        webClient.head(8000, "", "").send(ar -> {
+//            if (ar.succeeded()) {
+//                System.out.println(ar.result().body());
+//                routingContext.response().end(ar.result().bodyAsBuffer());
+//            } else {
+//                System.out.println("Wrong :" +ar.cause().getMessage());
+//            }
+//        });
     }
 
 }
