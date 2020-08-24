@@ -92,14 +92,14 @@
     <header id="header" class="header">
         <div class="top-left">
             <div class="row form-group" style="">
-                <form id="serverSelect" class="form-horizontal" method="get" >
+                <form id="serverSelect" class="form-horizontal" method="get">
                     <div class="col-12 col-md-9" style="width: 300px;padding-top: 15px;padding-left: 30px">
                         <select id="selServer" class="form-control" th:utext="${servers}" onchange="submitForm();">
                         </select>
                     </div>
 
                 </form>
-                </div>
+            </div>
         </div>
         <div class="top-right">
 
@@ -161,18 +161,22 @@
     </script>
     <script type="text/javascript" th:inline="javascript">
         var pageName = [[${pagename}]]
-        var serverName =[[${servername}]]
+        var serverName = [[${servername}]]
         $(function () {
-            var route = "/"+serverName+"/"+pageName;
+            var route = "/" + serverName + "/" + pageName;
 
             $("[href=" + pageName + "]").addClass("active");
             $("[href=" + pageName + "]").parent().parent().parent().addClass("open")
 
             var input = document.createElement("input");
-            input.setAttribute("type","hidden");
-            input.setAttribute("value",route);
-            input.setAttribute("name","route");
+            input.setAttribute("type", "hidden");
+            input.setAttribute("value", route);
+            input.setAttribute("name", "route");
             document.getElementById("form").appendChild(input);
+            // var forms = document.getElementsByClassName("form-horizontal");
+            // for(var i =0;i<forms.size;i++){
+            //     forms[i].innerHTML.appendChild(input);
+            // }
         })
 
         function logout() {
