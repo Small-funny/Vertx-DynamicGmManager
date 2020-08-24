@@ -110,7 +110,7 @@ public class XmlMapping {
 
                 //表单特殊属性 method="post"
                 if ("form".equals(childName)) {
-                    stringBuilder.append(" id=\"form\" class=\"form-horizontal\">");
+                    stringBuilder.append(" id=\"form\" class=\"form-horizontal\"  method=\"post\">");
                     //输入框的特殊属性
                 }
                 else if ("input".equals(childName)&& "file".equals(((Element) child).getAttribute("type").getValue())) {

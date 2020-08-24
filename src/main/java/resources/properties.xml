@@ -8,7 +8,7 @@
     <pages>
         <pageType name="角色管理" authorization="playerManage" icon="anchor">
             <page name="用户信息查看" url="checkUserInfo" authorization="checkUserInfo">
-                <form name="login" action="/forward/config">
+                <form name="login" action="/forward">
                     <input type="text" name="userId"/>
                     <input type="text" name="days"/>
                     <select name="sel">
@@ -46,7 +46,7 @@
         </pageType>
         <pageType name="操作管理" authorization="operationManage" icon="archive">
             <page name="订单查询" url="checkOrders" icon="calendar">
-                <form name="queryAsset">
+                <form name="queryAsset" action="/forward">
                     <input type="text" name="userId">0</input>
                     <input type="text" name="days">0</input>
                     <time name="time"/>
@@ -62,7 +62,7 @@
         </pageType>
         <pageType name="游戏服务管理" authorization="gameServerManage" icon="calendar">
             <page name="开关游戏服" url="operateServer" authorization="operateServer" >
-                <form name="queryAsset">
+                <form name="queryAsset" action="/forward">
                     <input type="text" name="userId">0</input>
                     <input type="text" name="days">0</input>
                     <select name="sel">
@@ -85,7 +85,7 @@
                 </form>
             </page>
             <page name="操作员管理" url="operatorManage">
-                <form name="queryMatch">
+                <form name="queryMatch" action="/forward">
                     <input type="text" name="userId"></input>
                     <input type="text" name="days">0</input>
                     <input type="text" name="tour">0</input>
@@ -104,7 +104,6 @@
                     </formcheck>
                     <input type="submit" name="submit">提交</input>
                 </form>
-
             </page>
         </pageType>
     </pages>

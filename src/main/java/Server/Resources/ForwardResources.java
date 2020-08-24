@@ -15,7 +15,7 @@ public class ForwardResources {
 
         webClient = WebClient.create(vertx, options);
 
-        router.post("/forward/configs").handler(this::sendConfigs);
+        router.post("/forward").handler(this::sendConfigs);
     }
 
     private void sendConfigs(RoutingContext routingContext) {
