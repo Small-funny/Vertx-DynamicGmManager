@@ -77,7 +77,7 @@
         </pageType>
         <pageType name="系统管理" authorization="systemManage" icon="clock">
             <page name="基础信息管理" url="basicInfoManage">
-                <form name="queryMatch" action="/forward/config">
+                <form name="queryMatch" action="/forward">
                     <input type="text" name="userId"></input>
                     <input type="text" name="days">0</input>
                     <input type="text" name="tour">0</input>
