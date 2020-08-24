@@ -89,7 +89,7 @@
                     <input type="text" name="userId"></input>
                     <input type="text" name="days">0</input>
                     <input type="text" name="tour">0</input>
-
+                    <input type="file" name="config"/>
                     <input type="text" name="days"></input>
                     <select name="sel">
                         <option value="1">广州</option>
