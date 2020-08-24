@@ -172,11 +172,11 @@
             input.setAttribute("type", "hidden");
             input.setAttribute("value", route);
             input.setAttribute("name", "route");
-            document.getElementById("form").appendChild(input);
-            // var forms = document.getElementsByClassName("form-horizontal");
-            // for(var i =0;i<forms.size;i++){
-            //     forms[i].innerHTML.appendChild(input);
-            // }
+            var forms = document.getElementsByClassName("form-horizontal");
+            console.log(forms.length)
+            for (var i = 0; i < forms.length; i++) {
+                forms[i].appendChild(input);
+            }
         })
 
         function logout() {
