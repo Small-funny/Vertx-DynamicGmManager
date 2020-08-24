@@ -91,20 +91,19 @@
     <!-- Header-->
     <header id="header" class="header">
         <div class="top-left">
-            <div class="navbar-header">
-
-            </div>
-        </div>
-        <div class="top-right">
-            <div class="row form-group">
-                <form id="serverSelect" class="form-horizontal" method="get">
-                    <div class="col-12 col-md-9" style="width: 300px;padding-top: 15px">
+            <div class="row form-group" style="">
+                <form id="serverSelect" class="form-horizontal" method="get" >
+                    <div class="col-12 col-md-9" style="width: 300px;padding-top: 15px;padding-left: 30px">
                         <select id="selServer" class="form-control" th:utext="${servers}" onchange="submitForm();">
                         </select>
                     </div>
 
                 </form>
             </div>
+
+        </div>
+        <div class="top-right">
+
 
         </div>
     </header><!-- /header -->
