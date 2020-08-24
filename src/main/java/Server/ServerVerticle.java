@@ -23,10 +23,10 @@ public class ServerVerticle extends AbstractVerticle {
         router.route().handler(BodyHandler.create());
         router.route("/main/*").handler(new TokenCheck());
         router.route("/manager/*").handler(new TokenCheck());
+        router.route("/forward").handler(new TokenCheck());
         router.route("/webroot/*").handler(StaticHandler.create());
         //router.route().handler(StaticHandler.create());
         registerResources(router);
-
         vertx.createHttpServer().requestHandler(router::accept).listen(8001);
     }
 
