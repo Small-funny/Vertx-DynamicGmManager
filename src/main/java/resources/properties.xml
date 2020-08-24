@@ -8,7 +8,7 @@
     <pages>
         <pageType name="角色管理" authorization="playerManage" icon="anchor">
             <page name="用户信息查看" url="checkUserInfo" authorization="checkUserInfo">
-                <form name="login" action="www.abc.com">
+                <form name="login" action="/forward/config">
                     <input type="text" name="userId"/>
                     <input type="text" name="days"/>
                     <select name="sel">
@@ -77,7 +77,7 @@
         </pageType>
         <pageType name="系统管理" authorization="systemManage" icon="clock">
             <page name="基础信息管理" url="basicInfoManage">
-                <form name="queryMatch">
+                <form name="queryMatch" action="/forward/config">
                     <input type="text" name="userId"></input>
                     <input type="text" name="days">0</input>
                     <input type="text" name="tour">0</input>
