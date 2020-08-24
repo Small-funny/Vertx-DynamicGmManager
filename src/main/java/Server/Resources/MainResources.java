@@ -40,17 +40,6 @@ public class MainResources extends AbstractVerticle {
                 ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
             });
         });
-        router.route("/main/:serverRouter").handler(ctx -> {
-            String pageRouter = ctx.request().getParam("serverRouter");
-            asideString=xmlMapping.createAsideString(JwtUtils.findToken(ctx),ctx.request().getParam("serverRouter"));
-            var obj = new JsonObject();
-            obj.put("sidePanal", asideString);
-            obj.put("servers", serverString);
-            obj.put("content", "");
-            thymeleafTemplateEngine.render(obj, "templates/home.html", bufferAsyncResult -> {
-                ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
-            });
-        });
         router.route("/main/:serverRouter/:pageRouter").handler(ctx -> {
             asideString=xmlMapping.createAsideString(JwtUtils.findToken(ctx),ctx.request().getParam("serverRouter"));
             String pageRouter = ctx.request().getParam("pageRouter");
@@ -67,6 +56,7 @@ public class MainResources extends AbstractVerticle {
             obj.put("sidePanal", asideString);
             obj.put("pagename", pageRouter);
             obj.put("servers", serverString);
+            obj.put("servername",serverRouter);
             //obj.put("name", xmlMapping.createElementString(xmlMapping.getElement(pageRouter)));
             obj.put("content", contentString);
             thymeleafTemplateEngine.render(obj, "templates/home.html", bufferAsyncResult -> {

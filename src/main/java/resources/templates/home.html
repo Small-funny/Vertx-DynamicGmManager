@@ -99,8 +99,7 @@
                     </div>
 
                 </form>
-            </div>
-
+                </div>
         </div>
         <div class="top-right">
 
@@ -162,13 +161,18 @@
     </script>
     <script type="text/javascript" th:inline="javascript">
         var pageName = [[${pagename}]]
-
+        var serverName =[[${servername}]]
         $(function () {
-            console.log(pageName.t);
+            var route = "/"+serverName+"/"+pageName;
 
             $("[href=" + pageName + "]").addClass("active");
             $("[href=" + pageName + "]").parent().parent().parent().addClass("open")
-            console.log(pageName);
+
+            var input = document.createElement("input");
+            input.setAttribute("type","hidden");
+            input.setAttribute("value",route);
+            input.setAttribute("name","route");
+            document.getElementById("form").appendChild(input);
         })
 
         function logout() {
@@ -179,7 +183,6 @@
 
         $('#Clock').clockpicker()
             .find('input').change(function () {
-            // console.log(this.value);
         });
         $(document).ready(function () {
             $('#Date').daterangepicker({
