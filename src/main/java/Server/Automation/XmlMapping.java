@@ -17,8 +17,10 @@ public class XmlMapping {
     //页面类型是键 对应的类型element是值
     private static final HashMap<String, Element> typeElement = new HashMap<>();
     private static final HashMap<String, Element> serverElement = new HashMap<>();
+    private static List<HashMap<String, String>> tableContent = new ArrayList<>();
 
     public XmlMapping() throws JDOMException, IOException {
+
         SAXBuilder saxBuilder = new SAXBuilder();
         //Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
         Element root = saxBuilder.build("properties.xml").getDocument().getRootElement();
@@ -54,13 +56,41 @@ public class XmlMapping {
             if (child instanceof Element) {
                 //当前标签外层所需要的标签和类
                 if (((Element) child).getName().equals("form")) {
-                    stringBuilder.append("<div class=\"card\">");
-                    stringBuilder.append("<div class=\"card-header\"><strong>" + ((Element) child).getAttribute("name").getValue() + "</strong></div>");
-                    stringBuilder.append("<div class=\"card-body card-block\">");
+                    stringBuilder.append("<div class=\"card\">")
+                            .append("<div class=\"card-header\"><strong>")
+                            .append(((Element) child).getAttribute("name").getValue())
+                            .append("</strong></div>")
+                            .append("<div class=\"card-body card-block\">");
                 } else if (((Element) child).getName().equals("formcheck")) {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\"><div class=\"form-check\">");
-                    //不是option这种小标签的通用类 input select会用
-                } else if (!(((Element) child).getName().equals("option") || ((Element) child).getName().equals("checkbox") || ((Element) child).getName().equals("radio"))) {
+
+                } else if (((Element) child).getName().equals("table")) {
+                    List<String> tableName = new ArrayList<>();
+                    stringBuilder.append("<div class=\"row form-group\"><div class=\"table-responsive\"><table class=\"table table-bordered\"><thead><tr>")
+                            .append("<th scope=\"col\">#</th>");
+                    for (Element tableChildren : ((Element) child).getChildren()) {
+                        stringBuilder.append("<th scope=\"col\">").append(tableChildren.getAttribute("name").getValue()).append("</th>");
+                        tableName.add(tableChildren.getAttribute("name").getValue());
+                    }
+                    tableContent = DatabaseHelper.selectManagerInfo(tableName);
+                    stringBuilder.append("</tr></thead><tbody>");
+                    int order = 1;
+                    for (Map<String, String> map : tableContent) {
+                        stringBuilder.append("<tr>");
+                        stringBuilder.append("<td>");
+                        stringBuilder.append(order);
+                        stringBuilder.append("</td>");
+                        for (String name : tableName) {
+                            stringBuilder.append("<td>");
+                            stringBuilder.append(map.get(name));
+                            stringBuilder.append("</td>");
+                        }
+                        stringBuilder.append("</tr>");
+                        order++;
+                    }
+                    stringBuilder.append("</tbody>");
+                }//不是option这种小标签的通用类 input select会用
+                else if (!(((Element) child).getName().equals("option") || ((Element) child).getName().equals("checkbox") || ((Element) child).getName().equals("radio"))) {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\">");
                 }
 
@@ -106,9 +136,10 @@ public class XmlMapping {
                 }
 
 
-                //添加标签头完毕 进入递归
-                stringBuilder.append(createElementString((Element) child));
-                //添加标签尾
+                //添加标签头完毕 进入递归 table不能进入
+                if (!((Element) child).getName().equals("table")) {
+                    stringBuilder.append(createElementString((Element) child));
+                }        //添加标签尾
                 //如果不是input就意味着是那种小标签 直接加尾部就行
                 if (!(((Element) child).getName().equals("input") || ((Element) child).getName().equals("form-check"))) {
                     stringBuilder.append("</").append(((Element) child).getName()).append(" >");
@@ -119,13 +150,18 @@ public class XmlMapping {
                 if (((Element) child).getName().equals("form")) {
                     stringBuilder.append("</div>");
                     stringBuilder.append("</div>");
+                    stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\">" +
+                            "<div class=\"row form-group\"><div class=\"col col-md-3\"><label for=\"textarea-input\" class=\" form-control-label\">Textarea</label></div>" +
+                            "<div class=\"col-12 col-md-9\"><textarea name=\"textarea-input\" id=\"textarea-input\" rows=\"9\" placeholder=\"Content...\" class=\"form-control\">" +
+                            "</textarea></div></div></div></div>");
                 } else if (((Element) child).getName().equals("formcheck")) {
                     stringBuilder.append("</div></div></div>");
                 } else if (!((Element) child).getName().equals("option") && !((Element) child).getName().equals("checkbox") && !((Element) child).getName().equals("radio")) {
                     stringBuilder.append("</div>");
                     stringBuilder.append("</div>");
                 }
-                //!(((Element) child).getName().equals("input") && ((Element) child).getAttribute("type").getValue().equals("submit")) &&
+
+
             }
 
         }
@@ -141,6 +177,20 @@ public class XmlMapping {
         return createElementString(getElement(pageName));
     }
 
+    public String createTable(List<HashMap<String, String>> list) {
+        Set<String> title = list.get(1).keySet();
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<table class=\"table table-bordered\"><thead><tr>")
+                .append("<th scope=\"col\">#</th>");
+        for (String string : title) {
+            stringBuilder.append("<th scope=\"col\">").append(string).append("</th>");
+        }
+        stringBuilder.append("</thead><tbody>");
+        for (HashMap<String, String> hashMap : list) {
+            stringBuilder.append("");
+        }
+        return stringBuilder.toString();
+    }
     //生成侧边栏的字符串
 //    public String createAsideString() {
 //        System.out.println("///////////////////////////////////////////////////////");
@@ -188,7 +238,6 @@ public class XmlMapping {
         for (Map.Entry<String, Element> entry : typeElement.entrySet()) {
             boolean flag = true;
             if (!urlList.contains(entry.getValue().getAttribute("authorization").getValue())) {
-                flag = false;
                 continue;
             }
             stringBuilder.append("<li> <a href=\"");
@@ -205,11 +254,6 @@ public class XmlMapping {
                     .append("</a>")
                     .append("<ul>");
             for (Element element : entry.getValue().getChildren()) {
-                if (!flag) {
-                    if (!urlList.contains(element.getAttribute("url").getValue())) {
-                        continue;
-                    }
-                }
                 stringBuilder.append("<li id =\" ")
                         .append(element.getAttribute("name").getValue())
                         .append("\"><a href=\"")
@@ -227,17 +271,18 @@ public class XmlMapping {
 
         }
         stringBuilder.append("</ul>");
-
+        System.out.println(stringBuilder.toString());
         return stringBuilder.toString();
     }
 
 
     public List<String> createPageUrlList() {
-        List<String> UrlList = new ArrayList<>();
+        List<String> urlList = new ArrayList<>();
         for (String string : pageElement.keySet()) {
-            UrlList.add(pageElement.get(string).getAttribute("url").getValue());
+            urlList.add(pageElement.get(string).getAttribute("url").getValue());
         }
-        return UrlList;
+        return urlList;
+
     }
 
     public String createServerString(String selected) {
@@ -263,9 +308,9 @@ public class XmlMapping {
 
         XmlMapping xmlMapping = new XmlMapping();
 
-        //System.out.println(xmlMapping.createAsideString("root"));
-        System.out.println(xmlMapping.createPageUrlList());
-        System.out.println(xmlMapping.createPageString("operatorManage"));
+        //System.out.println(xmlMapping.createAsideString("TOKEN","master"));
+        //System.out.println(xmlMapping.createPageUrlList());
+        System.out.println(xmlMapping.createPageString("checkUserInfo"));
 
     }
 }

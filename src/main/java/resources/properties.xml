@@ -17,6 +17,11 @@
                         <option value="3">山东</option>
                         <option value="4">北京</option>
                     </select>
+                    <table name="userinfo">
+                        <th name="username" />
+                        <th name="password" />
+
+                    </table>
                     <formcheck name="numberselect">
                         <checkbox value="11">11</checkbox>
                         <checkbox value="22">22</checkbox>
@@ -32,15 +37,15 @@
                     <input type="submit" name="submit">提交</input>
                 </form>
                 <form name="queryMatch">
-                    <input type="text" name="userId"></input>
-                    <input type="text" name="days"></input>
+                    <input type="text" name="userId"/>
+                    <input type="text" name="days"/>
                     <input type="text" name="tour">0</input>
                     <input type="submit" name="submit">提交</input>
                 </form>
             </page>
         </pageType>
         <pageType name="操作管理" authorization="operationManage" icon="archive">
-            <page name="订单查询" url="checkOrders" authorization="checkOrders" icon="calendar">
+            <page name="订单查询" url="checkOrders" icon="calendar">
                 <form name="queryAsset">
                     <input type="text" name="userId">0</input>
                     <input type="text" name="days">0</input>
@@ -54,7 +59,6 @@
                     <input type="submit" name="ttt">提交</input>
                 </form>
             </page>
-
         </pageType>
         <pageType name="游戏服务管理" authorization="gameServerManage" icon="calendar">
             <page name="开关游戏服" url="operateServer" authorization="operateServer" >
@@ -72,7 +76,7 @@
             </page>
         </pageType>
         <pageType name="系统管理" authorization="systemManage" icon="clock">
-            <page name="基础信息管理" url="basicInfoManage" authorization="basicInfoManage">
+            <page name="基础信息管理" url="basicInfoManage">
                 <form name="queryMatch">
                     <input type="text" name="userId"></input>
                     <input type="text" name="days">0</input>
@@ -80,7 +84,7 @@
                     <input type="submit" name="submit">提交</input>
                 </form>
             </page>
-            <page name="操作员管理" url="operatorManage" authorization="operatorManage" >
+            <page name="操作员管理" url="operatorManage">
                 <form name="queryMatch">
                     <input type="text" name="userId"></input>
                     <input type="text" name="days">0</input>
