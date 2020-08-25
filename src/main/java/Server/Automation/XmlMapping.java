@@ -158,7 +158,7 @@ public class XmlMapping {
                     stringBuilder.append("</div>");
                     stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\">" +
                             "<div class=\"row form-group\"><div class=\"col col-md-3\"><label for=\"textarea-input\" class=\" form-control-label\">Textarea</label></div>" +
-                            "<div class=\"col-12 col-md-9\"><iframe id=\"id_iframe\" name=\"nm_iframe\" style=\"display:none;\"></iframe><form name=\"query\" action=\"/forward\" id=\"updateForm\" class=\"form-horizontal\" method=\"post\" target=\"nm_iframe\"><textarea name=\"textarea-input\" rows=\"9\" placeholder=\"Content...\" class=\"form-control\" style=\"height:700px\">" +
+                            "<div class=\"col-12 col-md-9\"><iframe id=\"id_iframe\" name=\"nm_iframe\" style=\"display:none;\"></iframe><form name=\"query\" action=\"/forward\" id=\"updateForm\" class=\"form-horizontal\" method=\"post\" target=\"nm_iframe\"><textarea name=\"body\" rows=\"9\" placeholder=\"Content...\" class=\"form-control\" style=\"height:700px\">" +
                             "</textarea><input type=\"submit\" name=\"submit\" class=\"form-control\"></form></div></div></div></div>");
                 } else if ("formcheck".equals(childName)) {
                     stringBuilder.append("</div></div></div>");
