@@ -162,21 +162,33 @@
     <script type="text/javascript" th:inline="javascript">
         var pageName = [[${pagename}]]
         var serverName = [[${servername}]]
+
         $(function () {
             var route = "/" + serverName + "/" + pageName;
 
             $("[href=" + pageName + "]").addClass("active");
             $("[href=" + pageName + "]").parent().parent().parent().addClass("open")
 
-            var input = document.createElement("input");
-            input.setAttribute("type", "hidden");
-            input.setAttribute("value", route);
-            input.setAttribute("name", "route");
-            var forms = document.getElementsByClassName("form-horizontal");
-            console.log(forms.length)
-            for (var i = 0; i < forms.length; i++) {
-                forms[i].appendChild(input);
-            }
+            // var input = document.createElement("input");
+            // input.setAttribute("type", "hidden");
+            // input.setAttribute("value", route);
+            // input.setAttribute("name", "route");
+            //
+            // var forms = document.getElementsByClassName("form-horizontal");
+            // console.log(forms.length)
+            // for (var i = 0; i < forms.length; i++) {
+            //     forms[i].appendChild(input);
+            // }
+            var selectConfigBody = document.createElement("input");
+            selectConfigBody.setAttribute("type", "hidden");
+            selectConfigBody.setAttribute("value", "selectConfigName");
+            selectConfigBody.setAttribute("name", "operation");
+            document.getElementById("selectForm").appendChild(selectConfigBody);
+            var updateConfigBody = document.createElement("input");
+            updateConfigBody.setAttribute("type", "hidden");
+            updateConfigBody.setAttribute("value", "updateConfigBody");
+            updateConfigBody.setAttribute("name", "operation");
+            document.getElementById("updateForm").appendChild(updateConfigBody);
         })
 
         function logout() {

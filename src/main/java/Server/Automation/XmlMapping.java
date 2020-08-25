@@ -65,30 +65,8 @@ public class XmlMapping {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\"><div class=\"form-check\">");
 
                 } else if ("table".equals(childName)) {
-                    List<String> tableName = new ArrayList<>();
-                    stringBuilder.append("<div class=\"row form-group\"><div class=\"table-responsive\"><table class=\"table table-bordered\"><thead><tr>")
-                            .append("<th scope=\"col\">#</th>");
-                    for (Element tableChildren : ((Element) child).getChildren()) {
-                        stringBuilder.append("<th scope=\"col\">").append(tableChildren.getAttribute("name").getValue()).append("</th>");
-                        tableName.add(tableChildren.getAttribute("name").getValue());
-                    }
-                    tableContent = DatabaseHelper.selectManagerInfo(tableName);
-                    stringBuilder.append("</tr></thead><tbody>");
-                    int order = 1;
-                    for (Map<String, String> map : tableContent) {
-                        stringBuilder.append("<tr>");
-                        stringBuilder.append("<td>");
-                        stringBuilder.append(order);
-                        stringBuilder.append("</td>");
-                        for (String name : tableName) {
-                            stringBuilder.append("<td>");
-                            stringBuilder.append(map.get(name));
-                            stringBuilder.append("</td>");
-                        }
-                        stringBuilder.append("</tr>");
-                        order++;
-                    }
-                    stringBuilder.append("</tbody>");
+
+                    stringBuilder.append("<div class=\"row form-group\"><div class=\"table-responsive\">");
                 }//不是option这种小标签的通用类 input select会用
                 else if (!("option".equals(childName) || "checkbox".equals(childName) || "radio".equals(childName))) {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\">");
@@ -107,10 +85,9 @@ public class XmlMapping {
                 }
                 ///////根据不同的元素添加特别的属性
 
-
                 //表单特殊属性 method="post"
                 if ("form".equals(childName)) {
-                    stringBuilder.append(" id=\"form\" class=\"form-horizontal\"  method=\"post\">");
+                    stringBuilder.append(" id=\"selectForm\" class=\"form-horizontal\"  method=\"post\" target=\"nm_iframe\">");
                     //输入框的特殊属性
                 }
                 else if ("input".equals(childName)&& "file".equals(((Element) child).getAttribute("type").getValue())) {
@@ -133,9 +110,35 @@ public class XmlMapping {
 
                     }
                 } else if ("time".equals(childName)) {
+
                     stringBuilder.append("<input type=\"text\" name=\"")
                             .append(childName)
                             .append("\" id=\"TIMESTAMP\" class=\"form-control\" autocomplete=\"off\">");
+                } else if("table".equals(childName)){
+                    List<String>tableName = new ArrayList<>();
+                    stringBuilder.append(" class=\"table table-bordered\"><thead><tr>")
+                            .append("<th scope=\"col\">#</th>");
+                    for (Element tableChildren : ((Element) child).getChildren()) {
+                        stringBuilder.append("<th scope=\"col\">").append(tableChildren.getAttribute("name").getValue()).append("</th>");
+                        tableName.add(tableChildren.getAttribute("name").getValue());
+                    }
+                    tableContent = DatabaseHelper.selectManagerInfo(tableName);
+                    stringBuilder.append("</tr></thead><tbody>");
+                    int order = 1;
+                    for (Map<String, String> map : tableContent) {
+                        stringBuilder.append("<tr>");
+                        stringBuilder.append("<td>");
+                        stringBuilder.append(order);
+                        stringBuilder.append("</td>");
+                        for (String name : tableName) {
+                            stringBuilder.append("<td>");
+                            stringBuilder.append(map.get(name));
+                            stringBuilder.append("</td>");
+                        }
+                        stringBuilder.append("</tr>");
+                        order++;
+                    }
+                    stringBuilder.append("</tbody>");
                 }
 
 
@@ -155,8 +158,8 @@ public class XmlMapping {
                     stringBuilder.append("</div>");
                     stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\">" +
                             "<div class=\"row form-group\"><div class=\"col col-md-3\"><label for=\"textarea-input\" class=\" form-control-label\">Textarea</label></div>" +
-                            "<div class=\"col-12 col-md-9\"><textarea name=\"textarea-input\" id=\"textarea-input\" rows=\"9\" placeholder=\"Content...\" class=\"form-control\">" +
-                            "</textarea></div></div></div></div>");
+                            "<div class=\"col-12 col-md-9\"><iframe id=\"id_iframe\" name=\"nm_iframe\" style=\"display:none;\"></iframe><form name=\"query\" action=\"/forward\" id=\"updateForm\" class=\"form-horizontal\" method=\"post\" target=\"nm_iframe\"><textarea name=\"textarea-input\" rows=\"9\" placeholder=\"Content...\" class=\"form-control\" style=\"height:700px\">" +
+                            "</textarea><input type=\"submit\" name=\"submit\" class=\"form-control\"></form></div></div></div></div>");
                 } else if ("formcheck".equals(childName)) {
                     stringBuilder.append("</div></div></div>");
                 } else if (!"option".equals(childName) && !"checkbox".equals(childName) && !"radio".equals(childName)) {
@@ -215,9 +218,7 @@ public class XmlMapping {
                         .append(element.getAttribute("url").getValue())
                         .append("\">")
                         .append(element.getAttribute("name").getValue())
-
                         .append("</a>")
-
                         .append("</li>");
 
             }
