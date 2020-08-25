@@ -1,6 +1,7 @@
 package Server.Resources;
 
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
@@ -8,7 +9,6 @@ import io.vertx.ext.web.client.WebClientOptions;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.List;
 
 public class ForwardResources {
 
@@ -20,6 +20,7 @@ public class ForwardResources {
         webClient = WebClient.create(vertx, options);
 
         router.post("/forward").handler(this::forward);
+
     }
 
     private void forward(RoutingContext routingContext) {
@@ -34,16 +35,21 @@ public class ForwardResources {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        routingContext.reroute("/main"+data.get("route"));
-        data.remove("route");
-//        webClient.head(8000, "", "").send(ar -> {
-//            if (ar.succeeded()) {
-//                System.out.println(ar.result().body());
-//                routingContext.response().end(ar.result().bodyAsBuffer());
-//            } else {
-//                System.out.println("Wrong :" +ar.cause().getMessage());
-//            }
-//        });
-    }
+        JsonObject jsonObject = new JsonObject();
+        for (String key : data.keySet()) {
+            String value = data.get(key);
+            jsonObject.put(key, value);
+        }
 
+        webClient.post(8000, "localhost", "/GmServer")
+                .sendJsonObject(jsonObject, ar -> {
+            if (ar.succeeded()) {
+                // System.out.println(ar.result().body());
+                routingContext.response().end(ar.result().body());
+            } else {
+                System.out.println("Wrong :" +ar.cause().getMessage());
+                routingContext.response().end("Operation failed !");
+            }
+        });
+    }
 }
