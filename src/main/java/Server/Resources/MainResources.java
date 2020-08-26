@@ -1,6 +1,7 @@
 package Server.Resources;
 
 import Server.Automation.XmlMapping;
+import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
@@ -8,6 +9,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 public class MainResources extends AbstractVerticle {
@@ -35,49 +37,64 @@ public class MainResources extends AbstractVerticle {
             obj.put("sidePanal", "");
             obj.put("content", "");
             obj.put("servers", serverString);
-            thymeleafTemplateEngine.render(obj, "templates/home.html", bufferAsyncResult -> {
+            thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
                 ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
             });
         });
+        
         router.route("/main/:serverRouter/:pageRouter").handler(ctx -> {
-            asideString=xmlMapping.createAsideString(JwtUtils.findToken(ctx),ctx.request().getParam("serverRouter"));
+            asideString = xmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
             String pageRouter = ctx.request().getParam("pageRouter");
             String serverRouter = ctx.request().getParam("serverRouter");
+            //String returnContent=ctx.request().getParam("returnContent");
+            String returnContent =  ctx.get("returnContent");
+            String selectName= ctx.get("arg");
+            //System.out.println(returnContent);
             serverString = xmlMapping.createServerString(serverRouter);
             String contentString;
-            if("0".equals(pageRouter)){
-                contentString="";
-            }else {
-                contentString=xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")));
+            if ("0".equals(pageRouter)) {
+                contentString = "";
+            } else {
+                contentString = xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")));
             }
-
             var obj = new JsonObject();
             obj.put("sidePanal", asideString);
             obj.put("pagename", pageRouter);
             obj.put("servers", serverString);
-            obj.put("servername",serverRouter);
+            obj.put("servername", serverRouter);
+            obj.put("route","/"+serverRouter+"/"+pageRouter);
+            
+            // HashMap<String, Object> hashMap = new HashMap<>();
+            // List<String> list = new ArrayList<>();
+            // switch (type) {
+            //     case "table" :
+            //         hashMap = JSON.parseObject(resultData, HashMap.class);
+            //         routingContext.put("colName",hashMap.get("colName")).put("tableBody", hashMap.get("tableBody"));
+            //         break;
+            //     case "list" :
+            //         list = JSON.parseObject(resultData, ArrayList.class);
+            //         routingContext.put("list", list);
+            //         break;
+            //     case "str" :
+            //         routingContext.put("data", resultData);
+            //         break;
+            // }
+
+            obj.put("returnContent",returnContent);
+            obj.put("selectName",selectName);
+
             //obj.put("name", xmlMapping.createElementString(xmlMapping.getElement(pageRouter)));
             obj.put("content", contentString);
-            thymeleafTemplateEngine.render(obj, "templates/home.html", bufferAsyncResult -> {
+            thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
                 ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
             });
         });
-//        router.route("/main/:pageRouter").handler(ctx -> {
-//            //asideString = xmlMapping.createAsideString(userName);
-//            String pageRouter = ctx.request().getParam("pageRouter");
-//            var obj = new JsonObject();
-//            obj.put("sidePanal", asideString);
-//            obj.put("pagename", pageRouter);
-//            obj.put("servers", serverString);
-//            obj.put("name", xmlMapping.createElementString(xmlMapping.getElement(pageRouter)));
-//            thymeleafTemplateEngine.render(obj, "templates/home.html", bufferAsyncResult -> {
-//                ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
-//            });
-//        });
+
+        router.route("/main/args").handler(ctx -> {
+            String token = JwtUtils.findToken(ctx);
+            String args = Cache.getArgs(token);
+            ctx.response().end(args);
+        });
 
     }
-
-//    private void main(RoutingContext routingContext) {
-//        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("templates/index.html");
-//    }
 }
