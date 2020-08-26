@@ -14,7 +14,7 @@ public class JwtUtils {
 
         JWTAuthOptions jwtAuthOptions = new JWTAuthOptions()
                 .setKeyStore(new KeyStoreOptions()
-                        .setPath("verifies/Keystore.jceks")
+                        .setPath("src/main/java/resources/verifies/Keystore.jceks")
                         .setPassword("secret"));
 
         long starttime = System.currentTimeMillis();

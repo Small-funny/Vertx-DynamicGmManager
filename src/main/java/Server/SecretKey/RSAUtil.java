@@ -15,8 +15,6 @@ import java.util.Base64;
  *      前端需要使用RSA公钥（Base64编码）进行加密
  *      后端使用RSA私钥（这里可以是PrivateKey或者Base64编码格式）进行解密
  *
- * @author Alex
- * @date 4/13/2020 9:55 AM
  */
 public class RSAUtil {
 

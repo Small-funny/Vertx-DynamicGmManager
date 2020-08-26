@@ -31,7 +31,7 @@ public class LoginResources extends AbstractVerticle {
     }
 
     private void login(RoutingContext routingContext) {
-        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("templates/login.html");
+        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("src/main/java/resources/templates/login.html");
     }
 
     private void logout(RoutingContext routingContext) {
@@ -44,7 +44,7 @@ public class LoginResources extends AbstractVerticle {
 
     private void sendPublicKey(RoutingContext routingContext) {
         String publicKey = "";
-        publicKey = getString("verifies/publicKey");
+        publicKey = getString("src/main/java/resources/verifies/publicKey");
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(publicKey);
     }
 
@@ -61,7 +61,7 @@ public class LoginResources extends AbstractVerticle {
 //        System.out.println("账号:（加密后）"+password);
 
         String privateKey = null;
-        privateKey = getString("verifies/privateKey");
+        privateKey = getString("src/main/java/resources/verifies/privateKey");
 
         username = RSAUtil.decrypt(privateKey, username);
         password = RSAUtil.decrypt(privateKey, password);
@@ -106,7 +106,7 @@ public class LoginResources extends AbstractVerticle {
     }
 
     private void verifyCodePic(RoutingContext routingContext) {
-        File dir = new File("verifies");
+        File dir = new File("src/main/java/resources/verifies");
         if (!dir.exists()) {
             System.out.println("创建图片存储目录...");
             dir.mkdir();
@@ -115,7 +115,7 @@ public class LoginResources extends AbstractVerticle {
         VerifyCode instance = new VerifyCode();
         String verifyCode = instance.getCode();
 
-        File code = new File("verifies/code");
+        File code = new File("src/main/java/resources/verifies/code");
         if (!code.exists()) {
             try {
                 System.out.println("创建验证码存储文件...");
@@ -132,7 +132,7 @@ public class LoginResources extends AbstractVerticle {
             ImageIO.write(instance.getBuffImg(), "jpg", file);
 
             System.out.println("开始写入验证码...");
-            FileOutputStream privateFileStream = new FileOutputStream("verifies/code");
+            FileOutputStream privateFileStream = new FileOutputStream("src/main/java/resources/verifies/code");
             BufferedOutputStream privateBuffer =new BufferedOutputStream(privateFileStream);
             privateBuffer.write(verifyCode.getBytes(),0,verifyCode.getBytes().length);
             privateBuffer.flush();
@@ -141,11 +141,11 @@ public class LoginResources extends AbstractVerticle {
             e.printStackTrace();
         }
 
-        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("verifies/verifyCode.jpg");
+        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("src/main/java/resources/verifies/verifyCode.jpg");
     }
 
     private void verifyCode(RoutingContext routingContext) {
-        String code = getString("verifies/code");
+        String code = getString("src/main/java/resources/verifies/code");
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(code);
     }
 

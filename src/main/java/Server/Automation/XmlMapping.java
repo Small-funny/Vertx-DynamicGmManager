@@ -22,7 +22,7 @@ public class XmlMapping {
 
         SAXBuilder saxBuilder = new SAXBuilder();
         //Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
-        Element root = saxBuilder.build("properties.xml").getDocument().getRootElement();
+        Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
         List<Element> typeList = root.getChild("pages").getChildren();
         for (Element typeE : typeList) {
             typeElement.put(typeE.getAttribute("name").getValue(), typeE);
@@ -85,9 +85,9 @@ public class XmlMapping {
                 }
                 ///////根据不同的元素添加特别的属性
 
-                //表单特殊属性 method="post"
+                //表单特殊属性 method="post" target="nm_iframe"
                 if ("form".equals(childName)) {
-                    stringBuilder.append(" id=\"selectForm\" class=\"form-horizontal\"  method=\"post\" target=\"nm_iframe\">");
+                    stringBuilder.append(" id=\"selectForm\" class=\"form-horizontal\"  method=\"post\" >");
                     //输入框的特殊属性
                 }
                 else if ("input".equals(childName)&& "file".equals(((Element) child).getAttribute("type").getValue())) {
@@ -152,13 +152,13 @@ public class XmlMapping {
                 }
 
 
-                //这里加结束的div
+                //这里加结束的div  <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
                 if ("form".equals(childName)) {
                     stringBuilder.append("</div>");
                     stringBuilder.append("</div>");
                     stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\">" +
                             "<div class=\"row form-group\"><div class=\"col col-md-3\"><label for=\"textarea-input\" class=\" form-control-label\">Textarea</label></div>" +
-                            "<div class=\"col-12 col-md-9\"><iframe id=\"id_iframe\" name=\"nm_iframe\" style=\"display:none;\"></iframe><form name=\"query\" action=\"/forward\" id=\"updateForm\" class=\"form-horizontal\" method=\"post\" target=\"nm_iframe\"><textarea name=\"body\" rows=\"9\" placeholder=\"Content...\" class=\"form-control\" style=\"height:700px\">" +
+                            "<div class=\"col-12 col-md-9\"><form name=\"query\" action=\"/forward\" id=\"updateForm\" class=\"form-horizontal\" method=\"post\" ><textarea id=\"text\" name=\"body\" rows=\"9\" placeholder=\"Content...\" class=\"form-control\" style=\"height:700px\">" +
                             "</textarea><input type=\"submit\" name=\"submit\" class=\"form-control\"></form></div></div></div></div>");
                 } else if ("formcheck".equals(childName)) {
                     stringBuilder.append("</div></div></div>");

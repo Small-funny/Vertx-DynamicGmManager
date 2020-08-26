@@ -8,9 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
 public class VerifyCode {
-    // 图片的宽度。
+    // 图片的宽度
     private int width = 100;
-    // 图片的高度。
+    // 图片的高度
     private int height = 40;
     // 验证码字符个数
     private int codeCount = 4;
@@ -180,7 +180,7 @@ public class VerifyCode {
             try {
 
                 String fontByteStr = "";
-                File file = new File("VerifyCodeFontByte");
+                File file = new File("src/main/java/resources/VerifyCodeFontByte");
                 FileInputStream inputStream = new FileInputStream(file);
                 int length = inputStream.available();
                 byte bytes[] = new byte[length];

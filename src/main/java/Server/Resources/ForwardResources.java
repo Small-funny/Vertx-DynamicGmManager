@@ -6,9 +6,13 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import java.net.URLDecoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class ForwardResources {
 
@@ -23,6 +27,7 @@ public class ForwardResources {
 
     }
 
+    @SuppressWarnings("unchecked")
     private void forward(RoutingContext routingContext) {
         HashMap<String, String> data = new HashMap<>();
         try {
@@ -40,12 +45,21 @@ public class ForwardResources {
             String value = data.get(key);
             jsonObject.put(key, value);
         }
-
+        String url = jsonObject.getString("route");
+        System.out.println(url);
+        jsonObject.remove("route");
         webClient.post(8000, "localhost", "/GmServer")
                 .sendJsonObject(jsonObject, ar -> {
             if (ar.succeeded()) {
-                // System.out.println(ar.result().body());
-                routingContext.response().end(ar.result().body());
+//                System.out.println(ar.result().body());
+                JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
+                HashMap<String, Object> hashMap = new HashMap<>();
+                List<String> list = new ArrayList<>();
+
+                String type = jsonResult.getString("type");
+                String resultData = jsonResult.getString("data");
+
+                routingContext.put("type", type).put("data", resultData).put("route", url).reroute("/main"+url);
             } else {
                 System.out.println("Wrong :" +ar.cause().getMessage());
                 routingContext.response().end("Operation failed !");

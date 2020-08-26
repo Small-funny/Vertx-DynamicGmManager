@@ -16,7 +16,7 @@ public class DatabaseHelper {
         Element data = null;
         try {
             SAXBuilder sb = new SAXBuilder();
-            Document doc = sb.build("Database.xml");
+            Document doc = sb.build("src/main/java/resources/Database.xml");
             data = doc.getRootElement();
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,7 +72,7 @@ public class DatabaseHelper {
                 if (username.equals(record.getChildren().get(0).getAttributeValue("value"))) {
                     record.getChildren().get(2).setAttribute("value", token);
                     XMLOutputter outPutter = new XMLOutputter();
-                    outPutter.output(rootData, new FileOutputStream("Database.xml"));
+                    outPutter.output(rootData, new FileOutputStream("src/main/java/resources/Database.xml"));
                     break;
                 }
             }
@@ -123,12 +123,24 @@ public class DatabaseHelper {
         return result;
     }
 
+    public static String tokenToUsername(String token) {
+        String username = null;
+        List<Element> data = loadDatabase().getChildren();
+        try {
+            for (Element record: data) {
+                if (token.equals(record.getChildren().get(2).getAttributeValue("value"))) {
+                    username = record.getChildren().get(0).getAttributeValue("value");
+                }
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+
+        return username;
+    }
+
     public static void main(String[] args) {
-        List<String> test = new ArrayList<>();
-        test.add("username");
-        test.add("password");
-        test.add("token");
-        test.add("enable");
-        System.out.println(selectManagerInfo(test));
+        
+        System.out.println(tokenToUsername("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTgzNDA1OTQsImV4cCI6MTU5ODM0NDE5NH0.QF8oYBDsW4jH3sCBnB5VwE_JXCBeCjaiT7n9KH5X8ro"));
     }
 }
