@@ -86,7 +86,7 @@
 <!-- Right Panel -->
 
 
-<div id="right-panel" class="right-panel" style="width: 1000px;margin: 35px auto">
+<div id="right-panel" class="right-panel" style="width: 1500px;margin: 35px auto">
 
     <!-- Header-->
     <header id="header" class="header">
@@ -108,17 +108,45 @@
     </header><!-- /header -->
     <!-- Header-->
 
-    <div class="content" style="margin: auto">
+    <div class="content" style="margin: auto;">
         <div class="animated fadeIn">
             <div class="row">
-                <div class="col-lg-6" style="flex: 0 0 auto;max-width: 100%" th:utext="${content}">
+                <div class="col-lg-6" style="flex: 0 0 auto;margin-left:250px" th:utext="${content}">
 
                 </div>
-                <textarea th:utext="${returnContent}" style="height: 300px"></textarea>
+                <div class="col-lg-3" style="flex: 0 0 auto">
+                    <div class="card">
+                        <div class="row form-group" style="">
+                            <div class="col col-md-12" >
+                                <select name="multiple-select" id="multiple-select" multiple="" class="form-control" style="height: 1000px">
+                                    <option value="1">Option #1</option>
+                                    <option value="2">Option #2</option>
+                                    <option value="3">Option #3</option>
+                                    <option value="4">Option #4</option>
+                                    <option value="5">Option #5</option>
+                                    <option value="6">Option #6</option>
+                                    <option value="7">Option #7</option>
+                                    <option value="8">Option #8</option>
+                                    <option value="9">Option #9</option>
+                                    <option value="10">Option #10</option>
+                                    <option value="1">Option #1</option>
+                                    <option value="2">Option #2</option>
+                                    <option value="3">Option #3</option>
+                                    <option value="4">Option #4</option>
+                                    <option value="5">Option #5</option>
+                                    <option value="6">Option #6</option>
+                                    <option value="7">Option #7</option>
+                                    <option value="8">Option #8</option>
+                                    <option value="9">Option #9</option>
+                                    <option value="10">Option #10</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-
 
     <script src="/webroot/vendors/bundle.js"></script>
 
@@ -163,7 +191,7 @@
     </script>
     <script type="text/javascript" th:inline="javascript">
         var pageName = [[${pagename}]]
-        var serverName=[[${servername}]]
+        var serverName = [[${servername}]]
         $(function () {
 
             $("[href=" + pageName + "]").addClass("active");
@@ -172,14 +200,14 @@
 
             var route = document.createElement("input");
             route.setAttribute("type", "hidden");
-            route.setAttribute("value", "/"+serverName+"/"+pageName);
+            route.setAttribute("value", "/" + serverName + "/" + pageName);
             route.setAttribute("name", "route");
             document.getElementById("selectForm").appendChild(route);
 
 
             var textroute = document.createElement("input");
             textroute.setAttribute("type", "hidden");
-            textroute.setAttribute("value", "/"+serverName+"/"+pageName);
+            textroute.setAttribute("value", "/" + serverName + "/" + pageName);
             textroute.setAttribute("name", "route");
             document.getElementById("updateForm").appendChild(textroute);
 
@@ -198,21 +226,21 @@
             document.getElementById("updateForm").appendChild(updateConfigBody);
 
 
-            var content =[[${returnContent}]];
-            if(content!==null){
+            var content = [[${returnContent}]];
+            if (content !== null) {
                 var textContent = document.createTextNode(content);
                 document.getElementById("text").appendChild(textContent);
             }
-            var selectName =[[${selectName}]]
-                console.log("name"+selectName);
-                //$("#configName").val(selectName);
-                document.getElementById("configName").value=selectName;
+            var selectName = [[${selectName}]]
+            console.log("name" + selectName);
+            //$("#configName").val(selectName);
+            document.getElementById("configName").value = selectName;
             var configName = document.createElement("input");
             configName.setAttribute("type", "hidden");
             configName.setAttribute("value", selectName);
             configName.setAttribute("name", "configName");
             document.getElementById("updateForm").appendChild(configName);
-            history.pushState(null, null, "/main/"+serverName+"/"+pageName);
+            history.pushState(null, null, "/main/" + serverName + "/" + pageName);
         })
 
         function logout() {

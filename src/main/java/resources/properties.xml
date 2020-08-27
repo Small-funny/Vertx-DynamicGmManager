@@ -17,17 +17,13 @@
                         <option value="3">山东</option>
                         <option value="4">北京</option>
                     </select>
-                    <table name="userinfo">
-                        <th name="username" />
-                        <th name="password" />
 
-                    </table>
                     <formcheck name="numberselect">
                         <checkbox value="11">11</checkbox>
                         <checkbox value="22">22</checkbox>
                         <checkbox value="33">33</checkbox>
                     </formcheck>
-                    <input type="submit" name="submit"/>提交
+                    <input type="submit" name="submit" value="查询"/>
                 </form>
             </page>
             <page name="封禁用户" url="banUser" authorizqation="banUser" >
@@ -36,11 +32,17 @@
                     <input type="text" name="days">0</input>
                     <input type="submit" name="submit">提交</input>
                 </form>
-                <form name="queryMatch">
+                <form name="queryMatch" action="/forward">
                     <input type="text" name="userId"/>
                     <input type="text" name="days"/>
                     <input type="text" name="tour">0</input>
                     <input type="submit" name="submit">提交</input>
+                </form>
+            </page>
+            <page name="查询表结构" url="checkTable" authorizqation="checkTable">
+                <form name="check" action="/forward">
+                    <input type="text" name="name"/>
+                    <input type="submit" name="submit" value="查询"/>
                 </form>
             </page>
         </pageType>

@@ -16,7 +16,9 @@ public class XmlMapping {
     //页面类型是键 对应的类型element是值
     private static final HashMap<String, Element> typeElement = new HashMap<>();
     private static final HashMap<String, Element> serverElement = new HashMap<>();
-    private static List<HashMap<String, String>> tableContent = new ArrayList<>();
+    //private static List<HashMap<String, String>> tableContent = new ArrayList<>();
+    private static List<List<String>> tableContent = new ArrayList<>();
+    private static List<String> subAuthList = new ArrayList<>();
 
     public XmlMapping() throws JDOMException, IOException {
 
@@ -35,6 +37,7 @@ public class XmlMapping {
         for (Element element : serverlist) {
             serverElement.put(element.getAttribute("value").getValue(), element);
         }
+
 
     }
 
@@ -62,14 +65,18 @@ public class XmlMapping {
                             .append("</strong></div>")
                             .append("<div class=\"card-body card-block\">");
                 } else if ("formcheck".equals(childName)) {
-                    stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\"><div class=\"form-check\">");
+                    stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">")
+                            .append(((Element) child).getAttribute("name").getValue())
+                            .append("</label></div><div class=\"col-12 col-md-9\"><div class=\"form-check\">");
 
                 } else if ("table".equals(childName)) {
 
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"table-responsive\">");
                 }//不是option这种小标签的通用类 input select会用
                 else if (!("option".equals(childName) || "checkbox".equals(childName) || "radio".equals(childName))) {
-                    stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">").append(((Element) child).getAttribute("name").getValue()).append("</label></div><div class=\"col-12 col-md-9\">");
+                    stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">")
+                            .append(((Element) child).getAttribute("name").getValue())
+                            .append("</label></div><div class=\"col-12 col-md-9\">");
                 }
 
 
@@ -89,10 +96,9 @@ public class XmlMapping {
                 if ("form".equals(childName)) {
                     stringBuilder.append(" id=\"selectForm\" class=\"form-horizontal\"  method=\"post\" >");
                     //输入框的特殊属性
-                }
-                else if ("input".equals(childName)&& "file".equals(((Element) child).getAttribute("type").getValue())) {
+                } else if ("input".equals(childName) && "file".equals(((Element) child).getAttribute("type").getValue())) {
                     stringBuilder.append("class=\"form-control-file\">");
-                }else if ("input".equals(childName) || "select".equals(childName)) {
+                } else if ("input".equals(childName) || "select".equals(childName)) {
                     stringBuilder.append("class=\"form-control\">");
                 } else if ("option".equals(childName)) {
                     stringBuilder.append(">");
@@ -114,32 +120,33 @@ public class XmlMapping {
                     stringBuilder.append("<input type=\"text\" name=\"")
                             .append(childName)
                             .append("\" id=\"TIMESTAMP\" class=\"form-control\" autocomplete=\"off\">");
-                } else if("table".equals(childName)){
-                    List<String>tableName = new ArrayList<>();
-                    stringBuilder.append(" class=\"table table-bordered\"><thead><tr>")
-                            .append("<th scope=\"col\">#</th>");
-                    for (Element tableChildren : ((Element) child).getChildren()) {
-                        stringBuilder.append("<th scope=\"col\">").append(tableChildren.getAttribute("name").getValue()).append("</th>");
-                        tableName.add(tableChildren.getAttribute("name").getValue());
-                    }
-                    tableContent = DatabaseHelper.selectManagerInfo(tableName);
-                    stringBuilder.append("</tr></thead><tbody>");
-                    int order = 1;
-                    for (Map<String, String> map : tableContent) {
-                        stringBuilder.append("<tr>");
-                        stringBuilder.append("<td>");
-                        stringBuilder.append(order);
-                        stringBuilder.append("</td>");
-                        for (String name : tableName) {
-                            stringBuilder.append("<td>");
-                            stringBuilder.append(map.get(name));
-                            stringBuilder.append("</td>");
-                        }
-                        stringBuilder.append("</tr>");
-                        order++;
-                    }
-                    stringBuilder.append("</tbody>");
                 }
+//                else if ("table".equals(childName)) {
+//                    List<String> tableName = new ArrayList<>();
+//                    stringBuilder.append(" class=\"table table-bordered\"><thead><tr>")
+//                            .append("<th scope=\"col\">#</th>");
+//                    for (Element tableChildren : ((Element) child).getChildren()) {
+//                        stringBuilder.append("<th scope=\"col\">").append(tableChildren.getAttribute("name").getValue()).append("</th>");
+//                        tableName.add(tableChildren.getAttribute("name").getValue());
+//                    }
+//                    tableContent = DatabaseHelper.selectManagerInfo(tableName);
+//                    stringBuilder.append("</tr></thead><tbody>");
+//                    int order = 1;
+//                    for (Map<String, String> map : tableContent) {
+//                        stringBuilder.append("<tr>");
+//                        stringBuilder.append("<td>");
+//                        stringBuilder.append(order);
+//                        stringBuilder.append("</td>");
+//                        for (String name : tableName) {
+//                            stringBuilder.append("<td>");
+//                            stringBuilder.append(map.get(name));
+//                            stringBuilder.append("</td>");
+//                        }
+//                        stringBuilder.append("</tr>");
+//                        order++;
+//                    }
+//                    stringBuilder.append("</tbody>");
+//                }
 
 
                 //添加标签头完毕 进入递归 table不能进入
@@ -156,10 +163,24 @@ public class XmlMapping {
                 if ("form".equals(childName)) {
                     stringBuilder.append("</div>");
                     stringBuilder.append("</div>");
-                    stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\">" +
-                            "<div class=\"row form-group\"><div class=\"col col-md-3\"><label for=\"textarea-input\" class=\" form-control-label\">Textarea</label></div>" +
-                            "<div class=\"col-12 col-md-9\"><form name=\"query\" action=\"/forward\" id=\"updateForm\" class=\"form-horizontal\" method=\"post\" ><textarea id=\"text\" name=\"body\" rows=\"9\" placeholder=\"Content...\" class=\"form-control\" style=\"height:700px\">" +
-                            "</textarea><input type=\"submit\" name=\"submit\" class=\"form-control\"></form></div></div></div></div>");
+                    stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\">")
+                            .append("<div class=\"row form-group\">")
+                            .append("<div class=\"col col-md-3\"><label for=\"textarea-input\" class=\" form-control-label\">Textarea</label></div>")
+                            .append("<div class=\"col-12 col-md-9\"><form name=\"query\" action=\"/forward\" id=\"updateForm\" class=\"form-horizontal\" method=\"post\" >")
+                            .append("<textarea id=\"text\" name=\"body\" rows=\"9\" placeholder=\"Content...\" class=\"form-control\" style=\"height:700px\"></textarea>");
+                    System.out.println(element.getAttributeValue("url"));
+                    System.out.println(subAuthList);
+                    if (subAuthList.contains(element.getAttributeValue("url"))) {
+
+
+                        stringBuilder.append("<input type=\"submit\" name=\"submit\" class=\"form-control\">");
+                    }
+                    stringBuilder.append("</form></div></div></div></div>");
+//                    stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\">" +
+//                            "<div class=\"row form-group\">" +
+//                            "<div class=\"col col-md-3\"><label for=\"textarea-input\" class=\" form-control-label\">Textarea</label></div>" +
+//                            "<div class=\"col-12 col-md-9\">" +
+//                            "</div></div></div></div>");
                 } else if ("formcheck".equals(childName)) {
                     stringBuilder.append("</div></div></div>");
                 } else if (!"option".equals(childName) && !"checkbox".equals(childName) && !"radio".equals(childName)) {
@@ -187,6 +208,8 @@ public class XmlMapping {
     public String createAsideString(String token, String server) {
         // List<String> urlList = JdbcMysqlHelper.selectAuthority(token);
         List<String> urlList = DatabaseHelper.selectAuthority(token, server);
+        subAuthList = DatabaseHelper.selectSubAuthority(token, server);
+        System.out.println("subauthlist"+subAuthList);
         System.out.println("/////" + urlList);
         StringBuilder stringBuilder = new StringBuilder();
         //从外层div开始 div类是navigation-menu-body
@@ -209,8 +232,7 @@ public class XmlMapping {
                     .append(entry.getValue().getAttribute("icon").getValue())
                     .append("\"></i>")
                     .append(entry.getKey())
-                    .append("</a>")
-                    .append("<ul>");
+                    .append("</a><ul>");
             for (Element element : entry.getValue().getChildren()) {
                 stringBuilder.append("<li id =\" ")
                         .append(element.getAttribute("name").getValue())
@@ -218,8 +240,7 @@ public class XmlMapping {
                         .append(element.getAttribute("url").getValue())
                         .append("\">")
                         .append(element.getAttribute("name").getValue())
-                        .append("</a>")
-                        .append("</li>");
+                        .append("</a></li>");
 
             }
             stringBuilder.append("</ul>");
@@ -230,7 +251,6 @@ public class XmlMapping {
         System.out.println(stringBuilder.toString());
         return stringBuilder.toString();
     }
-
 
 
     public String createServerString(String selected) {
@@ -249,6 +269,28 @@ public class XmlMapping {
         }
         return stringBuilder.toString();
     }
+
+    public String createTableString(List<List<String>> tableList) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<table class=\"table table-bordered\">")
+                .append("<thead><tr>");
+        for (String s : tableList.get(0)) {
+            stringBuilder.append("<th scope=\"col\">").append(s).append("</th>");
+        }
+        stringBuilder.append("</tr></thead><tbody>");
+        tableList.remove(0);
+        for (List<String> list : tableList) {
+            stringBuilder.append("<tr>");
+            for (String s : list) {
+                stringBuilder.append("<td>").append(s).append("</td>");
+            }
+            stringBuilder.append("</tr>");
+        }
+        stringBuilder.append("</tbody></table>");
+        return stringBuilder.toString();
+
+    }
+
 
     public static void main(String[] args) throws JDOMException, IOException {
         System.out.println("\"");

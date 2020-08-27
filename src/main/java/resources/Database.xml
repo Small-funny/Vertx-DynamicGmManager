@@ -2,26 +2,36 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTgzNDA1OTQsImV4cCI6MTU5ODM0NDE5NH0.QF8oYBDsW4jH3sCBnB5VwE_JXCBeCjaiT7n9KH5X8ro" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTg1MTQ2MjQsImV4cCI6MTU5ODUxODIyNH0.bBfb9LOmZtllAy6nBOfiCyCYMTIoR2hc9YGif22PT50" />
         <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="sandbox">
-                <auth2 name="list" value="playerManage" />
+                <auth2 name="list" value="playerManage">
+                    <auth3 name="list" value="checkUserInfo" />
+                </auth2>
                 <auth2 name="list" value="operationManage" />
                 <auth2 name="list" value="gameServerManage" />
-                <auth2 name="list" value="systemManage" />
+                <auth2 name="list" value="systemManage">
+                    <auth3 name="list" value="basicInfoManage" />
+                </auth2>
             </auth1>
             <auth1 name="server" value="test">
-                <auth2 name="list" value="playerManage" />
+                <auth2 name="list" value="playerManage"/>
+
                 <auth2 name="list" value="operationManage" />
                 <auth2 name="list" value="gameServerManage" />
-                <auth2 name="list" value="systemManage" />
+                <auth2 name="list" value="systemManage"/>
+
             </auth1>
             <auth1 name="server" value="master">
-                <auth2 name="list" value="playerManage" />
+                <auth2 name="list" value="playerManage">
+                    <auth3 name="list" value="checkUserInfo" />
+                </auth2>
                 <auth2 name="list" value="operationManage" />
                 <auth2 name="list" value="gameServerManage" />
-                <auth2 name="list" value="systemManage" />
+                <auth2 name="list" value="systemManage">
+                    <auth3 name="list" value="basicInfoManage" />
+                </auth2>
             </auth1>
         </column>
     </record>
