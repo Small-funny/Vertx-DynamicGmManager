@@ -116,30 +116,19 @@
                 </div>
                 <div class="col-lg-3" style="flex: 0 0 auto">
                     <div class="card">
-                        <div class="row form-group" style="">
-                            <div class="col col-md-12" >
-                                <select name="multiple-select" id="multiple-select" multiple="" class="form-control" style="height: 1000px">
-                                    <option value="1">Option #1</option>
-                                    <option value="2">Option #2</option>
-                                    <option value="3">Option #3</option>
-                                    <option value="4">Option #4</option>
-                                    <option value="5">Option #5</option>
-                                    <option value="6">Option #6</option>
-                                    <option value="7">Option #7</option>
-                                    <option value="8">Option #8</option>
-                                    <option value="9">Option #9</option>
-                                    <option value="10">Option #10</option>
-                                    <option value="1">Option #1</option>
-                                    <option value="2">Option #2</option>
-                                    <option value="3">Option #3</option>
-                                    <option value="4">Option #4</option>
-                                    <option value="5">Option #5</option>
-                                    <option value="6">Option #6</option>
-                                    <option value="7">Option #7</option>
-                                    <option value="8">Option #8</option>
-                                    <option value="9">Option #9</option>
-                                    <option value="10">Option #10</option>
-                                </select>
+                        <div class="row form-group">
+                            <div class="col col-md-12">
+                                <form id="configNames" action="/forward" class="form-horizontal"
+                                      method="post">
+                                    <select name="multiple-select" id="multiple-select" multiple="" class="form-control"
+                                            style="height: 1000px">
+                                        <option >Option #1</option>
+                                        <option >Option #2</option>
+                                        <option >Option #3</option>
+                                        <option >Option #4</option>
+
+                                    </select>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -193,7 +182,7 @@
         var pageName = [[${pagename}]]
         var serverName = [[${servername}]]
         $(function () {
-
+            //侧边栏添加选中状态和展开状态
             $("[href=" + pageName + "]").addClass("active");
             $("[href=" + pageName + "]").parent().parent().parent().addClass("open")
 
@@ -240,6 +229,11 @@
             configName.setAttribute("value", selectName);
             configName.setAttribute("name", "configName");
             document.getElementById("updateForm").appendChild(configName);
+
+
+            document.getElementById("configNames").submit();
+
+
             history.pushState(null, null, "/main/" + serverName + "/" + pageName);
         })
 
