@@ -187,7 +187,7 @@ public class XmlMapping {
     public String createAsideString(String token, String server) {
         // List<String> urlList = JdbcMysqlHelper.selectAuthority(token);
         List<String> urlList = DatabaseHelper.selectAuthority(token, server);
-        System.out.println("/////" + urlList);
+        // System.out.println("/////" + urlList);
         StringBuilder stringBuilder = new StringBuilder();
         //从外层div开始 div类是navigation-menu-body
         //这是最外层的ul
@@ -227,7 +227,7 @@ public class XmlMapping {
 
         }
         stringBuilder.append("</ul>");
-        System.out.println(stringBuilder.toString());
+        // System.out.println(stringBuilder.toString());
         return stringBuilder.toString();
     }
 
@@ -251,14 +251,14 @@ public class XmlMapping {
     }
 
     public static void main(String[] args) throws JDOMException, IOException {
-        System.out.println("\"");
+        // System.out.println("\"");
 
 
         XmlMapping xmlMapping = new XmlMapping();
 
         //System.out.println(xmlMapping.createAsideString("TOKEN","master"));
         //System.out.println(xmlMapping.createPageUrlList());
-        System.out.println(xmlMapping.createPageString("checkUserInfo"));
+        // System.out.println(xmlMapping.createPageString("checkUserInfo"));
 
     }
 }
