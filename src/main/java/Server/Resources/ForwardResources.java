@@ -1,6 +1,7 @@
 package Server.Resources;
 
 import io.vertx.core.Vertx;
+import io.vertx.core.impl.Args;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -8,6 +9,9 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+
+import Server.Verify.Cache;
+import Server.Verify.JwtUtils;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
@@ -24,8 +28,9 @@ public class ForwardResources {
         router.post("/forward").handler(this::forward);
 
     }
-    
+
     private void forward(RoutingContext routingContext) {
+
         HashMap<String, String> data = new HashMap<>();
         try {
             System.out.println(URLDecoder.decode(routingContext.getBodyAsString(), "UTF-8"));
@@ -37,19 +42,26 @@ public class ForwardResources {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         JsonObject jsonObject = new JsonObject();
         for (String key : data.keySet()) {
             String value = data.get(key);
             jsonObject.put(key, value);
         }
+
+        String token = JwtUtils.findToken(routingContext);
+        Cache.setArgs(token , jsonObject.getString("args"));
+
         String url = jsonObject.getString("route");
         System.out.println(url);
         jsonObject.remove("route");
+
         webClient.post(8000, "localhost", "/GmServer")
                 .sendJsonObject(jsonObject, ar -> {
             if (ar.succeeded()) {
 //                System.out.println(ar.result().body());
                 JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
+                System.out.println(jsonResult);
 
                 String type = jsonResult.getString("type");
                 String resultData = jsonResult.getString("data");
@@ -62,3 +74,4 @@ public class ForwardResources {
         });
     }
 }
+ 
