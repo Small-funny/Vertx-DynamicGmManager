@@ -10,9 +10,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class ForwardResources {
 
@@ -26,8 +24,7 @@ public class ForwardResources {
         router.post("/forward").handler(this::forward);
 
     }
-
-    @SuppressWarnings("unchecked")
+    
     private void forward(RoutingContext routingContext) {
         HashMap<String, String> data = new HashMap<>();
         try {
@@ -53,8 +50,6 @@ public class ForwardResources {
             if (ar.succeeded()) {
 //                System.out.println(ar.result().body());
                 JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
-                HashMap<String, Object> hashMap = new HashMap<>();
-                List<String> list = new ArrayList<>();
 
                 String type = jsonResult.getString("type");
                 String resultData = jsonResult.getString("data");
