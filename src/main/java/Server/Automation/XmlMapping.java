@@ -24,7 +24,7 @@ public class XmlMapping {
 
         SAXBuilder saxBuilder = new SAXBuilder();
         //Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
-        Element root = saxBuilder.build("properties.xml").getDocument().getRootElement();
+        Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
         List<Element> typeList = root.getChild("pages").getChildren();
         for (Element typeE : typeList) {
             typeElement.put(typeE.getAttribute("name").getValue(), typeE);

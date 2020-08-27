@@ -6,10 +6,11 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 
 import java.net.URLDecoder;
 import java.util.HashMap;
-import java.util.List;
 
 public class ForwardResources {
 
@@ -23,7 +24,7 @@ public class ForwardResources {
         router.post("/forward").handler(this::forward);
 
     }
-
+    
     private void forward(RoutingContext routingContext) {
         HashMap<String, String> data = new HashMap<>();
         try {
@@ -48,15 +49,12 @@ public class ForwardResources {
                 .sendJsonObject(jsonObject, ar -> {
             if (ar.succeeded()) {
 //                System.out.println(ar.result().body());
+                JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
 
-                //routingContext.response().end(ar.result().body());
-                String[] dataList = ar.result().body().toString().split("&");
-                String arg = null;
-                if (dataList.length != 1) {
-                    arg = dataList[dataList.length - 1];
-                }
-                System.out.println("arg" + arg);
-                routingContext.put("returnContent", dataList[0]).put("arg", arg).put("route",url).reroute("/main"+url);
+                String type = jsonResult.getString("type");
+                String resultData = jsonResult.getString("data");
+
+                routingContext.put("type", type).put("data", resultData).put("route", url).reroute("/main"+url);
             } else {
                 System.out.println("Wrong :" +ar.cause().getMessage());
                 routingContext.response().end("Operation failed !");
