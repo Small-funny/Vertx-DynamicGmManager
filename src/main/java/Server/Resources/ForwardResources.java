@@ -9,6 +9,7 @@ import io.vertx.ext.web.client.WebClientOptions;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import java.awt.desktop.SystemSleepEvent;
 import java.net.URLDecoder;
 import java.util.HashMap;
 

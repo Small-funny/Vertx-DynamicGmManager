@@ -11,6 +11,8 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.HashMap;
+
 @Slf4j
 public class MainResources extends AbstractVerticle {
 
@@ -41,16 +43,17 @@ public class MainResources extends AbstractVerticle {
                 ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
             });
         });
-        
+
         router.route("/main/:serverRouter/:pageRouter").handler(ctx -> {
             asideString = xmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
             String pageRouter = ctx.request().getParam("pageRouter");
             String serverRouter = ctx.request().getParam("serverRouter");
-            //String returnContent=ctx.request().getParam("returnContent");
-            String returnContent =  ctx.get("returnContent");
-            String selectName= ctx.get("arg");
-            //System.out.println(returnContent);
+            String returnContent = ctx.get("returnContent");
+            String selectName = ctx.get("args");
+            String type = ctx.get("type");
+            String data = ctx.get("data");
             serverString = xmlMapping.createServerString(serverRouter);
+            //页面中显示的东西
             String contentString;
             if ("0".equals(pageRouter)) {
                 contentString = "";
@@ -62,8 +65,21 @@ public class MainResources extends AbstractVerticle {
             obj.put("pagename", pageRouter);
             obj.put("servers", serverString);
             obj.put("servername", serverRouter);
-            obj.put("route","/"+serverRouter+"/"+pageRouter);
-            
+            obj.put("route", "/" + serverRouter + "/" + pageRouter);
+            if (type != null) {
+                switch (type) {
+                    case "table":
+                        break;
+                    case "list":
+                        break;
+                    case "str":
+                        obj.put("returnContent", data);
+                        break;
+                    default:
+                        break;
+
+                }
+            }
             // HashMap<String, Object> hashMap = new HashMap<>();
             // List<String> list = new ArrayList<>();
             // switch (type) {
@@ -79,11 +95,7 @@ public class MainResources extends AbstractVerticle {
             //         routingContext.put("data", resultData);
             //         break;
             // }
-
-            obj.put("returnContent",returnContent);
-            obj.put("selectName",selectName);
-
-            //obj.put("name", xmlMapping.createElementString(xmlMapping.getElement(pageRouter)));
+            obj.put("selectName", selectName);
             obj.put("content", contentString);
             thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
                 ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());

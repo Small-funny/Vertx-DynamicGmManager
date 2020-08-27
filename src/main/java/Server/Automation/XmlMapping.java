@@ -270,15 +270,15 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public String createTableString(List<List<String>> tableList) {
+    public String createTableString(List<String> titleList,List<List<String>> tableList) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<table class=\"table table-bordered\">")
                 .append("<thead><tr>");
-        for (String s : tableList.get(0)) {
+        for (String s : titleList) {
             stringBuilder.append("<th scope=\"col\">").append(s).append("</th>");
         }
         stringBuilder.append("</tr></thead><tbody>");
-        tableList.remove(0);
+
         for (List<String> list : tableList) {
             stringBuilder.append("<tr>");
             for (String s : list) {
