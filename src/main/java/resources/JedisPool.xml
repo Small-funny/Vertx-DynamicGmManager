@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<pool>
+    <!--	<server host="10.0.102.217" port="6379" pwd="123456"/>-->
+    <server host="xxx" port="7000" pwd="xxx"/>
+    <config MaxIdle="50" MaxTotal="50" MinIdle="4" timeout="10000"/>
+</pool>

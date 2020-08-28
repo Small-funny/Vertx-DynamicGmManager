@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='UTF-8'?>
+
+<pool>
+    <property name="name" value="game"/>
+    <property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+    <property name="url" value="xxx"/>
+    <property name="username" value="xxx"/>
+    <property name="password" value="xxx"/>
+    <property name="initialSize" value="1"/>
+    <property name="minIdle" value="1"/>
+    <property name="maxActive" value="5"/>
+    <property name="keepAlive" value="true"/>
+    <property name="maxWait" value="6000"/>
+    <property name="timeBetweenEvictionRunsMillis" value="60000"/>
+    <property name="minEvictableIdleTimeMillis" value="300000"/>
+    <property name="testOnBorrow" value="false"/>
+    <property name="testOnReturn" value="false"/>
+    <property name="maxPoolPreparedStatementPerConnectionSize" value="100"/>
+    <property name="filters" value="stat"/>
+</pool>
