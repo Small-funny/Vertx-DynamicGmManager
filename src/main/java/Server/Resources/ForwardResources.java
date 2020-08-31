@@ -1,7 +1,6 @@
 package Server.Resources;
 
 import io.vertx.core.Vertx;
-import io.vertx.core.impl.Args;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -9,10 +8,8 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-
 import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
-
 import java.net.URLDecoder;
 import java.util.HashMap;
 
@@ -61,7 +58,7 @@ public class ForwardResources {
             if (ar.succeeded()) {
 //                System.out.println(ar.result().body());
                 JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
-                System.out.println(jsonResult);
+                System.out.println("jsonresult:"+jsonResult);
 
                 String type = jsonResult.getString("type");
                 String resultData = jsonResult.getString("data");

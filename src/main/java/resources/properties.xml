@@ -40,8 +40,10 @@
                 </form>
             </page>
             <page name="查询表结构" url="checkTable" authorizqation="checkTable">
+
+                <return type="table"/>
                 <form name="check" action="/forward">
-                    <input type="text" name="name"/>
+                    <input type="text" name="tableName"/>
                     <input type="submit" name="submit" value="查询"/>
                 </form>
             </page>
@@ -79,10 +81,12 @@
         </pageType>
         <pageType name="系统管理" authorization="systemManage" icon="clock">
             <page name="基础信息管理" url="basicInfoManage">
+                <return type="str"/>
                 <form name="queryMatch" action="/forward">
-                    <input type="text" name="configName" id="configName"/>
+                    <input type="text" name="args" id="configName"/>
                     <input type="submit" name="submit">提交</input>
                 </form>
+
             </page>
             <page name="操作员管理" url="operatorManage">
                 <form name="queryMatch" action="/forward">

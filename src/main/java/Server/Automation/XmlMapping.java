@@ -1,9 +1,12 @@
 package Server.Automation;
 
 import Server.DatabaseHelper.DatabaseHelper;
+import Server.Verify.Json;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.STIconSetType;
 
 import java.io.IOException;
 import java.util.*;
@@ -18,7 +21,7 @@ public class XmlMapping {
     private static final HashMap<String, Element> serverElement = new HashMap<>();
     //private static List<HashMap<String, String>> tableContent = new ArrayList<>();
     private static List<List<String>> tableContent = new ArrayList<>();
-    private static List<String> subAuthList = new ArrayList<>();
+    private static String returnType = null;
 
     public XmlMapping() throws JDOMException, IOException {
 
@@ -59,8 +62,7 @@ public class XmlMapping {
                 //当前标签外层所需要的标签和类
                 String childName = ((Element) child).getName();
                 if ("form".equals(childName)) {
-                    stringBuilder.append("<div class=\"card\">")
-                            .append("<div class=\"card-header\"><strong>")
+                    stringBuilder.append("<div class=\"card-header\"><strong>")
                             .append(((Element) child).getAttribute("name").getValue())
                             .append("</strong></div>")
                             .append("<div class=\"card-body card-block\">");
@@ -72,6 +74,9 @@ public class XmlMapping {
                 } else if ("table".equals(childName)) {
 
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"table-responsive\">");
+                } else if ("return".equals(childName)) {
+                    returnType = ((Element) child).getAttributeValue("type");
+                    continue;
                 }//不是option这种小标签的通用类 input select会用
                 else if (!("option".equals(childName) || "checkbox".equals(childName) || "radio".equals(childName))) {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">")
@@ -121,66 +126,41 @@ public class XmlMapping {
                             .append(childName)
                             .append("\" id=\"TIMESTAMP\" class=\"form-control\" autocomplete=\"off\">");
                 }
-//                else if ("table".equals(childName)) {
-//                    List<String> tableName = new ArrayList<>();
-//                    stringBuilder.append(" class=\"table table-bordered\"><thead><tr>")
-//                            .append("<th scope=\"col\">#</th>");
-//                    for (Element tableChildren : ((Element) child).getChildren()) {
-//                        stringBuilder.append("<th scope=\"col\">").append(tableChildren.getAttribute("name").getValue()).append("</th>");
-//                        tableName.add(tableChildren.getAttribute("name").getValue());
-//                    }
-//                    tableContent = DatabaseHelper.selectManagerInfo(tableName);
-//                    stringBuilder.append("</tr></thead><tbody>");
-//                    int order = 1;
-//                    for (Map<String, String> map : tableContent) {
-//                        stringBuilder.append("<tr>");
-//                        stringBuilder.append("<td>");
-//                        stringBuilder.append(order);
-//                        stringBuilder.append("</td>");
-//                        for (String name : tableName) {
-//                            stringBuilder.append("<td>");
-//                            stringBuilder.append(map.get(name));
-//                            stringBuilder.append("</td>");
-//                        }
-//                        stringBuilder.append("</tr>");
-//                        order++;
-//                    }
-//                    stringBuilder.append("</tbody>");
-//                }
 
 
                 //添加标签头完毕 进入递归 table不能进入
                 if (!"table".equals(childName)) {
                     stringBuilder.append(createElementString((Element) child));
-                }        //添加标签尾
+                }
+
+
+                //添加标签尾
                 //如果不是input就意味着是那种小标签 直接加尾部就行
-                if (!("input".equals(childName) || "form-check".equals(childName))) {
+                if ("form".equals(childName)) {
+                    if ("table".equals(returnType)) {
+                        stringBuilder.append("<input type=\"hidden\" value=\"selectTableData\" name=\"operation\"/>");
+                    } else if ("str".equals(returnType)) {
+                        stringBuilder.append("<input type=\"hidden\" value=\"selectConfigBody\" name=\"operation\"/>");
+                    }
+
+                } else if (!("input".equals(childName) || "form-check".equals(childName))) {
                     stringBuilder.append("</").append(childName).append(" >");
                 }
 
 
                 //这里加结束的div  <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
                 if ("form".equals(childName)) {
-                    stringBuilder.append("</div>");
-                    stringBuilder.append("</div>");
-                    stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\">")
-                            .append("<div class=\"row form-group\">")
-                            .append("<div class=\"col col-md-3\"><label for=\"textarea-input\" class=\" form-control-label\">Textarea</label></div>")
-                            .append("<div class=\"col-12 col-md-9\"><form name=\"query\" action=\"/forward\" id=\"updateForm\" class=\"form-horizontal\" method=\"post\" >")
-                            .append("<textarea id=\"text\" name=\"body\" rows=\"9\" placeholder=\"Content...\" class=\"form-control\" style=\"height:700px\"></textarea>");
-                    System.out.println(element.getAttributeValue("url"));
-                    System.out.println(subAuthList);
-                    if (subAuthList.contains(element.getAttributeValue("url"))) {
+
+                    stringBuilder.append("</form></div>");
+                    //stringBuilder.append("</div>");
 
 
-                        stringBuilder.append("<input type=\"submit\" name=\"submit\" class=\"form-control\">");
+                    if ("str".equals(returnType)) {
+
+                    } else if ("table".equals(returnType)) {
+
+
                     }
-                    stringBuilder.append("</form></div></div></div></div>");
-//                    stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\">" +
-//                            "<div class=\"row form-group\">" +
-//                            "<div class=\"col col-md-3\"><label for=\"textarea-input\" class=\" form-control-label\">Textarea</label></div>" +
-//                            "<div class=\"col-12 col-md-9\">" +
-//                            "</div></div></div></div>");
                 } else if ("formcheck".equals(childName)) {
                     stringBuilder.append("</div></div></div>");
                 } else if (!"option".equals(childName) && !"checkbox".equals(childName) && !"radio".equals(childName)) {
@@ -208,9 +188,6 @@ public class XmlMapping {
     public String createAsideString(String token, String server) {
         // List<String> urlList = JdbcMysqlHelper.selectAuthority(token);
         List<String> urlList = DatabaseHelper.selectAuthority(token, server);
-        subAuthList = DatabaseHelper.selectSubAuthority(token, server);
-        System.out.println("subauthlist"+subAuthList);
-        System.out.println("/////" + urlList);
         StringBuilder stringBuilder = new StringBuilder();
         //从外层div开始 div类是navigation-menu-body
         //这是最外层的ul
@@ -269,30 +246,70 @@ public class XmlMapping {
         }
         return stringBuilder.toString();
     }
-
-    public String createTableString(List<String> titleList,List<List<String>> tableList) {
+    public String createConfigsList(String data ) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<table class=\"table table-bordered\">")
-                .append("<thead><tr>");
-        for (String s : titleList) {
-            stringBuilder.append("<th scope=\"col\">").append(s).append("</th>");
+        List<String>list = Json.parseObject(data,List.class);
+        for(String s :list){
+            stringBuilder.append("<option/>"+s);
         }
-        stringBuilder.append("</tr></thead><tbody>");
-
-        for (List<String> list : tableList) {
-            stringBuilder.append("<tr>");
-            for (String s : list) {
-                stringBuilder.append("<td>").append(s).append("</td>");
-            }
-            stringBuilder.append("</tr>");
-        }
-        stringBuilder.append("</tbody></table>");
         return stringBuilder.toString();
+    }
 
+    public String createReturnString(String type, String data, boolean auth) throws Exception {
+        StringBuilder stringBuilder = new StringBuilder();
+        if ("list".equals(type)) {
+            List<String>list = Json.parseObject(data,List.class);
+            for(String s :list){
+                stringBuilder.append("<option/>"+s);
+            }
+
+            return stringBuilder.toString();
+        } else {
+            stringBuilder.append("<div class=\"card-body card-block\" style=\"width: auto\">")
+                    .append("<form action=\"/forward\" id=\"updateForm\" class=\"form-horizontal\" method=\"post\" style=\"width: auto\">")
+                    .append("<div class=\"row form-group\" style=\"width: auto\">")
+                    .append("<div class=\"col col-md-3\"><label  class=\" form-control-label\">Textarea</label></div>")
+                    .append("<div class=\"col-12 col-md-9\">");
+            if ("table".equals(type)) {
+                System.out.println("data:" + data);
+                HashMap<String, String> hashMap1 = JSON.parseObject(data, HashMap.class);
+                List<String> colName = Json.parseObject(hashMap1.get("colName"), List.class);
+                List<List<String>> tableBody = JSON.parseObject(hashMap1.get("tableBody"), List.class);
+                stringBuilder.append("<table class=\"table table-bordered\">").append("<thead><tr>");
+                for (String s : colName) {
+                    stringBuilder.append("<th scope=\"col\">").append(s).append("</th>");
+                }
+
+                stringBuilder.append("</tr></thead><tbody>");
+                for (List<String> subTableBody : tableBody) {
+                    stringBuilder.append("<tr>");
+                    for (String s : subTableBody) {
+                        stringBuilder.append("<td>").append(s).append("</td>");
+                    }
+                    stringBuilder.append("</tr>");
+                }
+                stringBuilder.append("</tbody></table>").append("</div></div></div></form>");
+
+            } else if ("str".equals(type)) {
+                stringBuilder.append("<textarea id=\"text\" name=\"body\" rows=\"19\" placeholder=\"Cont.\" class=\"form-control\" style=\"height:700px\">")
+                        .append(data)
+                        .append("</textarea></div></div>");
+                if (auth) {
+                    stringBuilder.append("<div class=\"row form-group\">")
+                            .append("<div class=\"col col-md-3\"><label  class=\" form-control-label\">Textarea</label></div>")
+                            .append("<div class=\"col-12 col-md-9\">")
+                            .append("<input type=\"submit\" name=\"submit\" class=\"form-control\"></div></div>");
+                }
+                stringBuilder.append("</div>");
+                stringBuilder.append("</form>");
+            }
+        }
+
+        return stringBuilder.toString();
     }
 
 
-    public static void main(String[] args) throws JDOMException, IOException {
+    public static void main(String[] args) throws Exception {
         System.out.println("\"");
 
 
@@ -300,7 +317,8 @@ public class XmlMapping {
 
         //System.out.println(xmlMapping.createAsideString("TOKEN","master"));
         //System.out.println(xmlMapping.createPageUrlList());
-        System.out.println(xmlMapping.createPageString("checkUserInfo"));
-
+        //System.out.println(xmlMapping.createPageString("checkUserInfo"));
+        System.out.println(xmlMapping.createPageString("basicInfoManage"));
+        System.out.println(xmlMapping.createReturnString("table", "", true));
     }
 }

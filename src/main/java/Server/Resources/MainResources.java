@@ -1,7 +1,9 @@
 package Server.Resources;
 
 import Server.Automation.XmlMapping;
+import Server.DatabaseHelper.DatabaseHelper;
 import Server.Verify.Cache;
+import Server.Verify.Json;
 import Server.Verify.JwtUtils;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
@@ -11,7 +13,9 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Slf4j
 public class MainResources extends AbstractVerticle {
@@ -20,6 +24,7 @@ public class MainResources extends AbstractVerticle {
     XmlMapping xmlMapping;
     static String serverString;
     static String asideString;
+    static List<String> subAuthList;
 
     public void registerResources(Router router, Vertx vertx) {
 //        router.get("/main").handler(this::main);
@@ -46,12 +51,19 @@ public class MainResources extends AbstractVerticle {
 
         router.route("/main/:serverRouter/:pageRouter").handler(ctx -> {
             asideString = xmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
+
             String pageRouter = ctx.request().getParam("pageRouter");
             String serverRouter = ctx.request().getParam("serverRouter");
+            subAuthList = DatabaseHelper.selectAuthority(JwtUtils.findToken(ctx), serverRouter);
+            boolean subAuth = false;
+            if (subAuthList.contains(pageRouter)) {
+                subAuth = true;
+            }
             String returnContent = ctx.get("returnContent");
-            String selectName = ctx.get("args");
             String type = ctx.get("type");
             String data = ctx.get("data");
+            String token = JwtUtils.findToken(ctx);
+            String username = DatabaseHelper.tokenToUsername(token);
             serverString = xmlMapping.createServerString(serverRouter);
             //页面中显示的东西
             String contentString;
@@ -67,41 +79,31 @@ public class MainResources extends AbstractVerticle {
             obj.put("servername", serverRouter);
             obj.put("route", "/" + serverRouter + "/" + pageRouter);
             if (type != null) {
-                switch (type) {
-                    case "table":
-                        break;
-                    case "list":
-                        break;
-                    case "str":
-                        obj.put("returnContent", data);
-                        break;
-                    default:
-                        break;
-
+                if (type.equals("list")) {
+                    try {
+                        obj.put("configsName", xmlMapping.createConfigsList(data));
+                        System.out.println("config:"+xmlMapping.createConfigsList(data));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        System.out.println("data:"+data);
+                        obj.put("returnString", xmlMapping.createReturnString(type, data, subAuth));
+                        System.out.println(xmlMapping.createReturnString(type, data, subAuth));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            // HashMap<String, Object> hashMap = new HashMap<>();
-            // List<String> list = new ArrayList<>();
-            // switch (type) {
-            //     case "table" :
-            //         hashMap = JSON.parseObject(resultData, HashMap.class);
-            //         routingContext.put("colName",hashMap.get("colName")).put("tableBody", hashMap.get("tableBody"));
-            //         break;
-            //     case "list" :
-            //         list = JSON.parseObject(resultData, ArrayList.class);
-            //         routingContext.put("list", list);
-            //         break;
-            //     case "str" :
-            //         routingContext.put("data", resultData);
-            //         break;
-            // }
-            obj.put("selectName", selectName);
-            obj.put("content", contentString);
+            obj.put("selectType", type);
+            obj.put("selectName", Cache.getArgs(token));
+            System.out.println(Cache.getArgs(token));
+            obj.put("contentString", contentString);
             thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
                 ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
             });
         });
-
         router.route("/main/args").handler(ctx -> {
             String token = JwtUtils.findToken(ctx);
             String args = Cache.getArgs(token);

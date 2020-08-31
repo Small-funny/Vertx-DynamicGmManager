@@ -108,160 +108,153 @@
     </header><!-- /header -->
     <!-- Header-->
 
-    <div class="content" style="margin: auto;">
+    <div class="content" style="margin: auto">
         <div class="animated fadeIn">
             <div class="row">
-                <div class="col-lg-6" style="flex: 0 0 auto;margin-left:250px" th:utext="${content}">
-
-                </div>
-                <div class="col-lg-3" style="flex: 0 0 auto">
+                <div class="col-lg-3" style="flex: 0 0 auto;margin-left:150px">
                     <div class="card">
-                        <div class="row form-group">
-                            <div class="col col-md-12">
-                                <form id="configNames" action="/forward" class="form-horizontal"
-                                      method="post">
-                                    <select name="multiple-select" id="multiple-select" multiple="" class="form-control"
-                                            style="height: 1000px">
-                                        <option >Option #1</option>
-                                        <option >Option #2</option>
-                                        <option >Option #3</option>
-                                        <option >Option #4</option>
+                        <div class="card-body card-block" style="width: auto">
+                            <div class="row form-group">
+                                <div class="col col-md-12">
 
+                                    <form id="configNames" action="/forward" class="form-horizontal" method="post" >
+                                        <input type="submit" value="显示所有配置">
+                                        <input type="hidden" name="operation" value="selectConfigName">
+                                    </form>
+                                    <select name="multiple-select" id="multiple-select" multiple="" class="form-control"
+                                            style="height: 1000px" th:utext="${configsName}" >
                                     </select>
-                                </form>
+                                    <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-6" style="flex: 0 0 auto;margin-left:25px">
+                    <div class="card" th:utext="${contentString}"></div>
+                    <div class="card" style="width: auto" th:utext="${returnString}"></div>
+                </div>
+
             </div>
         </div>
     </div>
-
-    <script src="/webroot/vendors/bundle.js"></script>
-
-    <!-- Select2 -->
-    <script src="/webroot/vendors/select2/js/select2.min.js"></script>
-    <script src="/webroot/assets/js/examples/select2.js"></script>
-
-    <!-- Range slider -->
-    <script src="/webroot/vendors/range-slider/js/ion.rangeSlider.min.js"></script>
-    <script src="/webroot/assets/js/examples/range-slider.js"></script>
-
-    <!-- Input mask -->
-    <script src="/webroot/vendors/input-mask/jquery.mask.js"></script>
-    <script src="/webroot/assets/js/examples/input-mask.js"></script>
-
-    <!-- Tagsinput -->
-    <script src="/webroot/vendors/tagsinput/bootstrap-tagsinput.js"></script>
-    <script src="/webroot/assets/js/examples/tagsinput.js"></script>
-
-    <!-- Prism -->
-    <script src="/webroot/vendors/prism/prism.js"></script>
-
-    <!-- App scripts -->
-    <script src="/webroot/assets/js/app.min.js"></script>
-    <!-- Prism -->
-
-    <script src="/webroot/assets/js/main.js"></script>
-    <script src="/webroot/vendors/bundle.js"></script>
-    <script src="/vendors/clockpicker/bootstrap-clockpicker.min.js"></script>
-    <script type="text/javascript" src="/webroot/vendors/datepicker/daterangepicker.js"></script>
-
-    <script src="/webroot/laydate/laydate.js"></script>
-    <script>
-        lay('#version').html('-v' + laydate.v);
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#TIMESTAMP' //指定元素
-            , type: 'datetime'
-
-        });
-    </script>
-    <script type="text/javascript" th:inline="javascript">
-        var pageName = [[${pagename}]]
-        var serverName = [[${servername}]]
-        $(function () {
-            //侧边栏添加选中状态和展开状态
-            $("[href=" + pageName + "]").addClass("active");
-            $("[href=" + pageName + "]").parent().parent().parent().addClass("open")
-
-
-            var route = document.createElement("input");
-            route.setAttribute("type", "hidden");
-            route.setAttribute("value", "/" + serverName + "/" + pageName);
-            route.setAttribute("name", "route");
-            document.getElementById("selectForm").appendChild(route);
-
-
-            var textroute = document.createElement("input");
-            textroute.setAttribute("type", "hidden");
-            textroute.setAttribute("value", "/" + serverName + "/" + pageName);
-            textroute.setAttribute("name", "route");
-            document.getElementById("updateForm").appendChild(textroute);
-
-
-            var selectConfigBody = document.createElement("input");
-            selectConfigBody.setAttribute("type", "hidden");
-            selectConfigBody.setAttribute("value", "selectConfigBody");
-            selectConfigBody.setAttribute("name", "operation");
-            document.getElementById("selectForm").appendChild(selectConfigBody);
-
-
-            var updateConfigBody = document.createElement("input");
-            updateConfigBody.setAttribute("type", "hidden");
-            updateConfigBody.setAttribute("value", "updateConfigBody");
-            updateConfigBody.setAttribute("name", "operation");
-            document.getElementById("updateForm").appendChild(updateConfigBody);
-
-
-            var content = [[${returnContent}]];
-            if (content !== null) {
-                var textContent = document.createTextNode(content);
-                document.getElementById("text").appendChild(textContent);
-            }
-            var selectName = [[${selectName}]]
-            console.log("name" + selectName);
-            //$("#configName").val(selectName);
-            document.getElementById("configName").value = selectName;
-            var configName = document.createElement("input");
-            configName.setAttribute("type", "hidden");
-            configName.setAttribute("value", selectName);
-            configName.setAttribute("name", "configName");
-            document.getElementById("updateForm").appendChild(configName);
-
-
-            // document.getElementById("configNames").submit();
-
-
-            history.pushState(null, null, "/main/" + serverName + "/" + pageName);
-        })
-
-        function logout() {
-
-            document.cookie = "Token=token;Path=/"
-            window.location.href = "/login";
-        }
-
-        $('#Clock').clockpicker()
-            .find('input').change(function () {
-        });
-        $(document).ready(function () {
-            $('#Date').daterangepicker({
-                singleDatePicker: true
-            })
-        })
-
-        function submitForm() {
-            var server = $("#selServer").val();
-            if (server !== "0") {
-                window.location.href = "/main/" + server + "/0"
-            }
-        }
-
-    </script>
-
-
 </div>
+<script src="/webroot/vendors/bundle.js"></script>
+
+<!-- Select2 -->
+<script src="/webroot/vendors/select2/js/select2.min.js"></script>
+<script src="/webroot/assets/js/examples/select2.js"></script>
+
+<!-- Range slider -->
+<script src="/webroot/vendors/range-slider/js/ion.rangeSlider.min.js"></script>
+<script src="/webroot/assets/js/examples/range-slider.js"></script>
+
+<!-- Input mask -->
+<script src="/webroot/vendors/input-mask/jquery.mask.js"></script>
+<script src="/webroot/assets/js/examples/input-mask.js"></script>
+
+<!-- Tagsinput -->
+<script src="/webroot/vendors/tagsinput/bootstrap-tagsinput.js"></script>
+<script src="/webroot/assets/js/examples/tagsinput.js"></script>
+
+<!-- Prism -->
+<script src="/webroot/vendors/prism/prism.js"></script>
+
+<!-- App scripts -->
+<script src="/webroot/assets/js/app.min.js"></script>
+<!-- Prism -->
+
+<script src="/webroot/assets/js/main.js"></script>
+<script src="/webroot/vendors/bundle.js"></script>
+<script src="/vendors/clockpicker/bootstrap-clockpicker.min.js"></script>
+<script type="text/javascript" src="/webroot/vendors/datepicker/daterangepicker.js"></script>
+
+<script src="/webroot/laydate/laydate.js"></script>
+<script>
+    lay('#version').html('-v' + laydate.v);
+
+    //执行一个laydate实例
+    laydate.render({
+        elem: '#TIMESTAMP' //指定元素
+        , type: 'datetime'
+
+    });
+</script>
+<script type="text/javascript" th:inline="javascript">
+    var pageName = [[${pagename}]]
+    var serverName = [[${servername}]]
+    var selectType = [[${selectType}]]
+    $(function () {
+        //侧边栏添加选中状态和展开状态
+        $("[href=" + pageName + "]").addClass("active");
+        $("[href=" + pageName + "]").parent().parent().parent().addClass("open")
+        history.pushState(null, null, "/main/" + serverName + "/" + pageName);
+
+        var route = document.createElement("input");
+        route.setAttribute("type", "hidden");
+        route.setAttribute("value", "/" + serverName + "/" + pageName);
+        route.setAttribute("name", "route");
+        if (document.getElementById("selectForm") != null) {
+            document.getElementById("selectForm").appendChild(route);
+        }
+
+        var route1 = document.createElement("input");
+        route1.setAttribute("type", "hidden");
+        route1.setAttribute("value", "/" + serverName + "/" + pageName);
+        route1.setAttribute("name", "route");
+        if (document.getElementById("configNames") != null) {
+            document.getElementById("configNames").appendChild(route1);
+        }
+
+        //再提交后把输入框的内容变成刚刚查找的配置名
+        var selectName = [[${selectName}]]
+        console.log("name" + selectName);
+        document.getElementById("configName").value = selectName;
+
+        //关于修改框的操作
+        var textroute = document.createElement("input");
+        textroute.setAttribute("type", "hidden");
+        textroute.setAttribute("value", "/" + serverName + "/" + pageName);
+        textroute.setAttribute("name", "route");
+        var configName = document.createElement("input");
+        configName.setAttribute("type", "hidden");
+        configName.setAttribute("value", selectName);
+        configName.setAttribute("name", "configName");
+        var updateConfigBody = document.createElement("input");
+        updateConfigBody.setAttribute("type", "hidden");
+        updateConfigBody.setAttribute("value", "updateConfigBody");
+        updateConfigBody.setAttribute("name", "operation");
+        if (document.getElementById("updateForm") != null) {
+            document.getElementById("updateForm").appendChild(textroute);
+            document.getElementById("updateForm").appendChild(configName);
+            document.getElementById("updateForm").appendChild(updateConfigBody);
+        }
+    })
+
+    function logout() {
+
+        document.cookie = "Token=token;Path=/"
+        window.location.href = "/login";
+    }
+
+    $('#Clock').clockpicker()
+        .find('input').change(function () {
+    });
+    $(document).ready(function () {
+        $('#Date').daterangepicker({
+            singleDatePicker: true
+        })
+    })
+
+    function submitForm() {
+        var server = $("#selServer").val();
+        if (server !== "0") {
+            window.location.href = "/main/" + server + "/0"
+        }
+    }
+
+</script>
+
+
 </body>
 </html>
