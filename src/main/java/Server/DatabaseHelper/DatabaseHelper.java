@@ -196,8 +196,8 @@ public class DatabaseHelper {
             result.put("colName", colName);
             for (Element record: data) {
                 List<String> rowData = new ArrayList<>();
-                for (int index = 0; index < record.getChildren().size() - 1; index++) {
-                    rowData.add(record.getChildren().get(index).getAttributeValue("value"));
+                for (Element info: record.getChildren()) {
+                    rowData.add(info.getAttributeValue("value"));
                 }
                 tableBody.add(rowData);
             }
@@ -313,46 +313,6 @@ public class DatabaseHelper {
     }
 
     /**
-     * 修改用户状态
-     * @param username
-     */
-    public static void changeUserStatus(String username) {
-        Element rootData = loadDatabase();
-        try {
-            for (Element record: rootData.getChildren()) {
-                if (username.equals(record.getChildren().get(INDEX_OF_USERNAME).getAttributeValue("value"))) {
-                    String str = record.getChildren().get(INDEX_OF_ENABLE).getAttributeValue("value").equals("1") ? "0" : "1";
-                    record.getChildren().get(INDEX_OF_ENABLE).setAttribute("value", str);
-                    break;
-                }
-            }
-            saveXml(rootData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 修改用户密码
-     * @param username
-     * @param password
-     */
-    public static void updateUserInfo(String username, String password) {
-        Element rootData = loadDatabase();
-        try {
-            for (Element record: rootData.getChildren()) {
-                if (username.equals(record.getChildren().get(INDEX_OF_USERNAME).getAttributeValue("value"))) {
-                    record.getChildren().get(INDEX_OF_PASSWORD).setAttribute("value", password);
-                    break;
-                }
-            }
-            saveXml(rootData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /** 
      * 保存数据库的修改结果
      * @param data
      * @throws Exception
@@ -363,6 +323,6 @@ public class DatabaseHelper {
     }
 
     public static void main(String[] args) {
-        changeUserStatus("username");
+        System.out.println(allUserInfo());
     }
 }
