@@ -27,6 +27,15 @@ public class Cache {
         }
         return args;
     }
+
+    public static void removeArgs(String token) {
+        try {
+            String username = DatabaseHelper.tokenToUsername(token);
+            formData.remove(username);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
     
 }
  

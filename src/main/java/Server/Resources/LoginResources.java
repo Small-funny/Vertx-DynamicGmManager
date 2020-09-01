@@ -2,6 +2,7 @@ package Server.Resources;
 
 import Server.DatabaseHelper.DatabaseHelper;
 import Server.Verify.VerifyCode;
+import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
 import Server.SecretKey.RSAUtil;
 import io.netty.handler.codec.http.HttpResponseStatus;
@@ -36,9 +37,8 @@ public class LoginResources extends AbstractVerticle {
 
     private void logout(RoutingContext routingContext) {
         System.out.println("token置空");
-        // String token = JwtUtils.findToken(routingContext);
-    //    JdbcMysqlHelper.execute("Update user set token='token' where token='"+token+"'");
-    //    DatabaseHelper.updateToken(token);
+        String token = JwtUtils.findToken(routingContext);
+        Cache.removeArgs(token);
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end();
     }
 
