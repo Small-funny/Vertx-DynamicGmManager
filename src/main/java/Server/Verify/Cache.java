@@ -6,19 +6,19 @@ import Server.DatabaseHelper.DatabaseHelper;
 
 public class Cache {
 
-    private static HashMap<String, String> formData = new HashMap<>();
+    private static HashMap<String, HashMap<String, String>> formData = new HashMap<>();
 
-    public static void setArgs(String token, String arg) {
+    public static void setArgs(String token, HashMap<String, String> args) {
         try {
             String username = DatabaseHelper.tokenToUsername(token);
-            formData.put(username, arg);
+            formData.put(username, args);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    public static String getArgs(String token) {
-        String args = null;
+    public static HashMap<String, String> getArgs(String token) {
+        HashMap<String, String> args = null;
         try {
             String username = DatabaseHelper.tokenToUsername(token);
             args = formData.get(username);

@@ -46,12 +46,15 @@ public class ForwardResources {
             jsonObject.put(key, value);
         }
 
-        String token = JwtUtils.findToken(routingContext);
-        Cache.setArgs(token , jsonObject.getString("args"));
-
         String url = jsonObject.getString("route");
         System.out.println(url);
         jsonObject.remove("route");
+
+        String token = JwtUtils.findToken(routingContext);
+
+        data.remove("route");
+        data.remove("operation");
+        Cache.setArgs(token, data);
 
         webClient.post(8000, "localhost", "/GmServer")
                 .sendJsonObject(jsonObject, ar -> {

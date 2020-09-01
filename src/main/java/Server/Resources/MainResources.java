@@ -10,6 +10,8 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
@@ -101,8 +103,8 @@ public class MainResources extends AbstractVerticle {
         });
         router.route("/main/args").handler(ctx -> {
             String token = JwtUtils.findToken(ctx);
-            String args = Cache.getArgs(token);
-            ctx.response().end(args);
+            HashMap<String, String> args = Cache.getArgs(token);
+            ctx.response().end(args.toString());
         });
 
     }
