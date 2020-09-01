@@ -6,12 +6,9 @@
     + RSA加密
     + JWT验证
     + Thymeleaf
-    + Jodm2
-    + Fastjson
     + Mysql(Database branch)
     + Redis(Database branch)
-    + Druid(Database branch)
-    + RBAC(Database branch)
+    + DBPool(Database branch)
 + 前端
     + Node.js
     + Ajax
