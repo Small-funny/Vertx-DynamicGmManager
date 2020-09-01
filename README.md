@@ -5,13 +5,13 @@
     + vertx框架
     + RSA加密
     + JWT验证
-    + thymeleaf模板
+    + thymeleaf
     + jodm2
     + fastjson
-    + Mysql(SQL branch)
-    + Redis(SQL branch)
-    + Druid(SQL branch)
-    + RBAC(SQL branch)
+    + Mysql(Database branch)
+    + Redis(Database branch)
+    + Druid(Database branch)
+    + RBAC(Database branch)
 + 前端
     + node.js
     + ajax
