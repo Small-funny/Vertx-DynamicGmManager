@@ -1,7 +1,6 @@
 package Server.Automation;
 
 import Server.DatabaseHelper.DatabaseHelper;
-import Server.Verify.Json;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
@@ -248,7 +247,7 @@ public class XmlMapping {
     }
     public String createConfigsList(String data ) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
-        List<String>list = Json.parseObject(data,List.class);
+        List<String>list = JSON.parseObject(data,List.class);
         for(String s :list){
             stringBuilder.append("<option/>"+s);
         }
@@ -258,7 +257,7 @@ public class XmlMapping {
     public String createReturnString(String type, String data, boolean auth) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
         if ("list".equals(type)) {
-            List<String>list = Json.parseObject(data,List.class);
+            List<String>list = JSON.parseObject(data,List.class);
             for(String s :list){
                 stringBuilder.append("<option/>"+s);
             }

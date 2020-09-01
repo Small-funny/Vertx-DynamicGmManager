@@ -3,18 +3,13 @@ package Server.Resources;
 import Server.Automation.XmlMapping;
 import Server.DatabaseHelper.DatabaseHelper;
 import Server.Verify.Cache;
-import Server.Verify.Json;
 import Server.Verify.JwtUtils;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
-import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 @Slf4j
