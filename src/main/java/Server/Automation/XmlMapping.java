@@ -273,7 +273,7 @@ public class XmlMapping {
             if ("table".equals(type)) {
                 System.out.println("data:" + data);
                 HashMap<String, String> hashMap1 = JSON.parseObject(data, HashMap.class);
-                List<String> colName = Json.parseObject(hashMap1.get("colName"), List.class);
+                List<String> colName = JSON.parseObject(hashMap1.get("colName"), List.class);
                 List<List<String>> tableBody = JSON.parseObject(hashMap1.get("tableBody"), List.class);
                 stringBuilder.append("<table class=\"table table-bordered\">").append("<thead><tr>");
                 for (String s : colName) {

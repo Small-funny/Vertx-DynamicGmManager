@@ -43,7 +43,7 @@
 
                 <return type="table"/>
                 <form name="check" action="/forward">
-                    <input type="text" name="tableName"/>
+                    <input type="text" name="args"/>
                     <input type="submit" name="submit" value="查询"/>
                 </form>
             </page>
