@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.STIconSetType;
 
 import java.io.IOException;
 import java.util.*;
@@ -245,22 +244,21 @@ public class XmlMapping {
         }
         return stringBuilder.toString();
     }
-
-    public String createConfigsList(String data) throws Exception {
+    public String createConfigsList(String data ) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
-        List<String> list = JSON.parseObject(data, List.class);
-        for (String s : list) {
-            stringBuilder.append("<option/>").append(s);
+        List<String>list = JSON.parseObject(data,List.class);
+        for(String s :list){
+            stringBuilder.append("<option/>"+s);
         }
         return stringBuilder.toString();
     }
 
-    public String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) throws Exception {
+    public String createReturnString(String type, String data, boolean auth) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
         if ("list".equals(type)) {
-            List<String> list = JSON.parseObject(data, List.class);
-            for (String s : list) {
-                stringBuilder.append("<option/>").append(s);
+            List<String>list = JSON.parseObject(data,List.class);
+            for(String s :list){
+                stringBuilder.append("<option/>"+s);
             }
 
             return stringBuilder.toString();
@@ -300,31 +298,10 @@ public class XmlMapping {
                             .append("<div class=\"col-12 col-md-9\">")
                             .append("<input type=\"submit\" name=\"submit\" class=\"form-control\"></div></div>");
                 }
-
-                for (Map.Entry<String, String> entry : argsName.entrySet()) {
-                    stringBuilder.append("<input type=\"hidden\" name=\"")
-                            .append(entry.getKey())
-                            .append("\" value =\"")
-                            .append(entry.getValue())
-                            .append("\" class=\"form-control\">");
-                }
+                stringBuilder.append("</div>");
                 stringBuilder.append("</form>");
             }
         }
-
-        return stringBuilder.toString();
-    }
-
-    public String jsString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        //stringBuilder.append("function submitForm() {var server = $(\"#selServer\").val();if (server !== \"0\") {window.location.href = \"/main/\" + server + \"/0\"}}");
-        stringBuilder.append("alert(\"qqweerr1123\")");
-//        stringBuilder.append("function submitForm() {\n" +
-//                "        var server = $(\"#selServer\").val();\n" +
-//                "        if (server !== \"0\") {\n" +
-//                "            window.location.href = \"/main/\" + server + \"/0\"\n" +
-//                "        }\n" +
-//                "    }");
 
         return stringBuilder.toString();
     }
@@ -340,6 +317,6 @@ public class XmlMapping {
         //System.out.println(xmlMapping.createPageUrlList());
         //System.out.println(xmlMapping.createPageString("checkUserInfo"));
         System.out.println(xmlMapping.createPageString("basicInfoManage"));
-        //System.out.println(xmlMapping.createReturnString("table", "", true));
+        System.out.println(xmlMapping.createReturnString("table", "", true));
     }
 }
