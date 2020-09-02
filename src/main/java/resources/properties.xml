@@ -43,7 +43,7 @@
 
                 <return type="table"/>
                 <form name="check" action="/forward">
-                    <input type="text" name="args"/>
+                    <input type="text" name="args" id="args"/>
                     <input type="submit" name="submit" value="查询"/>
                 </form>
             </page>
@@ -83,7 +83,7 @@
             <page name="基础信息管理" url="basicInfoManage">
                 <return type="str"/>
                 <form name="queryMatch" action="/forward">
-                    <input type="text" name="args" id="configName"/>
+                    <input type="text" name="args" id="args"/>
                     <input type="submit" name="submit">提交</input>
                 </form>
 

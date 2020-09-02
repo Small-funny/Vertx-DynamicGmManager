@@ -9,10 +9,12 @@ import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
+import jdk.swing.interop.SwingInterOpUtils;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 public class MainResources extends AbstractVerticle {
@@ -47,21 +49,49 @@ public class MainResources extends AbstractVerticle {
         });
 
         router.route("/main/:serverRouter/:pageRouter").handler(ctx -> {
+            var obj = new JsonObject();
+            //侧边栏菜单
             asideString = xmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
-
+            obj.put("sidePanal", asideString);
+            //页面路由
             String pageRouter = ctx.request().getParam("pageRouter");
+            obj.put("pagename", pageRouter);
+            //服务器路由
             String serverRouter = ctx.request().getParam("serverRouter");
+            obj.put("servername", serverRouter);
+            //服务器列表
+            serverString = xmlMapping.createServerString(serverRouter);
+            obj.put("servers", serverString);
+            //权限列表 用于分辨要不要有修改的按钮
             subAuthList = DatabaseHelper.selectAuthority(JwtUtils.findToken(ctx), serverRouter);
             boolean subAuth = false;
             if (subAuthList.contains(pageRouter)) {
                 subAuth = true;
             }
-            String returnContent = ctx.get("returnContent");
+            //返回值的类型和名字
             String type = ctx.get("type");
-            String data = ctx.get("data");
+            obj.put("selectType", type);
             String token = JwtUtils.findToken(ctx);
-            String username = DatabaseHelper.tokenToUsername(token);
-            serverString = xmlMapping.createServerString(serverRouter);
+            HashMap<String, String> argNames = Cache.getArgs(token);
+            obj.put("args",argNames);
+            //返回的数据
+            String data = ctx.get("data");
+            if (type != null) {
+                if ("list".equals(type)) {
+                    try {
+                        obj.put("configsName", xmlMapping.createConfigsList(data));
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    try {
+                        obj.put("returnString", xmlMapping.createReturnString(type, data, subAuth,argNames));
+                        Cache.removeArgs(token);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
             //页面中显示的东西
             String contentString;
             if ("0".equals(pageRouter)) {
@@ -69,34 +99,10 @@ public class MainResources extends AbstractVerticle {
             } else {
                 contentString = xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")));
             }
-            var obj = new JsonObject();
-            obj.put("sidePanal", asideString);
-            obj.put("pagename", pageRouter);
-            obj.put("servers", serverString);
-            obj.put("servername", serverRouter);
-            obj.put("route", "/" + serverRouter + "/" + pageRouter);
-            if (type != null) {
-                if (type.equals("list")) {
-                    try {
-                        obj.put("configsName", xmlMapping.createConfigsList(data));
-                        System.out.println("config:"+xmlMapping.createConfigsList(data));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        System.out.println("data:"+data);
-                        obj.put("returnString", xmlMapping.createReturnString(type, data, subAuth));
-                        System.out.println(xmlMapping.createReturnString(type, data, subAuth));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            obj.put("selectType", type);
-            obj.put("selectName", Cache.getArgs(token));
-            System.out.println(Cache.getArgs(token));
             obj.put("contentString", contentString);
+            obj.put("route", "/" + serverRouter + "/" + pageRouter);
+
+
             thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
                 ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
             });

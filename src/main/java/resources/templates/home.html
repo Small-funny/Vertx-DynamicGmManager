@@ -95,6 +95,7 @@
                 <form id="serverSelect" class="form-horizontal" method="get">
                     <div class="col-12 col-md-9" style="width: 300px;padding-top: 15px;padding-left: 30px">
                         <select id="selServer" class="form-control" th:utext="${servers}" onchange="submitForm();">
+
                         </select>
                     </div>
 
@@ -117,12 +118,13 @@
                             <div class="row form-group">
                                 <div class="col col-md-12">
 
-                                    <form id="configNames" action="/forward" class="form-horizontal" method="post" >
+                                    <form id="configNames" action="/forward" class="form-horizontal" method="post">
                                         <input type="submit" value="显示所有配置">
                                         <input type="hidden" name="operation" value="selectConfigName">
                                     </form>
-                                    <select name="multiple-select" id="multiple-select" multiple="" class="form-control"
-                                            style="height: 1000px" th:utext="${configsName}" >
+                                    <select name="multiple-select" id="multiple-select" onclick="configClick(this)"
+                                            multiple="" class="form-control"
+                                            style="height: 500px" th:utext="${configsName}">
                                     </select>
                                     <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
                                 </div>
@@ -183,7 +185,7 @@
 <script type="text/javascript" th:inline="javascript">
     var pageName = [[${pagename}]]
     var serverName = [[${servername}]]
-    var selectType = [[${selectType}]]
+
     $(function () {
         //侧边栏添加选中状态和展开状态
         $("[href=" + pageName + "]").addClass("active");
@@ -209,26 +211,37 @@
         //再提交后把输入框的内容变成刚刚查找的配置名
         var selectName = [[${selectName}]]
         console.log("name" + selectName);
-        document.getElementById("configName").value = selectName;
+        // document.getElementById("configName").value = selectName;
 
         //关于修改框的操作
         var textroute = document.createElement("input");
         textroute.setAttribute("type", "hidden");
         textroute.setAttribute("value", "/" + serverName + "/" + pageName);
         textroute.setAttribute("name", "route");
-        var configName = document.createElement("input");
-        configName.setAttribute("type", "hidden");
-        configName.setAttribute("value", selectName);
-        configName.setAttribute("name", "configName");
+        // var configName = document.createElement("input");
+        // configName.setAttribute("type", "hidden");
+        // configName.setAttribute("value", selectName);
+        // configName.setAttribute("name", "args");
         var updateConfigBody = document.createElement("input");
         updateConfigBody.setAttribute("type", "hidden");
         updateConfigBody.setAttribute("value", "updateConfigBody");
         updateConfigBody.setAttribute("name", "operation");
         if (document.getElementById("updateForm") != null) {
             document.getElementById("updateForm").appendChild(textroute);
-            document.getElementById("updateForm").appendChild(configName);
+            //document.getElementById("updateForm").appendChild(configName);
             document.getElementById("updateForm").appendChild(updateConfigBody);
         }
+        var argsName = [[${args}]];
+        console.log(argsName);
+        var subArgsName = argsName["map"];
+        console.log(subArgsName);
+        $.each(subArgsName,function (key,value) {
+            if(document.getElementById(key)!==null){
+                document.getElementById(key).value=value;
+            }
+            console.log(key);
+            console.log(value);
+        })
     })
 
     function logout() {
@@ -246,14 +259,21 @@
         })
     })
 
+
+    function configClick(config) {
+        var clickItem = config;
+        console.log(clickItem.value());
+    }
     function submitForm() {
         var server = $("#selServer").val();
         if (server !== "0") {
             window.location.href = "/main/" + server + "/0"
         }
     }
-
 </script>
+<!---->
+
+
 
 
 </body>
