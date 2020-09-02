@@ -1,7 +1,7 @@
 package Server.Resources;
 
 import Server.Automation.XmlMapping;
-import Server.DatabaseHelper.DatabaseHelper;
+import Server.DatabaseHelper.VerifyDatabaseHelper;
 import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
 import io.vertx.core.AbstractVerticle;
@@ -63,7 +63,7 @@ public class MainResources extends AbstractVerticle {
             serverString = xmlMapping.createServerString(serverRouter);
             obj.put("servers", serverString);
             //权限列表 用于分辨要不要有修改的按钮
-            subAuthList = DatabaseHelper.selectAuthority(JwtUtils.findToken(ctx), serverRouter);
+            subAuthList = VerifyDatabaseHelper.selectAuthority(JwtUtils.findToken(ctx), serverRouter);
             boolean subAuth = false;
             if (subAuthList.contains(pageRouter)) {
                 subAuth = true;

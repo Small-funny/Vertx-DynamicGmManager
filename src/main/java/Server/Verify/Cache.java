@@ -1,8 +1,7 @@
 package Server.Verify;
 
 import java.util.HashMap;
-
-import Server.DatabaseHelper.DatabaseHelper;
+import Server.DatabaseHelper.VerifyDatabaseHelper;
 
 public class Cache {
 
@@ -10,7 +9,7 @@ public class Cache {
 
     public static void setArgs(String token, HashMap<String, String> args) {
         try {
-            String username = DatabaseHelper.tokenToUsername(token);
+            String username = VerifyDatabaseHelper.tokenToUsername(token);
             formData.put(username, args);
         } catch (Exception e) {
             e.printStackTrace();
@@ -20,7 +19,7 @@ public class Cache {
     public static HashMap<String, String> getArgs(String token) {
         HashMap<String, String> args = null;
         try {
-            String username = DatabaseHelper.tokenToUsername(token);
+            String username = VerifyDatabaseHelper.tokenToUsername(token);
             args = formData.get(username);
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,12 +29,11 @@ public class Cache {
 
     public static void removeArgs(String token) {
         try {
-            String username = DatabaseHelper.tokenToUsername(token);
+            String username = VerifyDatabaseHelper.tokenToUsername(token);
             formData.remove(username);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-    
+
 }
- 

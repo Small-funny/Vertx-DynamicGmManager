@@ -1,6 +1,6 @@
 package Server.Verify;
 
-import Server.DatabaseHelper.DatabaseHelper;
+import Server.DatabaseHelper.VerifyDatabaseHelper;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
@@ -15,7 +15,7 @@ public class TokenCheck implements Handler<RoutingContext> {
         try {
             String token = JwtUtils.findToken(routingContext);
 
-            System.out.println("拦截器收到的token:"+token);
+            System.out.println("拦截器收到的token:" + token);
 
             JWTAuth jwtAuth = JwtUtils.createJwt(routingContext);
 
@@ -27,9 +27,9 @@ public class TokenCheck implements Handler<RoutingContext> {
                     routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code());
                     routingContext.reroute("/login");
                 } else {
-//                    long starttime = System.currentTimeMillis();
-//                    System.out.println("拦截器数据库验证程序计时开始");
-                    if (DatabaseHelper.isTokenExisted(token)) {
+                    // long starttime = System.currentTimeMillis();
+                    // System.out.println("拦截器数据库验证程序计时开始");
+                    if (VerifyDatabaseHelper.isTokenExisted(token)) {
                         System.out.println("有效token，验证成功");
                         routingContext.next();
                     } else {
@@ -37,8 +37,8 @@ public class TokenCheck implements Handler<RoutingContext> {
                         routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code());
                         routingContext.reroute("/login");
                     }
-//                    long endtime = System.currentTimeMillis();
-//                    System.out.println("程序运行时间：" + (endtime - starttime) + "ms");
+                    // long endtime = System.currentTimeMillis();
+                    // System.out.println("程序运行时间：" + (endtime - starttime) + "ms");
                 }
             });
         } catch (Exception e) {

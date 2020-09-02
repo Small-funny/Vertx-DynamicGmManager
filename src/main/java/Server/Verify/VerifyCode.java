@@ -21,9 +21,8 @@ public class VerifyCode {
     // 验证码图片Buffer
     private BufferedImage buffImg = null;
 
-    private char[] codeSequence = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
-            'I', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
-            'X', 'Y', 'Z', '2', '3', '4', '5', '6', '7', '8' };
+    private char[] codeSequence = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S',
+            'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '2', '3', '4', '5', '6', '7', '8' };
 
     // 生成随机数
     private Random random = new Random();
@@ -34,10 +33,8 @@ public class VerifyCode {
 
     /**
      *
-     * @param width
-     *            图片宽
-     * @param height
-     *            图片高
+     * @param width  图片宽
+     * @param height 图片高
      */
     public VerifyCode(int width, int height) {
         this.width = width;
@@ -47,14 +44,10 @@ public class VerifyCode {
 
     /**
      *
-     * @param width
-     *            图片宽
-     * @param height
-     *            图片高
-     * @param codeCount
-     *            字符个数
-     * @param lineCount
-     *            干扰线条数
+     * @param width     图片宽
+     * @param height    图片高
+     * @param codeCount 字符个数
+     * @param lineCount 干扰线条数
      */
     public VerifyCode(int width, int height, int codeCount, int lineCount) {
         this.width = width;
@@ -68,7 +61,7 @@ public class VerifyCode {
         int codeX = 0;
         int fontHeight = 0;
         fontHeight = height - 5;// 字体的高度
-        codeX = width / (codeCount+3);// 每个字符的宽度
+        codeX = width / (codeCount + 3);// 每个字符的宽度
 
         // 图像buffer
         buffImg = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -96,13 +89,11 @@ public class VerifyCode {
         StringBuffer randomCode = new StringBuffer();
         // 随机产生验证码字符
         for (int i = 0; i < codeCount; i++) {
-            String strRand = String.valueOf(codeSequence[random
-                    .nextInt(codeSequence.length)]);
+            String strRand = String.valueOf(codeSequence[random.nextInt(codeSequence.length)]);
             // 设置字体颜色
             g.setColor(getRandomColor());
             // 设置字体位置
-            g.drawString(strRand, (i + 1) * codeX,
-                    getRandomNumber(height / 2) + 25);
+            g.drawString(strRand, (i + 1) * codeX, getRandomNumber(height / 2) + 25);
             randomCode.append(strRand);
         }
         code = randomCode.toString();
@@ -113,9 +104,9 @@ public class VerifyCode {
         int r = getRandomNumber(200);
         int g = getRandomNumber(200);
         int b = getRandomNumber(200);
-//        System.out.println(r);
-//        System.out.println(g);
-//        System.out.println(b);
+        // System.out.println(r);
+        // System.out.println(g);
+        // System.out.println(b);
         return new Color(r, g, b);
     }
 
@@ -165,8 +156,7 @@ public class VerifyCode {
             byte[] b = new byte[len / 2];
             try {
                 for (int i = 0; i < str.length(); i += 2) {
-                    b[i / 2] = (byte) Integer.decode(
-                            "0x" + str.substring(i, i + 2)).intValue();
+                    b[i / 2] = (byte) Integer.decode("0x" + str.substring(i, i + 2)).intValue();
                 }
                 return b;
             } catch (Exception e) {
@@ -197,16 +187,16 @@ public class VerifyCode {
         }
     }
 
-//    public static void main(String[] args) throws IOException{
-//        File dir = new File("verifies");
-//        if (!dir.exists()) {
-//            System.out.println("创建目录");
-//            dir.mkdir();
-//        }
-//        VerifyCode instance = new VerifyCode();
-//        String verifyCode = instance.getCode();
-//        File file = new File(dir, verifyCode + ".jpg");
-//        ImageIO.write(instance.getBuffImg(), "jpg", file);
-//        System.out.println(instance.getBuffImg().toString());
-//    }
+    // public static void main(String[] args) throws IOException{
+    // File dir = new File("verifies");
+    // if (!dir.exists()) {
+    // System.out.println("创建目录");
+    // dir.mkdir();
+    // }
+    // VerifyCode instance = new VerifyCode();
+    // String verifyCode = instance.getCode();
+    // File file = new File(dir, verifyCode + ".jpg");
+    // ImageIO.write(instance.getBuffImg(), "jpg", file);
+    // System.out.println(instance.getBuffImg().toString());
+    // }
 }

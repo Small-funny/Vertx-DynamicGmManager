@@ -1,6 +1,6 @@
 package Server.Automation;
 
-import Server.DatabaseHelper.DatabaseHelper;
+import Server.DatabaseHelper.VerifyDatabaseHelper;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
@@ -186,7 +186,7 @@ public class XmlMapping {
 
     public String createAsideString(String token, String server) {
         // List<String> urlList = JdbcMysqlHelper.selectAuthority(token);
-        List<String> urlList = DatabaseHelper.selectAuthority(token, server);
+        List<String> urlList = VerifyDatabaseHelper.selectAuthority(token, server);
         StringBuilder stringBuilder = new StringBuilder();
         //从外层div开始 div类是navigation-menu-body
         //这是最外层的ul

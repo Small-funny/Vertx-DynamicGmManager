@@ -1,6 +1,6 @@
 package Server.Resources;
 
-import Server.DatabaseHelper.DatabaseHelper;
+import Server.DatabaseHelper.VerifyDatabaseHelper;
 import Server.Verify.VerifyCode;
 import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
@@ -68,11 +68,11 @@ public class LoginResources extends AbstractVerticle {
 
         System.out.println(username + " " + password);
 
-        if (DatabaseHelper.isExisted(username, password)) {
+        if (VerifyDatabaseHelper.isExisted(username, password)) {
             String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(3600L));
             routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(newToken);
             System.out.println("token写入数据库...");
-            DatabaseHelper.updateToken(username, newToken);
+            VerifyDatabaseHelper.updateToken(username, newToken);
             System.out.println("Username or password right, Verification succeed!");
 
         } else {
@@ -94,7 +94,7 @@ public class LoginResources extends AbstractVerticle {
 
         jwtAuth.authenticate(config, res -> {
             if (res.succeeded()) {
-                if (DatabaseHelper.isTokenExisted(token)) {
+                if (VerifyDatabaseHelper.isTokenExisted(token)) {
                     routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end("Verification succeeded!");
                 } else {
                     routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Token expired, Verification failed!");
