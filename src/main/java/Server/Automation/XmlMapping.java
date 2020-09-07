@@ -5,6 +5,8 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.STIconSetType;
+import org.openxmlformats.schemas.spreadsheetml.x2006.main.STRef;
 
 import java.io.IOException;
 import java.util.*;
@@ -244,21 +246,22 @@ public class XmlMapping {
         }
         return stringBuilder.toString();
     }
-    public String createConfigsList(String data ) throws Exception {
+
+    public String createConfigsList(String data) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
-        List<String>list = JSON.parseObject(data,List.class);
-        for(String s :list){
-            stringBuilder.append("<option/>"+s);
+        List<String> list = JSON.parseObject(data, List.class);
+        for (String s : list) {
+            stringBuilder.append("<option/>").append(s);
         }
         return stringBuilder.toString();
     }
 
-    public String createReturnString(String type, String data, boolean auth) throws Exception {
+    public String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) throws Exception {
         StringBuilder stringBuilder = new StringBuilder();
         if ("list".equals(type)) {
-            List<String>list = JSON.parseObject(data,List.class);
-            for(String s :list){
-                stringBuilder.append("<option/>"+s);
+            List<String> list = JSON.parseObject(data, List.class);
+            for (String s : list) {
+                stringBuilder.append("<option/>").append(s);
             }
 
             return stringBuilder.toString();
@@ -284,6 +287,9 @@ public class XmlMapping {
                     for (String s : subTableBody) {
                         stringBuilder.append("<td>").append(s).append("</td>");
                     }
+
+                    stringBuilder.append("<td><a href=\"404.html\"><button>aassdd</button></a></td>");
+                    //stringBuilder.append("<td class=\"text-right\"><div class=\"dropdown\"><a href=\"#\" class=\"btn btn-sm\"data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-ellipsis-v\" aria-hidden=\"true\"></i></a><div class=\"dropdown-menu dropdown-menu-right\"><button class=\"dropdown-item\" type=\"button\">Action</button><button class=\"dropdown-item\" type=\"button\">Another action</button><button class=\"dropdown-item\" type=\"button\">Something else here</button></div></div></td>");
                     stringBuilder.append("</tr>");
                 }
                 stringBuilder.append("</tbody></table>").append("</div></div></div></form>");
@@ -298,7 +304,14 @@ public class XmlMapping {
                             .append("<div class=\"col-12 col-md-9\">")
                             .append("<input type=\"submit\" name=\"submit\" class=\"form-control\"></div></div>");
                 }
-                stringBuilder.append("</div>");
+
+                for (Map.Entry<String, String> entry : argsName.entrySet()) {
+                    stringBuilder.append("<input type=\"hidden\" name=\"")
+                            .append(entry.getKey())
+                            .append("\" value =\"")
+                            .append(entry.getValue())
+                            .append("\" class=\"form-control\">");
+                }
                 stringBuilder.append("</form>");
             }
         }
@@ -306,7 +319,26 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    public String jsString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        //stringBuilder.append("function submitForm() {var server = $(\"#selServer\").val();if (server !== \"0\") {window.location.href = \"/main/\" + server + \"/0\"}}");
+        stringBuilder.append("alert(\"qqweerr1123\")");
+//        stringBuilder.append("function submitForm() {\n" +
+//                "        var server = $(\"#selServer\").val();\n" +
+//                "        if (server !== \"0\") {\n" +
+//                "            window.location.href = \"/main/\" + server + \"/0\"\n" +
+//                "        }\n" +
+//                "    }");
 
+        return stringBuilder.toString();
+    }
+
+    public String createUserTableString(HashMap<String,String>userData){
+        StringBuilder stringBuilder  = new StringBuilder();
+
+
+        return stringBuilder.toString();
+    }
     public static void main(String[] args) throws Exception {
         System.out.println("\"");
 
@@ -317,6 +349,6 @@ public class XmlMapping {
         //System.out.println(xmlMapping.createPageUrlList());
         //System.out.println(xmlMapping.createPageString("checkUserInfo"));
         System.out.println(xmlMapping.createPageString("basicInfoManage"));
-        System.out.println(xmlMapping.createReturnString("table", "", true));
+        //System.out.println(xmlMapping.createReturnString("table", "", true));
     }
 }
