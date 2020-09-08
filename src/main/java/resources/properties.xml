@@ -26,7 +26,7 @@
                     <input type="submit" name="submit" value="查询"/>
                 </form>
             </page>
-            <page name="封禁用户" url="banUser" authorizqation="banUser" >
+            <page name="封禁用户" url="banUser" authorization="banUser" >
                 <form name="queryDisc">
                     <input type="text" name="userId">0</input>
                     <input type="text" name="days">0</input>
@@ -39,13 +39,16 @@
                     <input type="submit" name="submit">提交</input>
                 </form>
             </page>
-            <page name="查询表结构" url="checkTable" authorizqation="checkTable">
+            <page name="查询表结构" url="checkTable" authorization="checkTable">
 
                 <return type="table"/>
                 <form name="check" action="/forward">
                     <input type="text" name="args" id="args"/>
                     <input type="submit" name="submit" value="查询"/>
                 </form>
+            </page>
+            <page name="删除用户" url="deleteUser" authorization="deleteUser" type="userManage">
+
             </page>
         </pageType>
         <pageType name="操作管理" authorization="operationManage" icon="archive">
@@ -80,7 +83,7 @@
             </page>
         </pageType>
         <pageType name="系统管理" authorization="systemManage" icon="clock">
-            <page name="基础信息管理" url="basicInfoManage">
+            <page name="基础信息管理" url="basicInfoManage" authorization="basicInfoManage"  type="configManage">
                 <return type="str"/>
                 <form name="queryMatch" action="/forward">
                     <input type="text" name="args" id="args"/>
@@ -88,7 +91,7 @@
                 </form>
 
             </page>
-            <page name="操作员管理" url="operatorManage">
+            <page name="操作员管理" url="operatorManage" authorization="operatorManage" type="configManage">
                 <form name="queryMatch" action="/forward">
                     <input type="text" name="userId"></input>
                     <input type="text" name="days">0</input>

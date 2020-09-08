@@ -19,8 +19,6 @@ public class XmlMapping {
     //页面类型是键 对应的类型element是值
     private static final HashMap<String, Element> typeElement = new HashMap<>();
     private static final HashMap<String, Element> serverElement = new HashMap<>();
-    //private static List<HashMap<String, String>> tableContent = new ArrayList<>();
-    private static List<List<String>> tableContent = new ArrayList<>();
     private static String returnType = null;
 
     public XmlMapping() throws JDOMException, IOException {
@@ -204,7 +202,6 @@ public class XmlMapping {
             } else {
                 stringBuilder.append("#\">");
             }
-            //iconList.add("data-feather=\"anchor\"");
             stringBuilder.append("<i class=\"nav-link-icon\" data-feather=\"")
                     .append(entry.getValue().getAttribute("icon").getValue())
                     .append("\"></i>")
@@ -248,11 +245,19 @@ public class XmlMapping {
     }
 
     public String createConfigsList(String data) throws Exception {
+
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">" +
+                "<div class=\"row form-group\"><div class=\"col col-md-12\">" +
+                "<select name=\"multiple-select\" id=\"multiple-select\" multiple=\"\" class=\"form-control\" style=\"height: 500px\" >");
         List<String> list = JSON.parseObject(data, List.class);
         for (String s : list) {
             stringBuilder.append("<option/>").append(s);
         }
+        stringBuilder.append("</select></div></div></div></div>");
+
+
+
         return stringBuilder.toString();
     }
 

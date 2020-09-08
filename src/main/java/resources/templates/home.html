@@ -112,25 +112,8 @@
     <div class="content" style="margin: auto">
         <div class="animated fadeIn">
             <div class="row">
-                <div class="col-lg-3" style="flex: 0 0 auto;margin-left:150px">
-                    <div class="card">
-                        <div class="card-body card-block" style="width: auto">
-                            <div class="row form-group">
-                                <div class="col col-md-12">
+                <div class="col-lg-3" style="flex: 0 0 auto;margin-left:150px" th:utext="${configsName}">
 
-                                    <form id="configNames" action="/forward" class="form-horizontal" method="post">
-                                        <input type="submit" value="显示所有配置">
-                                        <input type="hidden" name="operation" value="selectConfigName">
-                                    </form>
-                                    <select name="multiple-select" id="multiple-select" onclick="configClick(this)"
-                                            multiple="" class="form-control"
-                                            style="height: 500px" th:utext="${configsName}">
-                                    </select>
-                                    <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
                 <div class="col-lg-6" style="flex: 0 0 auto;margin-left:25px">
                     <div class="card" th:utext="${contentString}"></div>
