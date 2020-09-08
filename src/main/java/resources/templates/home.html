@@ -112,14 +112,17 @@
     <div class="content" style="margin: auto">
         <div class="animated fadeIn">
             <div class="row">
-                <div class="col-lg-3" style="flex: 0 0 auto;margin-left:150px" th:utext="${configsName}">
 
-                </div>
-                <div class="col-lg-6" style="flex: 0 0 auto;margin-left:25px">
+                <div class="col-lg-6" style="flex: 0 0 auto;margin-left:150px">
                     <div class="card" th:utext="${contentString}"></div>
                     <div class="card" style="width: auto" th:utext="${returnString}"></div>
-                </div>
+                    <div th:utext="${userInfo}">
 
+                    </div>
+                </div>
+                <div class="col-lg-3" style="flex: 0 0 auto;margin-left:50px" th:utext="${configsName}">
+
+                </div>
             </div>
         </div>
     </div>
@@ -218,9 +221,9 @@
         console.log(argsName);
         var subArgsName = argsName["map"];
         console.log(subArgsName);
-        $.each(subArgsName,function (key,value) {
-            if(document.getElementById(key)!==null){
-                document.getElementById(key).value=value;
+        $.each(subArgsName, function (key, value) {
+            if (document.getElementById(key) !== null) {
+                document.getElementById(key).value = value;
             }
             console.log(key);
             console.log(value);
@@ -247,6 +250,7 @@
         var clickItem = config;
         console.log(clickItem.value());
     }
+
     function submitForm() {
         var server = $("#selServer").val();
         if (server !== "0") {
@@ -255,8 +259,6 @@
     }
 </script>
 <!---->
-
-
 
 
 </body>

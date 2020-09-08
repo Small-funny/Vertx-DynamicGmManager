@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static Server.Automation.PageUtil.*;
+import static Server.DatabaseHelper.ManagerDatabaseHelper.allManagerInfo;
 
 @Slf4j
 public class MainResources extends AbstractVerticle {
@@ -59,6 +60,9 @@ public class MainResources extends AbstractVerticle {
             //服务器路由
             String serverRouter = ctx.request().getParam("serverRouter");
             obj.put("servername", serverRouter);
+            //总路由
+            String route = "/" + serverRouter + "/" + pageRouter;
+            obj.put("route", route);
             //服务器列表
             serverString = xmlMapping.createServerString(serverRouter);
             obj.put("servers", serverString);
@@ -68,17 +72,14 @@ public class MainResources extends AbstractVerticle {
             if (subAuthList.contains(pageRouter)) {
                 subAuth = true;
             }
-
-
             //页面中显示的东西
             String contentString;
             if ("0".equals(pageRouter)) {
                 contentString = "";
             } else {
-                contentString = xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")));
+                contentString = xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")), route);
             }
             obj.put("contentString", contentString);
-            obj.put("route", "/" + serverRouter + "/" + pageRouter);
 
 
             //返回值的类型和名字
@@ -106,11 +107,15 @@ public class MainResources extends AbstractVerticle {
                 }
             }
             if (CONFIG_MANAGE_PAGES.contains(pageRouter)) {
-               configManagePage(vertx,obj,ctx);
+                configManagePage(vertx, obj, ctx);
+            } else if (USER_MANAGE_PAGES.contains(pageRouter)) {
+                try {
+                    userManagePage(vertx, obj, ctx);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             } else {
-                thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
-                    ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
-                });
+                normalPage(vertx, obj, ctx);
             }
         });
 
@@ -143,6 +148,21 @@ public class MainResources extends AbstractVerticle {
                 ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
             });
 
+        });
+    }
+
+    private void userManagePage(Vertx vertx, JsonObject obj, RoutingContext ctx) throws Exception {
+        HashMap<String, String> userInfo = allManagerInfo();
+        String userInfoStr = JSON.toJSONString(userInfo);
+        obj.put("userInfo", xmlMapping.createReturnString("table", userInfoStr, false, null));
+        thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
+            ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
+        });
+    }
+
+    private void normalPage(Vertx vertx, JsonObject obj, RoutingContext ctx) {
+        thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
+            ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
         });
     }
 }

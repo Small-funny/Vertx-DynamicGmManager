@@ -123,7 +123,9 @@ public class ManagerResources {
             log.info(info);
             return;
         }
-        // routingContext.put("type", type).put("data", resultData).put("route", route).reroute("/main" + route);
-        routingContext.response().end(resultData);
+        routingContext.put("type", type).put("data", resultData).put("route", route).reroute("/main" + route);
+        //routingContext.response().end(resultData);
+        System.out.println("rtx:"+routingContext.toString());
+        //routingContext.reroute("/main"+routingContext.get("route"));
     }
 }

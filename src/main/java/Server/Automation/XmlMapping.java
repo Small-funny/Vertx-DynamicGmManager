@@ -44,7 +44,7 @@ public class XmlMapping {
 
 
     //创建页面的字符串
-    public String createElementString(Element element) {
+    public String createElementString(Element element, String route) {
         StringBuilder stringBuilder = new StringBuilder();
 
         Iterator it = element.getContent().iterator();
@@ -128,30 +128,32 @@ public class XmlMapping {
 
                 //添加标签头完毕 进入递归 table不能进入
                 if (!"table".equals(childName)) {
-                    stringBuilder.append(createElementString((Element) child));
+                    stringBuilder.append(createElementString((Element) child, route));
                 }
 
 
                 //添加标签尾
                 //如果不是input就意味着是那种小标签 直接加尾部就行
                 if ("form".equals(childName)) {
-                    if ("table".equals(returnType)) {
-                        stringBuilder.append("<input type=\"hidden\" value=\"selectTableData\" name=\"operation\"/>");
-                    } else if ("str".equals(returnType)) {
-                        stringBuilder.append("<input type=\"hidden\" value=\"selectConfigBody\" name=\"operation\"/>");
-                    }
+                    stringBuilder.append("<input type=\"hidden\" value=\"")
+                            .append(((Element) child).getAttributeValue("id"))
+                            .append("\" name=\"operation\"/>");
+                    stringBuilder.append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\"/>");
+//                    if ("table".equals(returnType)) {
+//                        stringBuilder.append("<input type=\"hidden\" value=\"selectTableData\" name=\"operation\"/>");
+//                    } else if ("str".equals(returnType)) {
+//                        stringBuilder.append("<input type=\"hidden\" value=\"selectConfigBody\" name=\"operation\"/>");
+//                    }
 
                 } else if (!("input".equals(childName) || "form-check".equals(childName))) {
                     stringBuilder.append("</").append(childName).append(" >");
                 }
 
 
-                //这里加结束的div  <iframe id="id_iframe" name="nm_iframe" style="display:none;"></iframe>
+                //这里加结束的div
                 if ("form".equals(childName)) {
 
                     stringBuilder.append("</form></div>");
-                    //stringBuilder.append("</div>");
-
 
                     if ("str".equals(returnType)) {
 
@@ -176,10 +178,6 @@ public class XmlMapping {
     //获取页面的element
     public Element getElement(String str) {
         return pageElement.get(str);
-    }
-
-    public String createPageString(String pageName) {
-        return createElementString(getElement(pageName));
     }
 
 
@@ -257,7 +255,6 @@ public class XmlMapping {
         stringBuilder.append("</select></div></div></div></div>");
 
 
-
         return stringBuilder.toString();
     }
 
@@ -274,7 +271,6 @@ public class XmlMapping {
             stringBuilder.append("<div class=\"card-body card-block\" style=\"width: auto\">")
                     .append("<form action=\"/forward\" id=\"updateForm\" class=\"form-horizontal\" method=\"post\" style=\"width: auto\">")
                     .append("<div class=\"row form-group\" style=\"width: auto\">")
-                    .append("<div class=\"col col-md-3\"><label  class=\" form-control-label\">Textarea</label></div>")
                     .append("<div class=\"col-12 col-md-9\">");
             if ("table".equals(type)) {
                 System.out.println("data:" + data);
@@ -324,26 +320,7 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public String jsString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        //stringBuilder.append("function submitForm() {var server = $(\"#selServer\").val();if (server !== \"0\") {window.location.href = \"/main/\" + server + \"/0\"}}");
-        stringBuilder.append("alert(\"qqweerr1123\")");
-//        stringBuilder.append("function submitForm() {\n" +
-//                "        var server = $(\"#selServer\").val();\n" +
-//                "        if (server !== \"0\") {\n" +
-//                "            window.location.href = \"/main/\" + server + \"/0\"\n" +
-//                "        }\n" +
-//                "    }");
 
-        return stringBuilder.toString();
-    }
-
-    public String createUserTableString(HashMap<String,String>userData){
-        StringBuilder stringBuilder  = new StringBuilder();
-
-
-        return stringBuilder.toString();
-    }
     public static void main(String[] args) throws Exception {
         System.out.println("\"");
 
@@ -353,7 +330,7 @@ public class XmlMapping {
         //System.out.println(xmlMapping.createAsideString("TOKEN","master"));
         //System.out.println(xmlMapping.createPageUrlList());
         //System.out.println(xmlMapping.createPageString("checkUserInfo"));
-        System.out.println(xmlMapping.createPageString("basicInfoManage"));
+        //System.out.println(xmlMapping.createPageString("basicInfoManage"));
         //System.out.println(xmlMapping.createReturnString("table", "", true));
     }
 }
