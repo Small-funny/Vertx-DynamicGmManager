@@ -75,7 +75,7 @@
     <!-- end::navigation header -->
 
     <!-- begin::navigation menu -->
-    <div class="navigation-menu-body" th:utext="${sidePanal}">
+    <div class="navigation-menu-body"  th:utext="${sidePanal}">
 
     </div>
     <!-- end::navigation menu -->
@@ -111,10 +111,12 @@
 
     <div class="content" style="margin: auto">
         <div class="animated fadeIn">
-            <div class="row">
+            <div class="row" >
 
                 <div class="col-lg-6" style="flex: 0 0 auto;margin-left:150px">
-                    <div class="card" th:utext="${contentString}"></div>
+                    <div class="card" th:utext="${contentString}">
+
+                    </div>
                     <div class="card" style="width: auto" th:utext="${returnString}"></div>
                     <div th:utext="${userInfo}">
 
@@ -245,7 +247,6 @@
         })
     })
 
-
     function configClick(config) {
         var clickItem = config;
         console.log(clickItem.value());
@@ -257,9 +258,35 @@
             window.location.href = "/main/" + server + "/0"
         }
     }
+
+    function refreshAjaxGet(urls, section) {
+        $.ajax({
+            type: "GET",
+            dataType: "text",
+            url: urls,
+            success: function (data) {
+                // alert(data)
+                $("#"+ section).html(data)
+            }
+        }) 
+    }
+
+    function refreshAjaxPost(urls, section) {
+        $.ajax({
+            type: "POST",
+            dataType: "text",
+            url: urls,
+            data: JSON.stringify({
+                
+            }),
+            success: function (data) {
+                // alert(data)
+                $("#"+ section).html(data)
+            }
+        }) 
+    }
 </script>
 <!---->
-
 
 </body>
 </html>

@@ -208,9 +208,7 @@ public class XmlMapping {
             for (Element element : entry.getValue().getChildren()) {
                 stringBuilder.append("<li id =\" ")
                         .append(element.getAttribute("name").getValue())
-                        .append("\"><a href=\"")
-                        .append(element.getAttribute("url").getValue())
-                        .append("\">")
+                        .append("\"><a href=\"#\"> onclick=\"changeAside("+ server + "/" +element.getAttributeValue("url")+")\"")
                         .append(element.getAttribute("name").getValue())
                         .append("</a></li>");
 
