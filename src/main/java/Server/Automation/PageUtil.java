@@ -10,6 +10,9 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PageUtil {
+    public static final String MAIN_PAGE_ROUTER="0";
+    public static final String TYPE_LIST ="list";
+    public static final String TYPE_TABLE="table";
     public static final HashMap<String, Element> PAGE_ELEMENT =new HashMap<>();
     public static final HashMap<String, Element> TYPE_ELEMENT = new HashMap<>();
     public static final HashMap<String, Element> SERVER_ELEMENT = new HashMap<>();

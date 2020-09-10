@@ -113,17 +113,16 @@
         <div class="animated fadeIn">
             <div class="row" >
 
-                <div class="col-lg-6" style="flex: 0 0 auto;margin-left:150px">
-                    <div class="card" th:utext="${contentString}">
+                <div class="col-lg-6" style="flex: 0 0 auto;margin-left:150px" >
+                    <div class="card" th:utext="${contentString}" id="pageContent">
 
                     </div>
-                    <div class="card" style="width: auto" th:utext="${returnString}"></div>
+                    <div class="card" style="width: auto" th:utext="${returnString}" id="returnContent"></div>
                     <div th:utext="${userInfo}">
 
                     </div>
                 </div>
                 <div class="col-lg-3" style="flex: 0 0 auto;margin-left:50px" th:utext="${configsName}">
-
                 </div>
             </div>
         </div>
@@ -259,11 +258,14 @@
         }
     }
 
+
     function refreshAjaxGet(urls, section) {
+        console.log("ajaxget")
         $.ajax({
             type: "GET",
             dataType: "text",
             url: urls,
+            data:JSON.stringify({"URLS":urls}),
             success: function (data) {
                 // alert(data)
                 $("#"+ section).html(data)
@@ -284,6 +286,13 @@
                 $("#"+ section).html(data)
             }
         }) 
+    }
+    function changeAside(urls) {
+        console.log("changeAside")
+        refreshAjaxGet(urls,"pageContent")
+    }
+    function changeReturn(urls) {
+        refreshAjaxPost(urls,"returnContent")
     }
 </script>
 <!---->

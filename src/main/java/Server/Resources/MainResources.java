@@ -49,79 +49,98 @@ public class MainResources extends AbstractVerticle {
                 ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
             });
         });
-        router.route("/main/:serverRouter/:pageRouter").handler(ctx -> {
-            var obj = new JsonObject();
-            //侧边栏菜单
-            asideString = xmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
-            obj.put("sidePanal", asideString);
+        router.route("/main/:serverRouter/:pageRouter").handler(this::mainPage);
+        router.route("/main/configsName").handler(this::configsName);
+        router.route("/main/pageContent").handler(this::pageContent);
+        router.route("/:serverRouter/:pageRouter").handler(ctx->{
             //页面路由
             String pageRouter = ctx.request().getParam("pageRouter");
-            obj.put("pagename", pageRouter);
+
             //服务器路由
             String serverRouter = ctx.request().getParam("serverRouter");
-            obj.put("servername", serverRouter);
-            //总路由
-            String route = "/" + serverRouter + "/" + pageRouter;
-            obj.put("route", route);
-            //服务器列表
-            serverString = xmlMapping.createServerString(serverRouter);
-            obj.put("servers", serverString);
-            //权限列表 用于分辨要不要有修改的按钮
-            subAuthList = VerifyDatabaseHelper.selectAuthority(JwtUtils.findToken(ctx), serverRouter);
-            boolean subAuth = false;
-            if (subAuthList.contains(pageRouter)) {
-                subAuth = true;
-            }
-            //页面中显示的东西
-            String contentString;
-            if ("0".equals(pageRouter)) {
-                contentString = "";
-            } else {
-                contentString = xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")), route);
-            }
-            obj.put("contentString", contentString);
+
+            String route = "/"+pageRouter+"/"+serverRouter;
 
 
-            //返回值的类型和名字
-            String type = ctx.get("type");
-            obj.put("selectType", type);
-            String token = JwtUtils.findToken(ctx);
-            HashMap<String, String> argNames = Cache.getArgs(token);
-            obj.put("args", argNames);
-            //返回的数据
-            String data = ctx.get("data");
-            if (type != null) {
-                if ("list".equals(type)) {
-                    try {
-                        obj.put("configsName", xmlMapping.createConfigsList(data));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    try {
-                        obj.put("returnString", xmlMapping.createReturnString(type, data, subAuth, argNames));
-                        Cache.removeArgs(token);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            if (CONFIG_MANAGE_PAGES.contains(pageRouter)) {
-                configManagePage(vertx, obj, ctx);
-            } else if (USER_MANAGE_PAGES.contains(pageRouter)) {
-                try {
-                    userManagePage(vertx, obj, ctx);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                normalPage(vertx, obj, ctx);
-            }
+            ctx.response().end(xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")),route));
         });
+        router.route("/main/returnContent").handler(ctx->{
 
-
+        });
     }
 
+
+    private void mainPage(RoutingContext ctx) {
+        var obj = new JsonObject();
+        //侧边栏菜单
+        asideString = xmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
+        obj.put("sidePanal", asideString);
+
+        //页面路由
+        String pageRouter = ctx.request().getParam("pageRouter");
+        obj.put("pagename", pageRouter);
+        //服务器路由
+        String serverRouter = ctx.request().getParam("serverRouter");
+        obj.put("servername", serverRouter);
+        //总路由
+        String route = "/" + serverRouter + "/" + pageRouter;
+        obj.put("route", route);
+
+        //服务器列表
+        serverString = xmlMapping.createServerString(serverRouter);
+        obj.put("servers", serverString);
+
+        //权限列表 用于分辨要不要有修改的按钮
+        subAuthList = VerifyDatabaseHelper.selectAuthority(JwtUtils.findToken(ctx), serverRouter);
+
+
+        //页面中显示的东西
+//        String contentString;
+//        if ("0".equals(pageRouter)) {
+//            contentString = "";
+//        } else {
+//            contentString = xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")), route);
+//        }
+//        obj.put("contentString", contentString);
+
+
+        //返回值的类型和名字
+        String type = ctx.get("type");
+        obj.put("selectType", type);
+        String token = JwtUtils.findToken(ctx);
+        HashMap<String, String> argNames = Cache.getArgs(token);
+        obj.put("args", argNames);
+        //返回的数据
+        String data = ctx.get("data");
+//        if (type != null) {
+//            if ("list".equals(type)) {
+//                obj.put("configsName", xmlMapping.createConfigsList(data));
+//            } else {
+//                obj.put("returnString", xmlMapping.createReturnString(type, data, subAuthList.contains(pageRouter), argNames));
+//                Cache.removeArgs(token);
+//            }
+//        }
+//        if (CONFIG_MANAGE_PAGES.contains(pageRouter)) {
+//            configManagePage(vertx, obj, ctx);
+//        } else if (USER_MANAGE_PAGES.contains(pageRouter)) {
+//            userManagePage(vertx, obj, ctx);
+//        } else {
+//            normalPage(vertx, obj, ctx);
+//        }
+
+        String allPage = xmlMapping.createPageString(route, type, data, pageRouter, subAuthList, ctx, ctx.vertx());
+        obj.put("allPage", allPage);
+        thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
+
+            ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
+        });
+        //ctx.response().putHeader("content-type", "text/json").end(JSON.toJSONString(obj));
+    }
+
+    private void pageContent(RoutingContext ctx){
+        System.out.println(ctx.getBodyAsString());
+        //xmlMapping.createElementString(ctx.request().getParam(""))
+    }
     private void configManagePage(Vertx vertx, JsonObject obj, RoutingContext ctx) {
         vertx.executeBlocking(future -> {
             JsonObject jsonObject = new JsonObject();
@@ -151,7 +170,7 @@ public class MainResources extends AbstractVerticle {
         });
     }
 
-    private void userManagePage(Vertx vertx, JsonObject obj, RoutingContext ctx) throws Exception {
+    private void userManagePage(Vertx vertx, JsonObject obj, RoutingContext ctx) {
         HashMap<String, String> userInfo = allManagerInfo();
         String userInfoStr = JSON.toJSONString(userInfo);
         obj.put("userInfo", xmlMapping.createReturnString("table", userInfoStr, false, null));
@@ -163,6 +182,15 @@ public class MainResources extends AbstractVerticle {
     private void normalPage(Vertx vertx, JsonObject obj, RoutingContext ctx) {
         thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
             ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
+        });
+    }
+
+    private void configsName(RoutingContext ctx) {
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.put("operation","selectConfigName");
+        WebClient webClient=WebClient.create(ctx.vertx());
+        webClient.post(8000,"localhost","/GmServer").sendJsonObject(jsonObject,res->{
+            ctx.response().end(res.result().toString());
         });
     }
 }

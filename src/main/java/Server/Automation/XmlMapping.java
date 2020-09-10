@@ -1,7 +1,13 @@
 package Server.Automation;
 
 import Server.DatabaseHelper.VerifyDatabaseHelper;
+import Server.Verify.Cache;
+import Server.Verify.JwtUtils;
 import com.alibaba.fastjson.JSON;
+import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.client.WebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
 import org.jdom2.input.SAXBuilder;
@@ -10,6 +16,10 @@ import org.openxmlformats.schemas.spreadsheetml.x2006.main.STRef;
 
 import java.io.IOException;
 import java.util.*;
+
+import static Server.Automation.PageUtil.*;
+import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
+import static Server.DatabaseHelper.VerifyDatabaseHelper.*;
 
 @Slf4j
 public class XmlMapping {
@@ -21,23 +31,23 @@ public class XmlMapping {
     private static final HashMap<String, Element> serverElement = new HashMap<>();
     private static String returnType = null;
 
-    public XmlMapping() throws JDOMException, IOException {
+    public XmlMapping() {
 
-        SAXBuilder saxBuilder = new SAXBuilder();
-        //Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
-        Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
-        List<Element> typeList = root.getChild("pages").getChildren();
-        for (Element typeE : typeList) {
-            typeElement.put(typeE.getAttribute("name").getValue(), typeE);
-            List<Element> pageList = typeE.getChildren();
-            for (Element pageE : pageList) {
-                pageElement.put(pageE.getAttribute("url").getValue(), pageE);
-            }
-        }
-        List<Element> serverlist = root.getChild("servers").getChildren();
-        for (Element element : serverlist) {
-            serverElement.put(element.getAttribute("value").getValue(), element);
-        }
+//        SAXBuilder saxBuilder = new SAXBuilder();
+//        //Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
+//        Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
+//        List<Element> typeList = root.getChild("pages").getChildren();
+//        for (Element typeE : typeList) {
+//            typeElement.put(typeE.getAttribute("name").getValue(), typeE);
+//            List<Element> pageList = typeE.getChildren();
+//            for (Element pageE : pageList) {
+//                pageElement.put(pageE.getAttribute("url").getValue(), pageE);
+//            }
+//        }
+//        List<Element> serverlist = root.getChild("servers").getChildren();
+//        for (Element element : serverlist) {
+//            serverElement.put(element.getAttribute("value").getValue(), element);
+//        }
 
 
     }
@@ -101,6 +111,8 @@ public class XmlMapping {
                     //输入框的特殊属性
                 } else if ("input".equals(childName) && "file".equals(((Element) child).getAttribute("type").getValue())) {
                     stringBuilder.append("class=\"form-control-file\">");
+                } else if ("input".equals(childName) && "submit".equals(((Element) child).getAttributeValue("type"))) {
+                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/forward')\">");
                 } else if ("input".equals(childName) || "select".equals(childName)) {
                     stringBuilder.append("class=\"form-control\">");
                 } else if ("option".equals(childName)) {
@@ -177,7 +189,7 @@ public class XmlMapping {
 
     //获取页面的element
     public Element getElement(String str) {
-        return pageElement.get(str);
+        return PAGE_ELEMENT.get(str);
     }
 
 
@@ -190,7 +202,7 @@ public class XmlMapping {
         stringBuilder.append("<ul>");
         //这个是最大类别 暂时没什么用
         stringBuilder.append("<li class=\"navigation-divider\">最大类别</li>");
-        for (Map.Entry<String, Element> entry : typeElement.entrySet()) {
+        for (Map.Entry<String, Element> entry : TYPE_ELEMENT.entrySet()) {
             if (!urlList.contains(entry.getValue().getAttribute("authorization").getValue())) {
                 continue;
             }
@@ -208,7 +220,11 @@ public class XmlMapping {
             for (Element element : entry.getValue().getChildren()) {
                 stringBuilder.append("<li id =\" ")
                         .append(element.getAttribute("name").getValue())
-                        .append("\"><a href=\"#\"> onclick=\"changeAside("+ server + "/" +element.getAttributeValue("url")+")\"")
+                        .append("\"><a href=\"#\" onclick=\"changeAside('/")
+                        .append(server)
+                        .append("/")
+                        .append(element.getAttributeValue("url"))
+                        .append("')\">")
                         .append(element.getAttribute("name").getValue())
                         .append("</a></li>");
 
@@ -226,21 +242,21 @@ public class XmlMapping {
     public String createServerString(String selected) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<option value=\"0\"> 选择服务器 </option>");
-        for (String string : serverElement.keySet()) {
+        for (String string : SERVER_ELEMENT.keySet()) {
             stringBuilder.append("<option value=\"")
-                    .append(serverElement.get(string).getAttribute("value").getValue())
+                    .append(SERVER_ELEMENT.get(string).getAttribute("value").getValue())
                     .append("\"");
-            if (selected.equals(serverElement.get(string).getAttribute("value").getValue())) {
+            if (selected.equals(SERVER_ELEMENT.get(string).getAttribute("value").getValue())) {
                 stringBuilder.append(" selected");
             }
             stringBuilder.append(">")
-                    .append(serverElement.get(string).getValue())
+                    .append(SERVER_ELEMENT.get(string).getValue())
                     .append("</option>");
         }
         return stringBuilder.toString();
     }
 
-    public String createConfigsList(String data) throws Exception {
+    public String createConfigsList(String data) {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">" +
@@ -256,7 +272,7 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) throws Exception {
+    public String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) {
         StringBuilder stringBuilder = new StringBuilder();
         if ("list".equals(type)) {
             List<String> list = JSON.parseObject(data, List.class);
@@ -318,13 +334,55 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    public String createPageString(String route, String type, String data, String pageRouter, List subAuthList, RoutingContext ctx, Vertx vertx) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder
+                .append("<div class=\"card\">");
+        if (!pageRouter.equals(MAIN_PAGE_ROUTER)) {
+            stringBuilder.append(createElementString(getElement(pageRouter), route));
+        }
+
+        stringBuilder.append("</div>")
+                .append("<div class=\"card\" style=\"width: auto\">");
+        if (type != null) {
+            if (!type.equals(TYPE_LIST)) {
+                stringBuilder.append(createReturnString(type, data, subAuthList.contains(pageRouter), Cache.getArgs(JwtUtils.findToken(ctx))));
+            }
+        }
+        stringBuilder.append("</div>")
+                .append("<div>");
+        if (USER_MANAGE_PAGES.contains(pageRouter)) {
+            stringBuilder.append(createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, null));
+        }
+        stringBuilder.append("</div>")
+                .append("</div>")
+                .append(" <div class=\"col-lg-3\" style=\"flex: 0 0 auto;margin-left:50px\">");
+//        if (CONFIG_MANAGE_PAGES.contains(pageRouter)) {
+//            vertx.executeBlocking(future -> {
+//                JsonObject jsonObject = new JsonObject();
+//                jsonObject.put("operation", "selectConfigName");
+//                WebClient webClient = WebClient.create(vertx);
+//                webClient.post(8000, "localhost", "/GmServer")
+//                        .sendJsonObject(jsonObject, res -> {
+//                            future.complete(JSON.parseObject(res.result().bodyAsString()).get("data"));
+//                        });
+//            }, false, res -> {
+//                stringBuilder.append(createConfigsList(res.result().toString()));
+//
+//
+//            });
+//        }
+
+
+        return stringBuilder.toString();
+    }
 
     public static void main(String[] args) throws Exception {
         System.out.println("\"");
 
 
         XmlMapping xmlMapping = new XmlMapping();
-
+        System.out.println(xmlMapping.createAsideString("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTk3MjI0MjIsImV4cCI6MTU5OTcyNjAyMn0.Z7KGUnZyYg3T8J1UzgFXhZuuYmdZh4n1Dj0Uv6tPfcs", "sandbox"));
         //System.out.println(xmlMapping.createAsideString("TOKEN","master"));
         //System.out.println(xmlMapping.createPageUrlList());
         //System.out.println(xmlMapping.createPageString("checkUserInfo"));

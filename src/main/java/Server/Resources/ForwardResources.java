@@ -1,5 +1,7 @@
 package Server.Resources;
 
+import Server.Automation.XmlMapping;
+import Server.DatabaseHelper.VerifyDatabaseHelper;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
@@ -10,6 +12,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
+
 import java.net.URLDecoder;
 import java.util.HashMap;
 
@@ -27,7 +30,7 @@ public class ForwardResources {
     }
 
     private void forward(RoutingContext routingContext) {
-
+        XmlMapping xmlMapping = new XmlMapping();
         HashMap<String, String> data = new HashMap<>();
         try {
             System.out.println(URLDecoder.decode(routingContext.getBodyAsString(), "UTF-8"));
@@ -55,23 +58,25 @@ public class ForwardResources {
         data.remove("route");
         data.remove("operation");
         Cache.setArgs(token, data);
-
+        String server = url.split("/")[0];
+        String page = url.split("/")[1];
         webClient.post(8000, "localhost", "/GmServer")
                 .sendJsonObject(jsonObject, ar -> {
-            if (ar.succeeded()) {
+                    if (ar.succeeded()) {
 //                System.out.println(ar.result().body());
-                JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
-                System.out.println("jsonresult:"+jsonResult);
+                        JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
+                        System.out.println("jsonresult:" + jsonResult);
 
-                String type = jsonResult.getString("type");
-                String resultData = jsonResult.getString("data");
-
-                routingContext.put("type", type).put("data", resultData).put("route", url).reroute("/main"+url);
-            } else {
-                System.out.println("Wrong :" +ar.cause().getMessage());
-                routingContext.response().end("Operation failed !");
-            }
-        });
+                        String type = jsonResult.getString("type");
+                        String resultData = jsonResult.getString("data");
+                        String returnString = xmlMapping.createReturnString(type, resultData, VerifyDatabaseHelper.selectAuthority(JwtUtils.findToken(routingContext), server).contains(page), Cache.getArgs(JwtUtils.findToken(routingContext)));
+                        // routingContext.put("type", type).put("data", resultData).put("route", url).reroute("/main"+url);
+                        routingContext.response().end(returnString);
+                    } else {
+                        System.out.println("Wrong :" + ar.cause().getMessage());
+                        routingContext.response().end("Operation failed !");
+                    }
+                });
     }
 }
  

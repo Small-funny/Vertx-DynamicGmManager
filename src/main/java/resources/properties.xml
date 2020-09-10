@@ -96,7 +96,7 @@
         <pageType name="系统管理" authorization="systemManage" icon="clock">
             <page name="基础信息管理" url="basicInfoManage" authorization="basicInfoManage"  type="configManage">
                 <return type="str"/>
-                <form name="queryMatch" action="/forward" id="selectConfigBody">
+                <form name="queryMatch"  id="selectConfigBody">
                     <input type="text" name="args" id="args"/>
                     <input type="submit" name="submit">提交</input>
                 </form>
