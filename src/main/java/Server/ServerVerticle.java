@@ -7,12 +7,15 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.handler.BodyHandler;
 import io.vertx.ext.web.handler.StaticHandler;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ServerVerticle extends AbstractVerticle {
 
     public static void main(String[] args) {
         Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(new ServerVerticle());
+        log.info("================== GM Manager Server Start ====================");
     }
 
     @Override
@@ -22,11 +25,11 @@ public class ServerVerticle extends AbstractVerticle {
 
         router.route().handler(BodyHandler.create());
         router.route("/main/*").handler(new TokenCheck());
-        // router.route("/manager").handler(new TokenCheck());
         router.route("/forward").handler(new TokenCheck());
         router.route("/*").handler(StaticHandler.create("src/main/java/resources"));
-        // router.route().handler(StaticHandler.create());
+
         registerResources(router);
+
         vertx.createHttpServer().requestHandler(router::accept).listen(8001);
     }
 
@@ -37,4 +40,5 @@ public class ServerVerticle extends AbstractVerticle {
         new ForwardResources().registerResources(router, vertx);
         // new FailureResources().registerResources(router);
     }
+    
 }

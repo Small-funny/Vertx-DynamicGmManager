@@ -9,14 +9,17 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.client.WebClientOptions;
+import lombok.extern.slf4j.Slf4j;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
-
-import java.net.URLDecoder;
 import java.util.HashMap;
 
+/**
+ * 数据转发接口
+ */
+@Slf4j
 public class ForwardResources {
 
     private WebClient webClient;
@@ -82,5 +85,6 @@ public class ForwardResources {
                     }
                 });
     }
+    
 }
  

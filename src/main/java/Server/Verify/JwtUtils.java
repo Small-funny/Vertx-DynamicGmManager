@@ -4,30 +4,44 @@ import io.vertx.ext.auth.KeyStoreOptions;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTAuthOptions;
 import io.vertx.ext.web.RoutingContext;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * JWT工具类
+ */
+@Slf4j
 public class JwtUtils {
 
+    /**
+     * 创建token
+     * @param routingContext
+     * @return
+     */
     public static JWTAuth createJwt(RoutingContext routingContext) {
-
         JWTAuthOptions jwtAuthOptions = new JWTAuthOptions()
                 .setKeyStore(new KeyStoreOptions()
                         .setPath("src/main/java/resources/verifies/Keystore.jceks")
                         .setPassword("secret"));
 
         long starttime = System.currentTimeMillis();
-        System.out.println("令牌程序计时开始");
+        log.info("Auth object create timer start");
 
         JWTAuth jwtAuth = JWTAuth.create(routingContext.vertx(), jwtAuthOptions);
 
         long endtime = System.currentTimeMillis();
-        System.out.println("验证过程时间：" + (endtime - starttime) + "ms");
+        log.info("Time：" + (endtime - starttime) + "ms");
 
         return jwtAuth;
     }
 
+    /**
+     * 用户发送的数据中提取token
+     * @param routingContext
+     * @return
+     */
     public static String findToken(RoutingContext routingContext) {
         String token = "token";
         String Cookies = routingContext.request().getHeader("Cookie");
@@ -41,5 +55,5 @@ public class JwtUtils {
         }
         return token;
     }
-
+    
 }

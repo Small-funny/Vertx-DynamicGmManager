@@ -12,7 +12,7 @@ import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 管理员相关操作路由
+ * 管理员相关操作接口
  */
 @Slf4j
 public class ManagerResources {
@@ -21,8 +21,12 @@ public class ManagerResources {
         router.route("/manager").handler(this::GmSystemServer);
     }
 
+    /**
+     * 数据库操作
+     * @param routingContext
+     */
     private void GmSystemServer(RoutingContext routingContext) {
-        System.out.println("manager接收到参数：" + routingContext.getBodyAsString());
+        log.info("Manager receive args：" + routingContext.getBodyAsString());
 
         HttpServerRequest request = routingContext.request();
         String route = request.getFormAttribute("route");
@@ -106,7 +110,6 @@ public class ManagerResources {
                     String server = request.getFormAttribute("server");
                     System.out.println(username+"  "+type+"   "+server);
                     List<String> authList = ManagerDatabaseHelper.selectAuthList(username, type, server);
-                    System.out.println(authList);
                     future.complete(authList);
                 }, false, asyncResult -> {
                     executeResult(routingContext, asyncResult, "Select failed!", "str", route, asyncResult.result().toString());
@@ -117,6 +120,15 @@ public class ManagerResources {
         }
     }
 
+    /**
+     * 阻塞结果处理
+     * @param routingContext
+     * @param asyncResult
+     * @param info
+     * @param type
+     * @param route
+     * @param resultData
+     */
     private void executeResult(RoutingContext routingContext, AsyncResult<Object> asyncResult, String info, String type, String route, String resultData) {
         if (asyncResult.failed()) {
             routingContext.fail(asyncResult.cause());
@@ -124,8 +136,6 @@ public class ManagerResources {
             return;
         }
         routingContext.put("type", type).put("data", resultData).put("route", route).reroute("/main" + route);
-        //routingContext.response().end(resultData);
-        System.out.println("rtx:"+routingContext.toString());
-        //routingContext.reroute("/main"+routingContext.get("route"));
     }
+    
 }

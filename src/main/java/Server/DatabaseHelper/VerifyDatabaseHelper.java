@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * 数据库操作
+ * GM管理系统验证帮助类
  */
 public class VerifyDatabaseHelper {
 

@@ -7,6 +7,9 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.Random;
 
+/**
+ * 验证码生成类
+ */
 public class VerifyCode {
     // 图片的宽度
     private int width = 100;
@@ -104,9 +107,6 @@ public class VerifyCode {
         int r = getRandomNumber(200);
         int g = getRandomNumber(200);
         int b = getRandomNumber(200);
-        // System.out.println(r);
-        // System.out.println(g);
-        // System.out.println(b);
         return new Color(r, g, b);
     }
 
@@ -186,17 +186,5 @@ public class VerifyCode {
             return "";
         }
     }
-
-    // public static void main(String[] args) throws IOException{
-    // File dir = new File("verifies");
-    // if (!dir.exists()) {
-    // System.out.println("创建目录");
-    // dir.mkdir();
-    // }
-    // VerifyCode instance = new VerifyCode();
-    // String verifyCode = instance.getCode();
-    // File file = new File(dir, verifyCode + ".jpg");
-    // ImageIO.write(instance.getBuffImg(), "jpg", file);
-    // System.out.println(instance.getBuffImg().toString());
-    // }
+    
 }

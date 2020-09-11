@@ -6,16 +6,21 @@ import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.web.RoutingContext;
+import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 拦截器类
+ */
+@Slf4j
 public class TokenCheck implements Handler<RoutingContext> {
 
     @Override
     public void handle(RoutingContext routingContext) {
-        System.out.println("进入拦截器");
+        log.info("Interceptor receive request");
         try {
             String token = JwtUtils.findToken(routingContext);
 
-            System.out.println("拦截器收到的token:" + token);
+            log.info("Interceptor receive token: " + token);
 
             JWTAuth jwtAuth = JwtUtils.createJwt(routingContext);
 
@@ -23,26 +28,23 @@ public class TokenCheck implements Handler<RoutingContext> {
 
             jwtAuth.authenticate(config, res -> {
                 if (!res.succeeded()) {
-                    System.out.println("token无效");
+                    log.info("Token authenticate failed");
                     routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code());
                     routingContext.reroute("/login");
                 } else {
-                    // long starttime = System.currentTimeMillis();
-                    // System.out.println("拦截器数据库验证程序计时开始");
                     if (VerifyDatabaseHelper.isTokenExisted(token)) {
-                        System.out.println("有效token，验证成功");
+                        log.info("Token authenticate succeed");
                         routingContext.next();
                     } else {
-                        System.out.println("token无效");
+                        log.info("Token is not existed");
                         routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code());
                         routingContext.reroute("/login");
                     }
-                    // long endtime = System.currentTimeMillis();
-                    // System.out.println("程序运行时间：" + (endtime - starttime) + "ms");
                 }
             });
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    
 }

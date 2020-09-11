@@ -12,14 +12,18 @@ import io.vertx.ext.auth.jwt.JWTAuth;
 import io.vertx.ext.auth.jwt.JWTOptions;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.imageio.ImageIO;
 import java.io.*;
 
 /**
- * 用户验证相关路由
+ * 用户验证相关接口
  */
+@Slf4j
 public class LoginResources extends AbstractVerticle {
+
+    private final static String PATH = "src/main/java/resources/";
 
     public void registerResources(Router router){
         router.get("/login").handler(this::login);
@@ -31,37 +35,54 @@ public class LoginResources extends AbstractVerticle {
         router.post("/login/createToken").handler(this::createToken);
     }
 
+    /**
+     * 发送静态登录页面
+     * @param routingContext
+     */
     private void login(RoutingContext routingContext) {
-        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("src/main/java/resources/templates/login.html");
+        log.info("Receive request: login web page");
+
+        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile(PATH + "templates/login.html");
     }
 
+    /**
+     * 登出后的数据处理
+     * @param routingContext
+     */
     private void logout(RoutingContext routingContext) {
-        System.out.println("token置空");
+        log.info("Receive request: logout processing");
+
         String token = JwtUtils.findToken(routingContext);
         Cache.removeArgs(token);
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end();
     }
 
+    /**
+     * 发送公钥
+     * @param routingContext
+     */
     private void sendPublicKey(RoutingContext routingContext) {
+        log.info("Receive request: send publickey");
+
         String publicKey = "";
-        publicKey = getString("src/main/java/resources/verifies/publicKey");
+        publicKey = getString(PATH + "verifies/publicKey");
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(publicKey);
     }
 
+    /**
+     * 为新登录的用户创建token
+     * @param routingContext
+     */
     private void createToken(RoutingContext routingContext){
-        System.out.println("Receive request: create token");
+        log.info("Receive request: create token");
 
         JWTAuth jwtAuth = JwtUtils.createJwt(routingContext);
 
         var username = routingContext.getBodyAsJson().getString("username");
         var password = routingContext.getBodyAsJson().getString("password");
 
-//        System.out.println("账号密码：");
-//        System.out.println("账号:（加密后）"+username);
-//        System.out.println("账号:（加密后）"+password);
-
         String privateKey = null;
-        privateKey = getString("src/main/java/resources/verifies/privateKey");
+        privateKey = getString(PATH + "verifies/privateKey");
 
         username = RSAUtil.decrypt(privateKey, username);
         password = RSAUtil.decrypt(privateKey, password);
@@ -71,27 +92,32 @@ public class LoginResources extends AbstractVerticle {
         if (VerifyDatabaseHelper.isExisted(username, password)) {
             String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(3600L));
             routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(newToken);
-            System.out.println("token写入数据库...");
+            
             VerifyDatabaseHelper.updateToken(username, newToken);
-            System.out.println("Username or password right, Verification succeed!");
+            log.info("Username or password right, Verification succeed!");
 
         } else {
-            System.out.println("Username or password error, Verification failed!");
+            log.info("Username or password error, Verification failed!");
             routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Username or password error, Verification failed!");
         }
 
     }
 
+    /**
+     * 登录验证
+     * @param routingContext
+     */
     private void authenticity(RoutingContext routingContext) {
-        System.out.println("开始登录验证");
+        log.info("Receive request: login authentication");
 
         String token = JwtUtils.findToken(routingContext);
-        System.out.println("登录验证收到的token:"+token);
+        log.info("Receive token: " + token);
 
         JWTAuth jwtAuth =  JwtUtils.createJwt(routingContext);
 
         JsonObject config = new JsonObject().put("jwt", token);
 
+        //时效验证
         jwtAuth.authenticate(config, res -> {
             if (res.succeeded()) {
                 if (VerifyDatabaseHelper.isTokenExisted(token)) {
@@ -104,21 +130,24 @@ public class LoginResources extends AbstractVerticle {
             }
         });
     }
-
+    /**
+     * 发送验证码图片
+     * @param routingContext
+     */
     private void verifyCodePic(RoutingContext routingContext) {
-        File dir = new File("src/main/java/resources/verifies");
+        log.info("Receive request: verify code picture");
+
+        File dir = new File(PATH + "verifies");
         if (!dir.exists()) {
-            System.out.println("创建图片存储目录...");
             dir.mkdir();
         }
 
         VerifyCode instance = new VerifyCode();
         String verifyCode = instance.getCode();
 
-        File code = new File("src/main/java/resources/verifies/code");
+        File code = new File(PATH + "verifies/code");
         if (!code.exists()) {
             try {
-                System.out.println("创建验证码存储文件...");
                 code.createNewFile();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -128,11 +157,11 @@ public class LoginResources extends AbstractVerticle {
         File file = new File(dir,  "verifyCode.jpg");
 
         try {
-            System.out.println("开始写入图片...");
+            System.out.println("Writing verify code picture ...");
             ImageIO.write(instance.getBuffImg(), "jpg", file);
 
-            System.out.println("开始写入验证码...");
-            FileOutputStream privateFileStream = new FileOutputStream("src/main/java/resources/verifies/code");
+            System.out.println("Writing verify code file ...");
+            FileOutputStream privateFileStream = new FileOutputStream(PATH + "verifies/code");
             BufferedOutputStream privateBuffer =new BufferedOutputStream(privateFileStream);
             privateBuffer.write(verifyCode.getBytes(),0,verifyCode.getBytes().length);
             privateBuffer.flush();
@@ -140,15 +169,25 @@ public class LoginResources extends AbstractVerticle {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("src/main/java/resources/verifies/verifyCode.jpg");
+        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile(PATH + "verifies/verifyCode.jpg");
     }
 
+    /**
+     * 发送验证码
+     * @param routingContext
+     */
     private void verifyCode(RoutingContext routingContext) {
-        String code = getString("src/main/java/resources/verifies/code");
+        log.info("Receive request: verify code");
+
+        String code = getString(PATH + "verifies/code");
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(code);
     }
 
+    /**
+     * 获取文件内的字符串
+     * @param fileName
+     * @return
+     */
     private String getString(String fileName) {
         String key = "";
         try {

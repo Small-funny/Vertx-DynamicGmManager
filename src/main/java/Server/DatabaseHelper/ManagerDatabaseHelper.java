@@ -4,9 +4,11 @@ import org.jdom2.Element;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import com.alibaba.fastjson.JSON;
 
+/**
+ * GM管理系统数据库基本操作帮助类
+ */
 public class ManagerDatabaseHelper {
     
     /**
@@ -219,4 +221,5 @@ public class ManagerDatabaseHelper {
         }
         return result;
     }
+
 }

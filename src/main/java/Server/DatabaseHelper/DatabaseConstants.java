@@ -8,6 +8,9 @@ import java.io.FileOutputStream;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * 数据库通用工具
+ */
 public class DatabaseConstants {
     public static final List<String> HEADER_LIST = Arrays.asList("username", "password", "token", "enable", "auth"); // 用户记录模板
 
