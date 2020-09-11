@@ -30,6 +30,7 @@ public class ForwardResources {
     }
 
     private void forward(RoutingContext routingContext) {
+        System.out.println("context:"+routingContext.getBodyAsString());
         XmlMapping xmlMapping = new XmlMapping();
         HashMap<String, String> data = new HashMap<>();
         try {

@@ -32,24 +32,6 @@ public class XmlMapping {
     private static String returnType = null;
 
     public XmlMapping() {
-
-//        SAXBuilder saxBuilder = new SAXBuilder();
-//        //Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
-//        Element root = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
-//        List<Element> typeList = root.getChild("pages").getChildren();
-//        for (Element typeE : typeList) {
-//            typeElement.put(typeE.getAttribute("name").getValue(), typeE);
-//            List<Element> pageList = typeE.getChildren();
-//            for (Element pageE : pageList) {
-//                pageElement.put(pageE.getAttribute("url").getValue(), pageE);
-//            }
-//        }
-//        List<Element> serverlist = root.getChild("servers").getChildren();
-//        for (Element element : serverlist) {
-//            serverElement.put(element.getAttribute("value").getValue(), element);
-//        }
-
-
     }
 
 
@@ -105,13 +87,13 @@ public class XmlMapping {
                 }
                 ///////根据不同的元素添加特别的属性
 
-                //表单特殊属性 method="post" target="nm_iframe"
+                //表单特殊属性 method="post" target="nm_iframe"  method="post"
                 if ("form".equals(childName)) {
-                    stringBuilder.append(" id=\"selectForm\" class=\"form-horizontal\"  method=\"post\" >");
+                    stringBuilder.append(" id=\"selectForm\" class=\"form-horizontal\" >");
                     //输入框的特殊属性
                 } else if ("input".equals(childName) && "file".equals(((Element) child).getAttribute("type").getValue())) {
                     stringBuilder.append("class=\"form-control-file\">");
-                } else if ("input".equals(childName) && "submit".equals(((Element) child).getAttributeValue("type"))) {
+                } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type"))) {
                     stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/forward')\">");
                 } else if ("input".equals(childName) || "select".equals(childName)) {
                     stringBuilder.append("class=\"form-control\">");
@@ -220,11 +202,11 @@ public class XmlMapping {
             for (Element element : entry.getValue().getChildren()) {
                 stringBuilder.append("<li id =\" ")
                         .append(element.getAttribute("name").getValue())
-                        .append("\"><a href=\"#\" onclick=\"changeAside('/")
+                        .append("\"><a href=\"#\" onclick=\"changeAside('")
                         .append(server)
-                        .append("/")
+                        .append("','")
                         .append(element.getAttributeValue("url"))
-                        .append("')\">")
+                        .append("')\" id=\"").append(element.getAttributeValue("url")).append("\">")
                         .append(element.getAttribute("name").getValue())
                         .append("</a></li>");
 
@@ -264,7 +246,7 @@ public class XmlMapping {
                 "<select name=\"multiple-select\" id=\"multiple-select\" multiple=\"\" class=\"form-control\" style=\"height: 500px\" >");
         List<String> list = JSON.parseObject(data, List.class);
         for (String s : list) {
-            stringBuilder.append("<option/>").append(s);
+            stringBuilder.append("<option>").append(s).append("</option>");
         }
         stringBuilder.append("</select></div></div></div></div>");
 

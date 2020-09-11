@@ -1,11 +1,13 @@
 package Server.Resources;
 
+import Server.Automation.PageUtil;
 import Server.Automation.XmlMapping;
 import Server.DatabaseHelper.VerifyDatabaseHelper;
 import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import io.vertx.config.spi.utils.JsonObjectHelper;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -14,6 +16,7 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import lombok.extern.slf4j.Slf4j;
+import org.openxmlformats.schemas.drawingml.x2006.chart.CTRotY;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,25 +53,47 @@ public class MainResources extends AbstractVerticle {
             });
         });
         router.route("/main/:serverRouter/:pageRouter").handler(this::mainPage);
-        router.route("/main/configsName").handler(this::configsName);
-        router.route("/main/pageContent").handler(this::pageContent);
-        router.route("/:serverRouter/:pageRouter").handler(ctx->{
-            //页面路由
+
+        router.route("/maintest/:serverRouter/:pageRouter").handler(ctx -> {
             String pageRouter = ctx.request().getParam("pageRouter");
-
-            //服务器路由
             String serverRouter = ctx.request().getParam("serverRouter");
-
-            String route = "/"+pageRouter+"/"+serverRouter;
-
-
-            ctx.response().end(xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")),route));
+            String route = "/" + serverRouter + "/" + pageRouter;
+//            JsonObject jsonObject = new JsonObject();
+//            jsonObject.put("userList", JSON.toJSONString(USER_MANAGE_PAGES));
+//            jsonObject.put("configList", JSON.toJSONString(CONFIG_MANAGE_PAGES));
+//            jsonObject.put("pageContent", );
+            //ctx.response().putHeader("content-type", "text/json").end(JSON.toJSONString(jsonObject));
+            ctx.response().end(xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")), route));
         });
-        router.route("/main/returnContent").handler(ctx->{
+        router.route("/main/configsName").handler(this::configsName);
 
+        router.route("/main/returnContent").handler(ctx -> {
+
+        });
+        router.route("/main/userInfo").handler(ctx -> {
+            String page = ctx.getBodyAsJson().getString("page");
+            if (USER_MANAGE_PAGES.contains(page)) {
+                System.out.println();
+                ctx.response().end(xmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, null));
+            } else {
+                ctx.response().end("");
+            }
         });
     }
 
+    private void configsName(RoutingContext ctx) {
+        String page = ctx.getBodyAsJson().getString("page");
+        if (CONFIG_MANAGE_PAGES.contains(page)) {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.put("operation", "selectConfigName");
+            WebClient webClient = WebClient.create(ctx.vertx());
+            webClient.post(8000, "localhost", "/GmServer").sendJsonObject(jsonObject, res -> {
+                ctx.response().end(xmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data")));
+            });
+        } else {
+            ctx.response().end("");
+        }
+    }
 
     private void mainPage(RoutingContext ctx) {
         var obj = new JsonObject();
@@ -137,10 +162,6 @@ public class MainResources extends AbstractVerticle {
         //ctx.response().putHeader("content-type", "text/json").end(JSON.toJSONString(obj));
     }
 
-    private void pageContent(RoutingContext ctx){
-        System.out.println(ctx.getBodyAsString());
-        //xmlMapping.createElementString(ctx.request().getParam(""))
-    }
     private void configManagePage(Vertx vertx, JsonObject obj, RoutingContext ctx) {
         vertx.executeBlocking(future -> {
             JsonObject jsonObject = new JsonObject();
@@ -185,12 +206,5 @@ public class MainResources extends AbstractVerticle {
         });
     }
 
-    private void configsName(RoutingContext ctx) {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.put("operation","selectConfigName");
-        WebClient webClient=WebClient.create(ctx.vertx());
-        webClient.post(8000,"localhost","/GmServer").sendJsonObject(jsonObject,res->{
-            ctx.response().end(res.result().toString());
-        });
-    }
+
 }

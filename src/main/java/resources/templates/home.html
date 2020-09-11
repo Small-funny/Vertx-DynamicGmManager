@@ -75,7 +75,7 @@
     <!-- end::navigation header -->
 
     <!-- begin::navigation menu -->
-    <div class="navigation-menu-body"  th:utext="${sidePanal}">
+    <div class="navigation-menu-body" th:utext="${sidePanal}">
 
     </div>
     <!-- end::navigation menu -->
@@ -111,18 +111,19 @@
 
     <div class="content" style="margin: auto">
         <div class="animated fadeIn">
-            <div class="row" >
+            <div class="row">
 
-                <div class="col-lg-6" style="flex: 0 0 auto;margin-left:150px" >
+                <div class="col-lg-6" style="flex: 0 0 auto;margin-left:150px">
                     <div class="card" th:utext="${contentString}" id="pageContent">
 
                     </div>
                     <div class="card" style="width: auto" th:utext="${returnString}" id="returnContent"></div>
-                    <div th:utext="${userInfo}">
+                    <div th:utext="${userInfo}" id="userInfo">
 
                     </div>
                 </div>
-                <div class="col-lg-3" style="flex: 0 0 auto;margin-left:50px" th:utext="${configsName}">
+                <div class="col-lg-3" style="flex: 0 0 auto;margin-left:50px" th:utext="${configsName}"
+                     id="configsName">
                 </div>
             </div>
         </div>
@@ -170,30 +171,28 @@
     });
 </script>
 <script type="text/javascript" th:inline="javascript">
-    var pageName = [[${pagename}]]
-    var serverName = [[${servername}]]
-
+    // var pageName = [[${pagename}]]
+    // var serverName = [[${servername}]]
+    var prepage = null;
+    var pageName = null
     $(function () {
-        //侧边栏添加选中状态和展开状态
-        $("[href=" + pageName + "]").addClass("active");
-        $("[href=" + pageName + "]").parent().parent().parent().addClass("open")
-        history.pushState(null, null, "/main/" + serverName + "/" + pageName);
 
-        var route = document.createElement("input");
-        route.setAttribute("type", "hidden");
-        route.setAttribute("value", "/" + serverName + "/" + pageName);
-        route.setAttribute("name", "route");
-        if (document.getElementById("selectForm") != null) {
-            document.getElementById("selectForm").appendChild(route);
-        }
 
-        var route1 = document.createElement("input");
-        route1.setAttribute("type", "hidden");
-        route1.setAttribute("value", "/" + serverName + "/" + pageName);
-        route1.setAttribute("name", "route");
-        if (document.getElementById("configNames") != null) {
-            document.getElementById("configNames").appendChild(route1);
-        }
+        // var route = document.createElement("input");
+        // route.setAttribute("type", "hidden");
+        // route.setAttribute("value", "/" + serverName + "/" + pageName);
+        // route.setAttribute("name", "route");
+        // if (document.getElementById("selectForm") != null) {
+        //     document.getElementById("selectForm").appendChild(route);
+        // }
+        //
+        // var route1 = document.createElement("input");
+        // route1.setAttribute("type", "hidden");
+        // route1.setAttribute("value", "/" + serverName + "/" + pageName);
+        // route1.setAttribute("name", "route");
+        // if (document.getElementById("configNames") != null) {
+        //     document.getElementById("configNames").appendChild(route1);
+        // }
 
         //再提交后把输入框的内容变成刚刚查找的配置名
         var selectName = [[${selectName}]]
@@ -201,23 +200,23 @@
         // document.getElementById("configName").value = selectName;
 
         //关于修改框的操作
-        var textroute = document.createElement("input");
-        textroute.setAttribute("type", "hidden");
-        textroute.setAttribute("value", "/" + serverName + "/" + pageName);
-        textroute.setAttribute("name", "route");
-        // var configName = document.createElement("input");
-        // configName.setAttribute("type", "hidden");
-        // configName.setAttribute("value", selectName);
-        // configName.setAttribute("name", "args");
-        var updateConfigBody = document.createElement("input");
-        updateConfigBody.setAttribute("type", "hidden");
-        updateConfigBody.setAttribute("value", "updateConfigBody");
-        updateConfigBody.setAttribute("name", "operation");
-        if (document.getElementById("updateForm") != null) {
-            document.getElementById("updateForm").appendChild(textroute);
-            //document.getElementById("updateForm").appendChild(configName);
-            document.getElementById("updateForm").appendChild(updateConfigBody);
-        }
+        // var textroute = document.createElement("input");
+        // textroute.setAttribute("type", "hidden");
+        // textroute.setAttribute("value", "/" + serverName + "/" + pageName);
+        // textroute.setAttribute("name", "route");
+        // // var configName = document.createElement("input");
+        // // configName.setAttribute("type", "hidden");
+        // // configName.setAttribute("value", selectName);
+        // // configName.setAttribute("name", "args");
+        // var updateConfigBody = document.createElement("input");
+        // updateConfigBody.setAttribute("type", "hidden");
+        // updateConfigBody.setAttribute("value", "updateConfigBody");
+        // updateConfigBody.setAttribute("name", "operation");
+        // if (document.getElementById("updateForm") != null) {
+        //     document.getElementById("updateForm").appendChild(textroute);
+        //     //document.getElementById("updateForm").appendChild(configName);
+        //     document.getElementById("updateForm").appendChild(updateConfigBody);
+        // }
         var argsName = [[${args}]];
         console.log(argsName);
         var subArgsName = argsName["map"];
@@ -259,40 +258,55 @@
     }
 
 
-    function refreshAjaxGet(urls, section) {
+    function refreshAjaxGet(server, page, section) {
         console.log("ajaxget")
         $.ajax({
             type: "GET",
             dataType: "text",
-            url: urls,
-            data:JSON.stringify({"URLS":urls}),
+            url: "/maintest" + "/" + server + "/" + page,
+
+            data: JSON.stringify({"URLS": server + page}),
             success: function (data) {
                 // alert(data)
-                $("#"+ section).html(data)
+
+                $("#" + section).html(data)
             }
-        }) 
+        })
     }
 
-    function refreshAjaxPost(urls, section) {
+    function refreshAjaxPost(url, page, section) {
         $.ajax({
             type: "POST",
             dataType: "text",
-            url: urls,
+            url: url,
             data: JSON.stringify({
-                
+                'page': page
             }),
             success: function (data) {
                 // alert(data)
-                $("#"+ section).html(data)
+                $("#" + section).html(data)
             }
-        }) 
+        })
     }
-    function changeAside(urls) {
+
+    function changeAside(server, page) {
+        pageName=page
         console.log("changeAside")
-        refreshAjaxGet(urls,"pageContent")
+        refreshAjaxGet(server, page, "pageContent")
+        history.pushState(null, null, "/main" + "/" + server + "/" + page);
+        //侧边栏添加选中状态和展开状态
+        console.log(server)
+        $("#"+prepage).removeClass("active")
+        $("#"+page).addClass("active")
+        prepage = page;
+        console.log(page)
+        console.log("server:" + server + page)
+        refreshAjaxPost("/main/configsName", page, "configsName")
+        refreshAjaxPost("/main/userInfo", page, "userInfo")
     }
+
     function changeReturn(urls) {
-        refreshAjaxPost(urls,"returnContent")
+        refreshAjaxPost(urls, pageName, "returnContent")
     }
 </script>
 <!---->

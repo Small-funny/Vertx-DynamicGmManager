@@ -98,7 +98,7 @@
                 <return type="str"/>
                 <form name="queryMatch"  id="selectConfigBody">
                     <input type="text" name="args" id="args"/>
-                    <input type="submit" name="submit">提交</input>
+                    <input type="button" name="submit" value="提交">提交</input>
                 </form>
 
             </page>
