@@ -175,6 +175,7 @@
     // var serverName = [[${servername}]]
     var prepage = null;
     var pageName = null
+    var configList;
     $(function () {
 
 
@@ -231,7 +232,6 @@
     })
 
     function logout() {
-
         document.cookie = "Token=token;Path=/"
         window.location.href = "/login";
     }
@@ -274,13 +274,14 @@
         })
     }
 
-    function refreshAjaxPost(url, page, section) {
+    function refreshAjaxPost(url, page, arguments, section) {
         $.ajax({
             type: "POST",
             dataType: "text",
             url: url,
             data: JSON.stringify({
-                'page': page
+                'page': page,
+                'arguments': arguments
             }),
             success: function (data) {
                 // alert(data)
@@ -290,23 +291,29 @@
     }
 
     function changeAside(server, page) {
-        pageName=page
-        console.log("changeAside")
+        pageName = page
         refreshAjaxGet(server, page, "pageContent")
         history.pushState(null, null, "/main" + "/" + server + "/" + page);
         //侧边栏添加选中状态和展开状态
-        console.log(server)
-        $("#"+prepage).removeClass("active")
-        $("#"+page).addClass("active")
+        $("#" + prepage).removeClass("active")
+        $("#" + page).addClass("active")
         prepage = page;
-        console.log(page)
         console.log("server:" + server + page)
-        refreshAjaxPost("/main/configsName", page, "configsName")
-        refreshAjaxPost("/main/userInfo", page, "userInfo")
+        refreshAjaxPost("/main/configsName", page, null, "configsName")
+        refreshAjaxPost("/main/userInfo", page, null, "userInfo")
+        $("input[type='hidden']").each(function () {
+            console.log($(this).attr("value"))
+            $(this).attr({from: "return"})
+        })
     }
 
     function changeReturn(urls) {
-        refreshAjaxPost(urls, pageName, "returnContent")
+        var json = {};
+        $("input[from='return']").each(function () {
+            json[$(this).attr('name')] = $(this).val()
+        })
+        console.log(JSON.stringify(json))
+        refreshAjaxPost(urls, pageName, JSON.stringify(json), "returnContent")
     }
 </script>
 <!---->

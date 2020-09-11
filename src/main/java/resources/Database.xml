@@ -2,7 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTk4MDY0OTMsImV4cCI6MTU5OTgxMDA5M30.7AXBSuW9HfRebRK0jfmPMprrlQKQy_7ZT3K_GoP_ih4" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTk4MjE3NzksImV4cCI6MTU5OTgyNTM3OX0.OAZVAEb6pIo1w6uj_O-j0Sm0y5XDkslq79n00WQd7iY" />
         <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="sandbox">
@@ -11,7 +11,7 @@
                 <auth2 name="list" value="operationManage" />
                 <auth2 name="list" value="gameServerManage" />
                 <auth2 name="list" value="systemManage" />
-                <auth2 name="list" value="basicInfoManage" />
+                <auth2 name="btn" value="basicInfoManage" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 name="list" value="playerManage" />

@@ -58,7 +58,7 @@
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="server" id="server"/>
                     <input type="text" name="auth" id="auth"/>
-                    <input type="submit" name="删除"/>
+                    <input type="button" name="删除"/>
                 </form>
             </page>
         </pageType>
@@ -81,8 +81,8 @@
         <pageType name="游戏服务管理" authorization="gameServerManage" icon="calendar">
             <page name="开关游戏服" url="operateServer" authorization="operateServer" >
                 <form name="queryAsset" action="/forward">
-                    <input type="text" name="userId">0</input>
-                    <input type="text" name="days">0</input>
+                    <input type="text" name="userId" >0</input>
+                    <input type="text" name="days" >0</input>
                     <select name="sel">
                         <option value="1">广州</option>
                         <option value="2">深圳</option>
@@ -97,7 +97,7 @@
             <page name="基础信息管理" url="basicInfoManage" authorization="basicInfoManage"  type="configManage">
                 <return type="str"/>
                 <form name="queryMatch"  id="selectConfigBody">
-                    <input type="text" name="args" id="args"/>
+                    <input type="text" name="args" id="args" />
                     <input type="button" name="submit" value="提交">提交</input>
                 </form>
 

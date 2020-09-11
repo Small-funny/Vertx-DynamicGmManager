@@ -95,7 +95,9 @@ public class XmlMapping {
                     stringBuilder.append("class=\"form-control-file\">");
                 } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type"))) {
                     stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/forward')\">");
-                } else if ("input".equals(childName) || "select".equals(childName)) {
+                } else if ("input".equals(childName) && "text".equals(((Element) child).getAttributeValue("type"))) {
+                    stringBuilder.append("class=\"form-control\" from=\"return\">");
+                }  else if ("input".equals(childName) || "select".equals(childName)) {
                     stringBuilder.append("class=\"form-control\">");
                 } else if ("option".equals(childName)) {
                     stringBuilder.append(">");
@@ -131,8 +133,8 @@ public class XmlMapping {
                 if ("form".equals(childName)) {
                     stringBuilder.append("<input type=\"hidden\" value=\"")
                             .append(((Element) child).getAttributeValue("id"))
-                            .append("\" name=\"operation\"/>");
-                    stringBuilder.append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\"/>");
+                            .append("\" name=\"operation\" from=\"return\"/>");
+                    stringBuilder.append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"return\"/>");
 //                    if ("table".equals(returnType)) {
 //                        stringBuilder.append("<input type=\"hidden\" value=\"selectTableData\" name=\"operation\"/>");
 //                    } else if ("str".equals(returnType)) {

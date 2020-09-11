@@ -58,11 +58,7 @@ public class MainResources extends AbstractVerticle {
             String pageRouter = ctx.request().getParam("pageRouter");
             String serverRouter = ctx.request().getParam("serverRouter");
             String route = "/" + serverRouter + "/" + pageRouter;
-//            JsonObject jsonObject = new JsonObject();
-//            jsonObject.put("userList", JSON.toJSONString(USER_MANAGE_PAGES));
-//            jsonObject.put("configList", JSON.toJSONString(CONFIG_MANAGE_PAGES));
-//            jsonObject.put("pageContent", );
-            //ctx.response().putHeader("content-type", "text/json").end(JSON.toJSONString(jsonObject));
+
             ctx.response().end(xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")), route));
         });
         router.route("/main/configsName").handler(this::configsName);

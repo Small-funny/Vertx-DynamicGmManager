@@ -1,6 +1,7 @@
 package Server.Resources;
 
 import Server.Automation.XmlMapping;
+import Server.DatabaseHelper.ManagerDatabaseHelper;
 import Server.DatabaseHelper.VerifyDatabaseHelper;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -33,16 +34,18 @@ public class ForwardResources {
         System.out.println("context:"+routingContext.getBodyAsString());
         XmlMapping xmlMapping = new XmlMapping();
         HashMap<String, String> data = new HashMap<>();
-        try {
-            System.out.println(URLDecoder.decode(routingContext.getBodyAsString(), "UTF-8"));
-            for (String str : URLDecoder.decode(routingContext.getBodyAsString(), "UTF-8").split("&")) {
-                data.put(str.split("=")[0], str.split("=")[1]);
-            }
-            data.remove("submit");
-            System.out.println(data);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            System.out.println(URLDecoder.decode(routingContext.getBodyAsString(), "UTF-8"));
+//            for (String str : URLDecoder.decode(routingContext.getBodyAsString(), "UTF-8").split("&")) {
+//                data.put(str.split("=")[0], str.split("=")[1]);
+//            }
+//            data.remove("submit");
+//            System.out.println(data);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+        data=JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"),HashMap.class);
+
 
         JsonObject jsonObject = new JsonObject();
         for (String key : data.keySet()) {
@@ -59,8 +62,8 @@ public class ForwardResources {
         data.remove("route");
         data.remove("operation");
         Cache.setArgs(token, data);
-        String server = url.split("/")[0];
-        String page = url.split("/")[1];
+        String server = url.split("/")[1];
+        String page = url.split("/")[0];
         webClient.post(8000, "localhost", "/GmServer")
                 .sendJsonObject(jsonObject, ar -> {
                     if (ar.succeeded()) {
@@ -70,7 +73,7 @@ public class ForwardResources {
 
                         String type = jsonResult.getString("type");
                         String resultData = jsonResult.getString("data");
-                        String returnString = xmlMapping.createReturnString(type, resultData, VerifyDatabaseHelper.selectAuthority(JwtUtils.findToken(routingContext), server).contains(page), Cache.getArgs(JwtUtils.findToken(routingContext)));
+                        String returnString = xmlMapping.createReturnString(type, resultData, ManagerDatabaseHelper.selectAuthList(VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(routingContext)),"btn" ,page).contains(page), Cache.getArgs(JwtUtils.findToken(routingContext)));
                         // routingContext.put("type", type).put("data", resultData).put("route", url).reroute("/main"+url);
                         routingContext.response().end(returnString);
                     } else {
