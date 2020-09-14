@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ServerVerticle extends AbstractVerticle {
 
     public static void main(String[] args) {
+        log.info("ss");
         Vertx vertx = Vertx.vertx();
         vertx.deployVerticle(new ServerVerticle());
     }

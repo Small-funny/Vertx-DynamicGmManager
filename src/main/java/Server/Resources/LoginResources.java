@@ -23,8 +23,6 @@ import java.io.*;
 @Slf4j
 public class LoginResources extends AbstractVerticle {
 
-    private final static String PATH = "src/main/java/resources/";
-
     public void registerResources(Router router){
         router.get("/login").handler(this::login);
         router.get("/login/logout").handler(this::logout);
@@ -42,7 +40,7 @@ public class LoginResources extends AbstractVerticle {
     private void login(RoutingContext routingContext) {
         log.info("Receive request: login web page");
 
-        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile(PATH + "templates/login.html");
+        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("src/main/java/resources/templates/login.html");
     }
 
     /**
@@ -65,7 +63,7 @@ public class LoginResources extends AbstractVerticle {
         log.info("Receive request: send publickey");
 
         String publicKey = "";
-        publicKey = getString(PATH + "verifies/publicKey");
+        publicKey = getString("src/main/java/resources/verifies/publicKey");
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(publicKey);
     }
 
@@ -82,12 +80,10 @@ public class LoginResources extends AbstractVerticle {
         var password = routingContext.getBodyAsJson().getString("password");
 
         String privateKey = null;
-        privateKey = getString(PATH + "verifies/privateKey");
+        privateKey = getString("src/main/java/resources/verifies/privateKey");
 
         username = RSAUtil.decrypt(privateKey, username);
         password = RSAUtil.decrypt(privateKey, password);
-
-        System.out.println(username + " " + password);
 
         if (VerifyDatabaseHelper.isExisted(username, password)) {
             String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(3600L));
@@ -112,9 +108,7 @@ public class LoginResources extends AbstractVerticle {
 
         String token = JwtUtils.findToken(routingContext);
         log.info("Receive token: " + token);
-
         JWTAuth jwtAuth =  JwtUtils.createJwt(routingContext);
-
         JsonObject config = new JsonObject().put("jwt", token);
 
         //时效验证
@@ -138,7 +132,7 @@ public class LoginResources extends AbstractVerticle {
     private void verifyCodePic(RoutingContext routingContext) {
         log.info("Receive request: verify code picture");
 
-        File dir = new File(PATH + "verifies");
+        File dir = new File("src/main/java/resources/verifies");
         if (!dir.exists()) {
             dir.mkdir();
         }
@@ -146,7 +140,7 @@ public class LoginResources extends AbstractVerticle {
         VerifyCode instance = new VerifyCode();
         String verifyCode = instance.getCode();
 
-        File code = new File(PATH + "verifies/code");
+        File code = new File("src/main/java/resources/verifies/code");
         if (!code.exists()) {
             try {
                 code.createNewFile();
@@ -162,7 +156,7 @@ public class LoginResources extends AbstractVerticle {
             ImageIO.write(instance.getBuffImg(), "jpg", file);
 
             log.info("Writing verify code file ...");
-            FileOutputStream privateFileStream = new FileOutputStream(PATH + "verifies/code");
+            FileOutputStream privateFileStream = new FileOutputStream("src/main/java/resources/verifies/code");
             BufferedOutputStream privateBuffer =new BufferedOutputStream(privateFileStream);
             privateBuffer.write(verifyCode.getBytes(),0,verifyCode.getBytes().length);
             privateBuffer.flush();
@@ -170,7 +164,7 @@ public class LoginResources extends AbstractVerticle {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile(PATH + "verifies/verifyCode.jpg");
+        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("src/main/java/resources/verifies/verifyCode.jpg");
     }
 
     /**
@@ -180,7 +174,7 @@ public class LoginResources extends AbstractVerticle {
     private void verifyCode(RoutingContext routingContext) {
         log.info("Receive request: verify code");
 
-        String code = getString(PATH + "verifies/code");
+        String code = getString("src/main/java/resources/verifies/code");
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(code);
     }
 

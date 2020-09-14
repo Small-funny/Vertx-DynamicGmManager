@@ -108,7 +108,6 @@ public class ManagerResources {
                     String username = request.getFormAttribute("username");
                     String type = request.getFormAttribute("type");
                     String server = request.getFormAttribute("server");
-                    System.out.println(username+"  "+type+"   "+server);
                     List<String> authList = ManagerDatabaseHelper.selectAuthList(username, type, server);
                     future.complete(authList);
                 }, false, asyncResult -> {
