@@ -130,6 +130,7 @@ public class LoginResources extends AbstractVerticle {
             }
         });
     }
+
     /**
      * 发送验证码图片
      * @param routingContext
@@ -157,10 +158,10 @@ public class LoginResources extends AbstractVerticle {
         File file = new File(dir,  "verifyCode.jpg");
 
         try {
-            System.out.println("Writing verify code picture ...");
+            log.info("Writing verify code picture ...");
             ImageIO.write(instance.getBuffImg(), "jpg", file);
 
-            System.out.println("Writing verify code file ...");
+            log.info("Writing verify code file ...");
             FileOutputStream privateFileStream = new FileOutputStream(PATH + "verifies/code");
             BufferedOutputStream privateBuffer =new BufferedOutputStream(privateFileStream);
             privateBuffer.write(verifyCode.getBytes(),0,verifyCode.getBytes().length);
@@ -206,4 +207,5 @@ public class LoginResources extends AbstractVerticle {
         }
         return key;
     }
+
 }
