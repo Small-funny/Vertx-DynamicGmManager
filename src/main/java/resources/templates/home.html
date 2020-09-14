@@ -177,47 +177,10 @@
     var pageName = null
     var configList;
     $(function () {
-
-
-        // var route = document.createElement("input");
-        // route.setAttribute("type", "hidden");
-        // route.setAttribute("value", "/" + serverName + "/" + pageName);
-        // route.setAttribute("name", "route");
-        // if (document.getElementById("selectForm") != null) {
-        //     document.getElementById("selectForm").appendChild(route);
-        // }
-        //
-        // var route1 = document.createElement("input");
-        // route1.setAttribute("type", "hidden");
-        // route1.setAttribute("value", "/" + serverName + "/" + pageName);
-        // route1.setAttribute("name", "route");
-        // if (document.getElementById("configNames") != null) {
-        //     document.getElementById("configNames").appendChild(route1);
-        // }
-
         //再提交后把输入框的内容变成刚刚查找的配置名
         var selectName = [[${selectName}]]
         console.log("name" + selectName);
-        // document.getElementById("configName").value = selectName;
 
-        //关于修改框的操作
-        // var textroute = document.createElement("input");
-        // textroute.setAttribute("type", "hidden");
-        // textroute.setAttribute("value", "/" + serverName + "/" + pageName);
-        // textroute.setAttribute("name", "route");
-        // // var configName = document.createElement("input");
-        // // configName.setAttribute("type", "hidden");
-        // // configName.setAttribute("value", selectName);
-        // // configName.setAttribute("name", "args");
-        // var updateConfigBody = document.createElement("input");
-        // updateConfigBody.setAttribute("type", "hidden");
-        // updateConfigBody.setAttribute("value", "updateConfigBody");
-        // updateConfigBody.setAttribute("name", "operation");
-        // if (document.getElementById("updateForm") != null) {
-        //     document.getElementById("updateForm").appendChild(textroute);
-        //     //document.getElementById("updateForm").appendChild(configName);
-        //     document.getElementById("updateForm").appendChild(updateConfigBody);
-        // }
         var argsName = [[${args}]];
         console.log(argsName);
         var subArgsName = argsName["map"];
@@ -252,9 +215,7 @@
 
     function submitForm() {
         var server = $("#selServer").val();
-        if (server !== "0") {
-            window.location.href = "/main/" + server + "/0"
-        }
+        window.location.href = "/main/" + server + "/0"
     }
 
 
@@ -263,7 +224,7 @@
         $.ajax({
             type: "GET",
             dataType: "text",
-            url: "/maintest" + "/" + server + "/" + page,
+            url: "/subMain" + "/" + server + "/" + page,
 
             data: JSON.stringify({"URLS": server + page}),
             success: function (data) {
@@ -318,12 +279,13 @@
         refreshAjaxPost(urls, pageName, JSON.stringify(json), "returnContent")
 
     }
+
     function updateReturn(urls) {
-        var json ={}
+        var json = {}
         $("input[from='return']").each(function () {
             json[$(this).attr('name')] = $(this).val()
         })
-        json['body']=$("#text").val()
+        json['body'] = $("#text").val()
         console.log(JSON.stringify(json))
         refreshAjaxPost(urls, pageName, JSON.stringify(json), "returnContent")
 

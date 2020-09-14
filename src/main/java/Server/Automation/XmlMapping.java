@@ -218,7 +218,6 @@ public class XmlMapping {
 
         }
         stringBuilder.append("</ul>");
-        System.out.println(stringBuilder.toString());
         return stringBuilder.toString();
     }
 
@@ -321,8 +320,7 @@ public class XmlMapping {
 
     public String createPageString(String route, String type, String data, String pageRouter, List subAuthList, RoutingContext ctx, Vertx vertx) {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder
-                .append("<div class=\"card\">");
+        stringBuilder.append("<div class=\"card\">");
         if (!pageRouter.equals(MAIN_PAGE_ROUTER)) {
             stringBuilder.append(createElementString(getElement(pageRouter), route));
         }
@@ -342,22 +340,6 @@ public class XmlMapping {
         stringBuilder.append("</div>")
                 .append("</div>")
                 .append(" <div class=\"col-lg-3\" style=\"flex: 0 0 auto;margin-left:50px\">");
-//        if (CONFIG_MANAGE_PAGES.contains(pageRouter)) {
-//            vertx.executeBlocking(future -> {
-//                JsonObject jsonObject = new JsonObject();
-//                jsonObject.put("operation", "selectConfigName");
-//                WebClient webClient = WebClient.create(vertx);
-//                webClient.post(8000, "localhost", "/GmServer")
-//                        .sendJsonObject(jsonObject, res -> {
-//                            future.complete(JSON.parseObject(res.result().bodyAsString()).get("data"));
-//                        });
-//            }, false, res -> {
-//                stringBuilder.append(createConfigsList(res.result().toString()));
-//
-//
-//            });
-//        }
-
 
         return stringBuilder.toString();
     }

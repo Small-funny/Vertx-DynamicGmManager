@@ -162,7 +162,8 @@ public class LoginResources extends AbstractVerticle {
             privateBuffer.flush();
             privateBuffer.close();
         } catch (Exception e) {
-            e.printStackTrace();
+            // e.printStackTrace();
+            log.error("asdasdsad");
         }
         routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("src/main/java/resources/verifies/verifyCode.jpg");
     }

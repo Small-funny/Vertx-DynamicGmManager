@@ -36,39 +36,23 @@ public class ForwardResources {
     }
 
     private void forward(RoutingContext routingContext) {
-        System.out.println("context:" + routingContext.getBodyAsString());
+        String server;
+        String page;
         XmlMapping xmlMapping = new XmlMapping();
-        HashMap<String, String> data = new HashMap<>();
-//        try {
-//            System.out.println(URLDecoder.decode(routingContext.getBodyAsString(), "UTF-8"));
-//            for (String str : URLDecoder.decode(routingContext.getBodyAsString(), "UTF-8").split("&")) {
-//                data.put(str.split("=")[0], str.split("=")[1]);
-//            }
-//            data.remove("submit");
-//            System.out.println(data);
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
+        HashMap<String, String> data;
         data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
-
-
         JsonObject jsonObject = new JsonObject();
         for (String key : data.keySet()) {
             String value = data.get(key);
             jsonObject.put(key, value);
         }
-
         String url = jsonObject.getString("route");
-        System.out.println(url);
         jsonObject.remove("route");
-
         String token = JwtUtils.findToken(routingContext);
-
         data.remove("route");
         data.remove("operation");
         Cache.setArgs(token, data);
-        final String server;
-        final String page;
+
         if (url != null) {
             server = url.split("/")[1];
             page = url.split("/")[2];
@@ -79,10 +63,7 @@ public class ForwardResources {
         webClient.post(8000, "localhost", "/GmServer")
                 .sendJsonObject(jsonObject, ar -> {
                     if (ar.succeeded()) {
-//                System.out.println(ar.result().body());
                         JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
-                        System.out.println("jsonresult:" + jsonResult);
-
                         String type = jsonResult.getString("type");
                         String resultData = jsonResult.getString("data");
                         boolean auth;
