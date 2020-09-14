@@ -171,6 +171,7 @@
     });
 </script>
 <script type="text/javascript" th:inline="javascript">
+    var flag
     // var pageName = [[${pagename}]]
     // var serverName = [[${servername}]]
     var prepage = null;
@@ -180,7 +181,7 @@
         //再提交后把输入框的内容变成刚刚查找的配置名
         var selectName = [[${selectName}]]
         console.log("name" + selectName);
-
+        toastr.success("登陆成功")
         var argsName = [[${args}]];
         console.log(argsName);
         var subArgsName = argsName["map"];
@@ -192,6 +193,7 @@
             console.log(key);
             console.log(value);
         })
+        
     })
 
     function logout() {
@@ -226,11 +228,12 @@
             dataType: "text",
             url: "/subMain" + "/" + server + "/" + page,
 
-            data: JSON.stringify({"URLS": server + page}),
-            success: function (data) {
-                // alert(data)
-
+            data: JSON.stringify({
+                "URLS": server + page
+            }),success: function (data) {
                 $("#" + section).html(data)
+            },error: function () {
+                toastr.error("操作失败")
             }
         })
     }
@@ -243,10 +246,27 @@
             data: JSON.stringify({
                 'page': page,
                 'arguments': arguments
-            }),
-            success: function (data) {
-                // alert(data)
+            }),success: function (data) {
                 $("#" + section).html(data)
+            },error: function () {
+                toastr.error("操作失败")
+            }
+        })
+    }
+
+    function refreshAjaxPostAlert(url, page, arguments, section) {
+        $.ajax({
+            type: "POST",
+            dataType: "text",
+            url: url,
+            data: JSON.stringify({
+                'page': page,
+                'arguments': arguments
+            }),success: function (data) {
+                toastr.success("操作成功")
+                $("#" + section).html(data)
+            },error: function () {
+                toastr.success("操作失败")
             }
         })
     }
@@ -276,8 +296,7 @@
             json[$(this).attr('name')] = $(this).val()
         })
         console.log(JSON.stringify(json))
-        refreshAjaxPost(urls, pageName, JSON.stringify(json), "returnContent")
-
+        refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
     }
 
     function updateReturn(urls) {
@@ -287,9 +306,9 @@
         })
         json['body'] = $("#text").val()
         console.log(JSON.stringify(json))
-        refreshAjaxPost(urls, pageName, JSON.stringify(json), "returnContent")
-
+        refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
     }
+    
 </script>
 <!---->
 

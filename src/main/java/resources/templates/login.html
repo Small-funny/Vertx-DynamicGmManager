@@ -96,7 +96,7 @@
                     if ($('#verifyCode').val().toLowerCase() === data.toLowerCase()) {
                         getPublicKey();
                     } else if ($('#verifyCode').val().toLowerCase() !== data.toLowerCase()) {
-                        alert("验证码错误！")
+                        toastr.error("验证码错误")
                         document.getElementById("sign in").innerHTML = "Sign in"
                     }
                 } else {

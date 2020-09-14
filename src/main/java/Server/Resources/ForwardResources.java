@@ -60,27 +60,28 @@ public class ForwardResources {
             server = null;
             page = null;
         }
-        webClient.post(8000, "localhost", "/GmServer")
-                .sendJsonObject(jsonObject, ar -> {
-                    if (ar.succeeded()) {
-                        JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
-                        String type = jsonResult.getString("type");
-                        String resultData = jsonResult.getString("data");
-                        boolean auth;
-                        if (server != null) {
-                            auth = ManagerDatabaseHelper.selectAuthList(VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(routingContext)), "btn", server).contains(page);
-                        } else {
-                            auth = true;
-                        }
-                        String returnString = xmlMapping.createReturnString(type, resultData, auth, Cache.getArgs(JwtUtils.findToken(routingContext)));
-                        // routingContext.put("type", type).put("data", resultData).put("route", url).reroute("/main"+url);
-                        routingContext.response().end(returnString);
-                    } else {
-                        System.out.println("Wrong :" + ar.cause().getMessage());
-                        routingContext.response().end("Operation failed !");
-                    }
-                });
+        webClient.post(8000, "localhost", "/GmServer").sendJsonObject(jsonObject, ar -> {
+            if (ar.succeeded()) {
+                JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
+                String type = jsonResult.getString("type");
+                String resultData = jsonResult.getString("data");
+                boolean auth;
+                if (server != null) {
+                    auth = ManagerDatabaseHelper
+                            .selectAuthList(VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(routingContext)),
+                                    "btn", server)
+                            .contains(page);
+                } else {
+                    auth = true;
+                }
+                String returnString = xmlMapping.createReturnString(type, resultData, auth,
+                        Cache.getArgs(JwtUtils.findToken(routingContext)));
+                routingContext.response().end(returnString);
+            } else {
+                System.out.println("Wrong :" + ar.cause().getMessage());
+                routingContext.response().end("Operation failed !");
+            }
+        });
     }
 
 }
- 
