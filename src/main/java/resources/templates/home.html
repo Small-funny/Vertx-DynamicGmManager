@@ -297,7 +297,6 @@
         $("#" + page).addClass("active")
         prepage = page;
 
-
         refreshAjaxGet(server, page, "pageContent")
         history.pushState(null, null, "/main" + "/" + server + "/" + page);
         console.log("server:" + server + page)
@@ -307,6 +306,7 @@
             console.log($(this).attr("value"))
             $(this).attr({from: "return"})
         })
+        $("#returnContent").html(" ")
     }
 
     function changeReturn(urls) {
@@ -316,7 +316,7 @@
         })
         console.log(JSON.stringify(json))
         refreshAjaxPost(urls, pageName, JSON.stringify(json), "returnContent")
-        alert("select succeed")
+
     }
     function updateReturn(urls) {
         var json ={}
@@ -326,7 +326,7 @@
         json['body']=$("#text").val()
         console.log(JSON.stringify(json))
         refreshAjaxPost(urls, pageName, JSON.stringify(json), "returnContent")
-        alert("select succeed")
+
     }
 </script>
 <!---->
