@@ -60,24 +60,12 @@ public class MainResources extends AbstractVerticle {
         //侧边栏菜单
         asideString = xmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
         obj.put("sidePanal", asideString);
-
-        //页面路由
-        String pageRouter = ctx.request().getParam("pageRouter");
-        //服务器路由
         String serverRouter = ctx.request().getParam("serverRouter");
-//        //总路由
-        String route = "/" + serverRouter + "/" + pageRouter;
-
-
-        //服务器列表
         serverString = xmlMapping.createServerString(serverRouter);
         obj.put("servers", serverString);
-
         thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
             ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
         });
-
-
     }
 
     private void userInfo(RoutingContext ctx) {
@@ -110,5 +98,4 @@ public class MainResources extends AbstractVerticle {
         String route = "/" + serverRouter + "/" + pageRouter;
         ctx.response().end(xmlMapping.createElementString(xmlMapping.getElement(ctx.request().getParam("pageRouter")), route));
     }
-
 }

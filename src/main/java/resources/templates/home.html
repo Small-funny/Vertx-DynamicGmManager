@@ -29,7 +29,7 @@
     <link rel="stylesheet" href="/webroot/vendors/datepicker/daterangepicker.css" type="text/css">
 
 </head>
-<body class="form-membership">
+<body class="form-membership" style="padding: 0">
 
 <!-- begin::preloader-->
 <div class="preloader">
@@ -47,8 +47,17 @@
 </div>
 <!-- end::preloader -->
 <!-- Left Panel -->
-<aside class="navigation left-panel" style="height: 100%">
+<aside class="navigation left-panel" style="height: 100%;top: 0">
+    <div class="row form-group" style="height:50px">
+        <form id="serverSelect" class="form-horizontal" method="get">
+            <div class="col-12 col-md-9" style="width: 300px;margin: auto;top: 50%;">
+                <select id="selServer" class="form-control" th:utext="${servers}" onchange="submitForm();">
 
+                </select>
+            </div>
+
+        </form>
+    </div>
     <!-- begin::logo -->
     <div id="logo">
 
@@ -59,7 +68,9 @@
     <!-- end::logo -->
 
     <!-- begin::navigation header -->
+
     <header class="navigation-header">
+
         <div>
             <h5>Fotoable</h5>
             <p class="text-muted">Administrator</p>
@@ -89,24 +100,15 @@
 <div id="right-panel" class="right-panel" style="width: 1500px;margin: 35px auto">
 
     <!-- Header-->
-    <header id="header" class="header">
-        <div class="top-left">
-            <div class="row form-group" style="">
-                <form id="serverSelect" class="form-horizontal" method="get">
-                    <div class="col-12 col-md-9" style="width: 300px;padding-top: 15px;padding-left: 30px">
-                        <select id="selServer" class="form-control" th:utext="${servers}" onchange="submitForm();">
+<!--    <header id="header" class="header">-->
+<!--        <div class="top-left">-->
 
-                        </select>
-                    </div>
-
-                </form>
-            </div>
-        </div>
-        <div class="top-right">
+<!--        </div>-->
+<!--        <div class="top-right">-->
 
 
-        </div>
-    </header><!-- /header -->
+<!--        </div>-->
+<!--    </header>&lt;!&ndash; /header &ndash;&gt;-->
     <!-- Header-->
 
     <div class="content" style="margin: auto">
