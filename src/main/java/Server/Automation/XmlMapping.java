@@ -96,8 +96,8 @@ public class XmlMapping {
                 } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type"))) {
                     stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/forward')\">");
                 } else if ("input".equals(childName) && "text".equals(((Element) child).getAttributeValue("type"))) {
-                    stringBuilder.append("class=\"form-control\" from=\"return\">");
-                }  else if ("input".equals(childName) || "select".equals(childName)) {
+                    stringBuilder.append("class=\"form-control\" from=\"select\">");
+                } else if ("input".equals(childName) || "select".equals(childName)) {
                     stringBuilder.append("class=\"form-control\">");
                 } else if ("option".equals(childName)) {
                     stringBuilder.append(">");
@@ -133,8 +133,8 @@ public class XmlMapping {
                 if ("form".equals(childName)) {
                     stringBuilder.append("<input type=\"hidden\" value=\"")
                             .append(((Element) child).getAttributeValue("id"))
-                            .append("\" name=\"operation\" from=\"return\"/>");
-                    stringBuilder.append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"return\"/>");
+                            .append("\" name=\"operation\" from=\"select\"/>");
+                    stringBuilder.append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"select\"/>");
 //                    if ("table".equals(returnType)) {
 //                        stringBuilder.append("<input type=\"hidden\" value=\"selectTableData\" name=\"operation\"/>");
 //                    } else if ("str".equals(returnType)) {
@@ -267,7 +267,7 @@ public class XmlMapping {
             return stringBuilder.toString();
         } else {
             stringBuilder.append("<div class=\"card-body card-block\" style=\"width: auto\">")
-                    .append("<form action=\"/forward\" id=\"updateForm\" class=\"form-horizontal\" method=\"post\" style=\"width: auto\">")
+                    .append("<form id=\"updateForm\" class=\"form-horizontal\" style=\"width: auto\">")
                     .append("<div class=\"row form-group\" style=\"width: auto\">")
                     .append("<div class=\"col-12 col-md-9\">");
             if ("table".equals(type)) {
@@ -294,14 +294,15 @@ public class XmlMapping {
                 stringBuilder.append("</tbody></table>").append("</div></div></div></form>");
 
             } else if ("str".equals(type)) {
-                stringBuilder.append("<textarea id=\"text\" name=\"body\" rows=\"19\" placeholder=\"Cont.\" class=\"form-control\" style=\"height:700px\">")
+                stringBuilder.append("<textarea id=\"text\" name=\"body\" rows=\"19\" placeholder=\"Cont.\" class=\"form-control\" style=\"height:700px\" from=\"return\">")
                         .append(data)
                         .append("</textarea></div></div>");
                 if (auth) {
                     stringBuilder.append("<div class=\"row form-group\">")
                             .append("<div class=\"col col-md-3\"><label  class=\" form-control-label\">Textarea</label></div>")
                             .append("<div class=\"col-12 col-md-9\">")
-                            .append("<input type=\"submit\" name=\"submit\" class=\"form-control\"></div></div>");
+                            .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\"></div></div>")
+                            .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">");
                 }
 
                 for (Map.Entry<String, String> entry : argsName.entrySet()) {
@@ -309,7 +310,7 @@ public class XmlMapping {
                             .append(entry.getKey())
                             .append("\" value =\"")
                             .append(entry.getValue())
-                            .append("\" class=\"form-control\">");
+                            .append("\" class=\"form-control\" from=\"return\">");
                 }
                 stringBuilder.append("</form>");
             }

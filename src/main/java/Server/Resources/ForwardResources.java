@@ -14,7 +14,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
+
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * 数据转发接口
@@ -34,7 +36,7 @@ public class ForwardResources {
     }
 
     private void forward(RoutingContext routingContext) {
-        System.out.println("context:"+routingContext.getBodyAsString());
+        System.out.println("context:" + routingContext.getBodyAsString());
         XmlMapping xmlMapping = new XmlMapping();
         HashMap<String, String> data = new HashMap<>();
 //        try {
@@ -47,7 +49,7 @@ public class ForwardResources {
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //        }
-        data=JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"),HashMap.class);
+        data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
 
 
         JsonObject jsonObject = new JsonObject();
@@ -65,8 +67,15 @@ public class ForwardResources {
         data.remove("route");
         data.remove("operation");
         Cache.setArgs(token, data);
-        String server = url.split("/")[1];
-        String page = url.split("/")[0];
+        final String server;
+        final String page;
+        if (url != null) {
+            server = url.split("/")[1];
+            page = url.split("/")[2];
+        } else {
+            server = null;
+            page = null;
+        }
         webClient.post(8000, "localhost", "/GmServer")
                 .sendJsonObject(jsonObject, ar -> {
                     if (ar.succeeded()) {
@@ -76,7 +85,13 @@ public class ForwardResources {
 
                         String type = jsonResult.getString("type");
                         String resultData = jsonResult.getString("data");
-                        String returnString = xmlMapping.createReturnString(type, resultData, ManagerDatabaseHelper.selectAuthList(VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(routingContext)),"btn" ,page).contains(page), Cache.getArgs(JwtUtils.findToken(routingContext)));
+                        boolean auth;
+                        if (server != null) {
+                            auth = ManagerDatabaseHelper.selectAuthList(VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(routingContext)), "btn", server).contains(page);
+                        } else {
+                            auth = true;
+                        }
+                        String returnString = xmlMapping.createReturnString(type, resultData, auth, Cache.getArgs(JwtUtils.findToken(routingContext)));
                         // routingContext.put("type", type).put("data", resultData).put("route", url).reroute("/main"+url);
                         routingContext.response().end(returnString);
                     } else {
@@ -85,6 +100,6 @@ public class ForwardResources {
                     }
                 });
     }
-    
+
 }
  
