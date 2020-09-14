@@ -81,20 +81,11 @@
 <!-- Token -->
 <script>
 
-    // window.alert = function (str) {
-    //     let shield = document.createElement("div");
-    //     shield.className = "alert alert-danger";
-    //     shield.role = "alert";
-    //     shield.innerText = str
-    //     document.body.appendChild(shield);
-    // }
-
     function btn() {
 
         document.getElementById("sign in").innerHTML =
             "<span class=\"spinner-border spinner-border-sm\" role=\"status\" aria-hidden=\"true\"></span>\n" +
             "            <span class=\"sr-only\">Loading...</span>"
-
 
         $.ajax({
             type: "GET",
@@ -103,49 +94,7 @@
             success: function (data) {
                 if (($('#verifyCode').val() !== "")) {
                     if ($('#verifyCode').val().toLowerCase() === data.toLowerCase()) {
-                        let encrypt = new JSEncrypt();
-
-                        $.ajax({
-                            type: "GET",
-                            datatype: "text",
-                            url: "/login/publicKey",
-                            success: function (data) {
-                                // alert(data);
-
-                                encrypt.setPublicKey(data);
-
-                                let usernameEncrypted = encrypt.encrypt($('#username').val())
-                                let passwordEncrypted = encrypt.encrypt($('#password').val())
-
-                                $.ajax({
-                                    type: "POST",
-                                    dataType: "text",
-                                    url: "/login/createToken",
-                                    data: JSON.stringify({
-                                        'username': usernameEncrypted,
-                                        'password': passwordEncrypted
-                                    }), success: function (data, result, xhr) {
-                                        if (xhr.status === 200) {
-                                            document.cookie = "Token=" + data + ";Path=/"
-                                            if (document.getElementById("remember").checked === true) {
-                                                localStorage.setItem("username", $("#username").val());
-                                                localStorage.setItem("password", $("#password").val());
-                                            } else {
-                                                $("#password")
-                                                localStorage.setItem("username", "");
-                                                localStorage.setItem("password", "");
-                                            }
-                                            window.location.href = "/main/home"
-                                        }
-                                    }, error: function () {
-                                        document.getElementById("sign in").innerHTML = "Sign in"
-                                        alert("用户名或密码错误")
-                                    }
-                                })
-                            }, error: function () {
-                                document.getElementById("sign in").innerHTML = "Sign in"
-                            }
-                        })
+                        getPublicKey();
                     } else if ($('#verifyCode').val().toLowerCase() !== data.toLowerCase()) {
                         alert("验证码错误！")
                         document.getElementById("sign in").innerHTML = "Sign in"
@@ -159,6 +108,54 @@
 
     }
 
+    function getPublicKey() {
+        $.ajax({
+            type: "GET",
+            datatype: "text",
+            url: "/login/publicKey",
+            success: function (data) {
+                // alert(data);
+                let encrypt = new JSEncrypt();
+                encrypt.setPublicKey(data);
+
+                let usernameEncrypted = encrypt.encrypt($('#username').val())
+                let passwordEncrypted = encrypt.encrypt($('#password').val())
+
+                createToken(usernameEncrypted, passwordEncrypted)
+            }, error: function () {
+                document.getElementById("sign in").innerHTML = "Sign in"
+            }
+        })
+    }
+
+    function createToken(usernameEncrypted, passwordEncrypted) {
+        $.ajax({
+            type: "POST",
+            dataType: "text",
+            url: "/login/createToken",
+            data: JSON.stringify({
+                'username': usernameEncrypted,
+                'password': passwordEncrypted
+            }), success: function (data, result, xhr) {
+                if (xhr.status === 200) {
+                    document.cookie = "Token=" + data + ";Path=/"
+                    if (document.getElementById("remember").checked === true) {
+                        localStorage.setItem("username", $("#username").val());
+                        localStorage.setItem("password", $("#password").val());
+                    } else {
+                        $("#password")
+                        localStorage.setItem("username", "");
+                        localStorage.setItem("password", "");
+                    }
+                    window.location.href = "/main/home"
+                }
+            }, error: function () {
+                document.getElementById("sign in").innerHTML = "Sign in"
+                alert("用户名或密码错误")
+            }
+        })
+    }
+
     function changeUrl() {
         document.getElementById('verifyCodePic').src = "/login/verifyCodePic" + "?time=" + Date.now();
     }
@@ -168,7 +165,6 @@
         history.pushState(null, null, "/login");
 
         if (localStorage.getItem("username") !== "" && localStorage.getItem("password") !== "") {
-            //alert("读取账号密码:\n username:"+ localStorage.getItem("username").toString() + "\n"+"password:"+localStorage.getItem("password").toString());
             $("#username").val(localStorage.getItem("username"));
             $("#password").val(localStorage.getItem("password"));
             document.getElementById("remember").checked = true;
@@ -182,7 +178,6 @@
             type: "GET",
             url: "/login/authenticity",
             success: function () {
-                // alert("token验证通过")
                 window.location.href = "/main/home"
             }
         })

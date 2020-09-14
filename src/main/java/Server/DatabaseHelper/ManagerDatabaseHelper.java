@@ -10,7 +10,7 @@ import com.alibaba.fastjson.JSON;
  * GM管理系统数据库基本操作帮助类
  */
 public class ManagerDatabaseHelper {
-    
+
     /**
      * 查询所有用户信息
      * 
@@ -18,9 +18,9 @@ public class ManagerDatabaseHelper {
      */
     public static HashMap<String, String> allManagerInfo() {
         HashMap<String, String> result = new HashMap<>();
-        List<String> colName = new ArrayList<>(DatabaseConstants.HEADER_LIST);
         List<List<String>> tableBody = new ArrayList<>();
         List<Element> data = DatabaseConstants.loadDatabase().getChildren();
+        List<String> colName = new ArrayList<>(DatabaseConstants.HEADER_LIST);
         try {
             result.put("colName", JSON.toJSONString(colName));
             for (Element record : data) {
@@ -48,8 +48,10 @@ public class ManagerDatabaseHelper {
         Element rootData = DatabaseConstants.loadDatabase();
         try {
             for (Element record : rootData.getChildren()) {
-                if (username.equals(record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME).getAttributeValue("value"))) {
-                    for (Element serverAuth : record.getChildren().get(DatabaseConstants.INDEX_OF_AUTH).getChildren()) {
+                Element authElement = record.getChildren().get(DatabaseConstants.INDEX_OF_AUTH);
+                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
+                if (username.equals(unameElement.getAttributeValue("value"))) {
+                    for (Element serverAuth : authElement.getChildren()) {
                         if (server.equals(serverAuth.getAttributeValue("value", server))) {
                             for (Element auth2 : serverAuth.getChildren()) {
                                 if (auth.equals(auth2.getAttributeValue("value"))) {
@@ -64,7 +66,6 @@ public class ManagerDatabaseHelper {
                 }
             }
             DatabaseConstants.saveXml(rootData);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,15 +79,16 @@ public class ManagerDatabaseHelper {
      * @param auth
      */
     public static void addAuth(String username, String server, String auth) {
-        Element rootData = DatabaseConstants.loadDatabase();
         Element newAuth = new Element("auth2");
         newAuth.setAttribute("name", "list");
         newAuth.setAttribute("value", auth);
+        Element rootData = DatabaseConstants.loadDatabase();
         try {
             for (Element record : rootData.getChildren()) {
-                if (username.equals(
-                        record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME).getAttributeValue("value"))) {
-                    for (Element serverAuth : record.getChildren().get(DatabaseConstants.INDEX_OF_AUTH).getChildren()) {
+                Element authElement = record.getChildren().get(DatabaseConstants.INDEX_OF_AUTH);
+                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
+                if (username.equals(unameElement.getAttributeValue("value"))) {
+                    for (Element serverAuth : authElement.getChildren()) {
                         if (server.equals(serverAuth.getAttributeValue("value"))) {
                             serverAuth.addContent(newAuth);
                             break;
@@ -110,8 +112,8 @@ public class ManagerDatabaseHelper {
         Element rootData = DatabaseConstants.loadDatabase();
         try {
             for (Element record : rootData.getChildren()) {
-                if (username.equals(
-                        record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME).getAttributeValue("value"))) {
+                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
+                if (username.equals(unameElement.getAttributeValue("value"))) {
                     rootData.removeContent(record);
                 }
             }
@@ -127,8 +129,8 @@ public class ManagerDatabaseHelper {
      * @param userInfo
      */
     public static void addUser(List<String> userInfo) {
-        Element rootData = DatabaseConstants.loadDatabase();
         Element newUser = new Element("record");
+        Element rootData = DatabaseConstants.loadDatabase();
         try {
             for (int colIndex = 0; colIndex < DatabaseConstants.HEADER_LIST.size(); colIndex++) {
                 Element column = new Element("cloumn");
@@ -159,9 +161,10 @@ public class ManagerDatabaseHelper {
         Element rootData = DatabaseConstants.loadDatabase();
         try {
             for (Element record : rootData.getChildren()) {
-                if (username.equals(record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME).getAttributeValue("value"))) {
-                    String str = record.getChildren().get(DatabaseConstants.INDEX_OF_ENABLE).getAttributeValue("value")
-                            .equals("1") ? "0" : "1";
+                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
+                Element enableElemable = record.getChildren().get(DatabaseConstants.INDEX_OF_ENABLE);
+                if (username.equals(unameElement.getAttributeValue("value"))) {
+                    String str = enableElemable.getAttributeValue("value").equals("1") ? "0" : "1";
                     record.getChildren().get(DatabaseConstants.INDEX_OF_ENABLE).setAttribute("value", str);
                     break;
                 }
@@ -182,7 +185,8 @@ public class ManagerDatabaseHelper {
         Element rootData = DatabaseConstants.loadDatabase();
         try {
             for (Element record : rootData.getChildren()) {
-                if (username.equals(record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME).getAttributeValue("value"))) {
+                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
+                if (username.equals(unameElement.getAttributeValue("value"))) {
                     record.getChildren().get(DatabaseConstants.INDEX_OF_PASSWORD).setAttribute("value", password);
                     break;
                 }
@@ -206,9 +210,11 @@ public class ManagerDatabaseHelper {
         List<Element> data = DatabaseConstants.loadDatabase().getChildren();
         try {
             for (Element record : data) {
-                if (username.equals(record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME).getAttributeValue("value"))) {
-                    for (Element auth : record.getChildren().get(DatabaseConstants.INDEX_OF_AUTH).getChildren()
-                            .get(DatabaseConstants.SERVER_LIST.indexOf(server)).getChildren()) {
+                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
+                Element authElement = record.getChildren().get(DatabaseConstants.INDEX_OF_AUTH);
+                Element serverElement = authElement.getChildren().get(DatabaseConstants.SERVER_LIST.indexOf(server));
+                if (username.equals(unameElement.getAttributeValue("value"))) {
+                    for (Element auth : serverElement.getChildren()) {
                         if (type.equals(auth.getAttributeValue("name"))) {
                             result.add(auth.getAttributeValue("value"));
                         }
