@@ -206,8 +206,8 @@ public class ManagerDatabaseHelper {
     }
 
     /**
-     * 按类型获取权限列表
-     *
+     * 按类型获取权限(列表)
+     * 
      * @param username
      * @param server
      * @param type
@@ -233,6 +233,45 @@ public class ManagerDatabaseHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        return result;
+    }
+
+    /**
+     * 获取所有权限(表格)
+     *
+     * @param username
+     * @param server
+     * @param type
+     * @return
+     */
+    public static HashMap<String, Object> selectAuthTable(String username, String server) {
+        HashMap<String, Object> result = new HashMap<>();
+        List<String> colName = Arrays.asList("list", "btn");
+        List<String> list = new ArrayList<>();
+        List<String> listBtn = new ArrayList<>();
+        List<Element> data = DatabaseConstants.loadDatabase().getChildren();
+        try {
+            for (Element record : data) {
+                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
+                Element authElement = record.getChildren().get(DatabaseConstants.INDEX_OF_AUTH);
+                Element serverElement = authElement.getChildren().get(DatabaseConstants.SERVER_LIST.indexOf(server));
+                if (username.equals(unameElement.getAttributeValue("value"))) {
+                    for (Element auth : serverElement.getChildren()) {
+                        if ("btn".equals(auth.getAttributeValue("name"))) {
+                            listBtn.add(auth.getAttributeValue("value"));
+                        } else if ("list".equals(auth.getAttributeValue("name"))) {
+                            list.add(auth.getAttributeValue("value"));
+                        }
+                    }
+                    break;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<List<String>> body = Arrays.asList(list, listBtn);
+        result.put("colName", colName);
+        result.put("tableBody", body);
         return result;
     }
 }

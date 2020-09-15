@@ -97,22 +97,6 @@ public class ManagerResources {
                     executeResult(routingContext, asyncResult, "Update failed!", "str", asyncResult.result().toString());
                 });
                 break;
-            case "selectAuthList":
-                routingContext.vertx().executeBlocking(future -> {
-                    String username = data.get("username");
-                    String server = data.get("server");
-                    HashMap<String, Object> resultHashMap = new HashMap<>();
-                    List<String> list = ManagerDatabaseHelper.selectAuthList(username, "list", server);
-                    List<String> listBtn = ManagerDatabaseHelper.selectAuthList(username, "btn", server);
-                    List<String> colName = Arrays.asList("list","btn");
-                    List<List<String>> body = Arrays.asList(list, listBtn);
-                    resultHashMap.put("colName", colName);
-                    resultHashMap.put("tableBody", body);
-                    future.complete(resultHashMap);
-                }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Select failed!", "table", asyncResult.result().toString());
-                });
-                break;
             default:
                 break;
         }
