@@ -120,9 +120,7 @@
 
                     </div>
                     <div class="card" style="width: auto" th:utext="${returnString}" id="returnContent"></div>
-                    <div th:utext="${userInfo}" id="userInfo">
-
-                    </div>
+                    <div th:utext="${userInfo}" id="userInfo"></div>
                 </div>
                 <div class="col-lg-3" style="flex: 0 0 auto;margin-left:50px" th:utext="${configsName}"
                      id="configsName">
@@ -285,7 +283,8 @@
         console.log("server:" + server + page)
 
         refreshAjaxPost("/main/configsName", page, null, "configsName")
-        refreshAjaxPost("/main/userInfo", page, null, "userInfo")
+        refreshAjaxPost("/main/userInfo", page,  null, "userInfo")
+
         $("input[type='hidden']").each(function () {
             console.log($(this).attr("value"))
             $(this).attr({from: "return"})
@@ -300,6 +299,7 @@
         })
         console.log(JSON.stringify(json))
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+        refreshAjaxPost("/main/userInfo", pageName,  null, "userInfo")
     }
 
     function updateReturn(urls) {

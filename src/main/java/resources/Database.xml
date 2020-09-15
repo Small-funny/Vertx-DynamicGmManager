@@ -2,7 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAxMzU1MzIsImV4cCI6MTYwMDEzOTEzMn0.9FiKFI6MHMhLjhNdhWT7Xa163E9-CRTGTlC10EQ5HnA" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAxNTc3MzMsImV4cCI6MTYwMDE2MTMzM30.Yq31Qeek7CkbTFjM0WxWORQPl7XWhJRLkh_NpZECn2c" />
         <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="sandbox">
@@ -58,8 +58,8 @@
         <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="sandbox">
-                <auth2 name="list" value="playerManage" />
                 <auth2 name="list" value="operationManage" />
+                <auth2 name="list" value="systemManage" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 name="list" value="playerManage" />
@@ -67,5 +67,17 @@
             </auth1>
         </column>
     </record>
+
+    <record>
+        <cloumn name="username" value="saoihdfkashd" />
+        <cloumn name="password" value="111" />
+        <cloumn name="token" value="token" />
+        <cloumn name="enable" value="1" />
+        <cloumn name="auth">
+            <auth1 name="server" value="sandbox" />
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
+    </record>
     
-</database>
+<record><cloumn name="username" value="tim" /><cloumn name="password" value="123" /><cloumn name="token" value="token" /><cloumn name="enable" value="0" /><cloumn name="auth"><auth1 name="server" value="sandbox" /><auth1 name="server" value="test" /><auth1 name="server" value="master" /></cloumn></record></database>

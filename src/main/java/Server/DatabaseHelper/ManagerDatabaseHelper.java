@@ -1,10 +1,12 @@
 package Server.DatabaseHelper;
 
 import org.jdom2.Element;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+
 import com.alibaba.fastjson.JSON;
 
 /**
@@ -14,7 +16,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 查询所有用户信息
-     * 
+     *
      * @return
      */
     public static HashMap<String, String> allManagerInfo() {
@@ -23,6 +25,7 @@ public class ManagerDatabaseHelper {
         List<Element> data = DatabaseConstants.loadDatabase().getChildren();
         List<String> colName = new ArrayList<>(DatabaseConstants.HEADER_LIST);
         colName.remove(DatabaseConstants.INDEX_OF_TOKEN);
+        colName.remove(DatabaseConstants.INDEX_OF_AUTH - 1);
         try {
             result.put("colName", JSON.toJSONString(colName));
             for (Element record : data) {
@@ -43,7 +46,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 删除用户权限
-     * 
+     *
      * @param username
      * @param server
      * @param auth
@@ -77,7 +80,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 添加用户权限
-     * 
+     *
      * @param username
      * @param server
      * @param auth
@@ -109,7 +112,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 删除用户所有相关记录
-     * 
+     *
      * @param username
      */
     public static void deleteUser(String username) {
@@ -129,7 +132,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 增加新用户
-     * 
+     *
      * @param userInfo
      */
     public static void addUser(List<String> userInfo) {
@@ -159,7 +162,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 修改用户状态
-     * 
+     *
      * @param username
      */
     public static void updateUserStatus(String username) {
@@ -182,7 +185,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 修改用户密码
-     * 
+     *
      * @param username
      * @param password
      */
@@ -204,7 +207,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 按类型获取权限列表
-     * 
+     *
      * @param username
      * @param server
      * @param type

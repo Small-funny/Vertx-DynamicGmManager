@@ -85,10 +85,13 @@ public class MainResources extends AbstractVerticle {
     private void PreloadingTable(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
         if (USER_MANAGE_PAGES.contains(page)) {
-            System.out.println();
             ctx.response().end(
                     XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, null));
-        } else {
+        }else if (USER_AUTH_MANAGE_PAGES.contains(page)){
+            ctx.response().end(
+                    XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, null));
+        }
+        else {
             ctx.response().end("");
         }
     }

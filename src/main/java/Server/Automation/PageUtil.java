@@ -10,14 +10,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public class PageUtil {
-    public static final String MAIN_PAGE_ROUTER="0";
-    public static final String TYPE_LIST ="list";
-    public static final String TYPE_TABLE="table";
-    public static final HashMap<String, Element> PAGE_ELEMENT =new HashMap<>();
+    public static final String MAIN_PAGE_ROUTER = "0";
+    public static final String TYPE_LIST = "list";
+    public static final String TYPE_TABLE = "table";
+    public static final HashMap<String, Element> PAGE_ELEMENT = new HashMap<>();
     public static final HashMap<String, Element> TYPE_ELEMENT = new HashMap<>();
     public static final HashMap<String, Element> SERVER_ELEMENT = new HashMap<>();
     public static final List<String> USER_MANAGE_PAGES = new ArrayList<>();
     public static final List<String> CONFIG_MANAGE_PAGES = new ArrayList<>();
+    public static final List<String> USER_AUTH_MANAGE_PAGES = new ArrayList<>();
+
     static {
         SAXBuilder saxBuilder = new SAXBuilder();
         Element root = null;
@@ -32,10 +34,12 @@ public class PageUtil {
             List<Element> pageList = typeE.getChildren();
             for (Element pageE : pageList) {
                 PAGE_ELEMENT.put(pageE.getAttributeValue("url"), pageE);
-                if("userManage".equals(pageE.getAttributeValue("type"))){
+                if ("userManage".equals(pageE.getAttributeValue("type"))) {
                     USER_MANAGE_PAGES.add(pageE.getAttributeValue("authorization"));
-                }else if("configManage".equals(pageE.getAttributeValue("type"))){
+                } else if ("configManage".equals(pageE.getAttributeValue("type"))) {
                     CONFIG_MANAGE_PAGES.add(pageE.getAttributeValue("authorization"));
+                }else if ("userAuthMange".equals(pageE.getAttributeValue("authorization"))){
+                    USER_AUTH_MANAGE_PAGES.equals(pageE.getAttributeValue("authorization"));
                 }
             }
         }

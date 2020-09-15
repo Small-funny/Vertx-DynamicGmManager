@@ -7,61 +7,48 @@
     </servers>
     <pages>
         <pageType name="角色管理" authorization="playerManage" icon="anchor">
-            <page name="用户信息查看" url="checkUserInfo" authorization="checkUserInfo" type="userManage">
-                <form name="login" action="/forward">
-                    <input type="text" name="userId"/>
-                    <input type="text" name="days"/>
-                    <select name="sel">
-                        <option value="1">广州</option>
-                        <option value="2">深圳</option>
-                        <option value="3">山东</option>
-                        <option value="4">北京</option>
-                    </select>
-
-                    <formcheck name="numberselect">
-                        <checkbox value="11">11</checkbox>
-                        <checkbox value="22">22</checkbox>
-                        <checkbox value="33">33</checkbox>
-                    </formcheck>
-                    <input type="button" name="button" value="查询"/>
-                </form>
-            </page>
-            <page name="封禁用户" url="banUser" authorization="banUser" type="userManage">
-                <form name="queryDisc">
-                    <input type="text" name="userId">0</input>
-                    <input type="text" name="days">0</input>
-                    <input type="button" name="button">提交</input>
-                </form>
-                <form name="queryMatch" action="/forward">
-                    <input type="text" name="userId"/>
-                    <input type="text" name="days"/>
-                    <input type="text" name="tour">0</input>
-                    <input type="button" name="button">提交</input>
-                </form>
-            </page >
-            <page name="查询表结构" url="checkTable" authorization="checkTable" type="userManage">
-
-                <return type="table"/>
-                <form name="check" action="/forward">
-                    <input type="text" name="args" id="args"/>
-                    <input type="button" name="button" value="查询"/>
+            <page name="添加用户" url="addUser" authorization="addUser" type="userManage">
+                <form name="添加用户" id="addUser">
+                    <input type="text" name="username" id="username"/>
+                    <input type="text" name="password" id="password"/>
+                    <input type="button" name="button" id="userManage" value="添加用户"/>
                 </form>
             </page>
             <page name="删除用户" url="deleteUser" authorization="deleteUser" type="userManage">
-                <form name="删除用户"  id="deleteUser">
+                <form name="删除用户" id="deleteUser">
                     <input type="text" name="username" id="username"/>
                     <input type="button" name="button" id="userManage">删除</input>
                 </form>
             </page>
-            <page name="删除权限" url="deleteAuth" authorization="deleteUser" type="userManage">
-                <form name="删除用户权限" action="/manager" id="deleteAuth">
+            <page name="删除权限" url="deleteAuth" authorization="deleteUser" type="userAuthManage">
+                <form name="删除用户权限"  id="deleteAuth">
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="server" id="server"/>
                     <input type="text" name="auth" id="auth"/>
-                    <input type="button" name="删除"/>
+                    <input type="button" name="删除" id="userManage"/>
                 </form>
             </page>
-
+            <page name="修改用户状态" url="updateUserStatus" authorization="updateUserStatus" type="userManage">
+                <form name="修改用户状态" id="updateUserStatus">
+                    <input type="text" name="username" id="username"/>
+                    <input type="button" name="修改" id="userManage" value="修改"/>
+                </form>
+            </page>
+            <page name="修改用户信息" url="updateUserInfo" authorization="updateUserInfo" type="userManage">
+                <form name="修改用户信息" id="updateUserInfo">
+                    <input type="text" name="username" id="username"/>
+                    <input type="text" name="password" id="password"/>
+                    <input type="button" name="修改" id="userManage" value="修改"/>
+                </form>
+            </page>3
+            <page name="添加权限" url="addAuth" authorization="addAuth" type="userAuthManage">
+                <form name="添加权限" id="addAuth">
+                    <input type="text" name="username" id="username"/>
+                    <input type="text" name="server" id="server"/>
+                    <input type="text" name="auth" id="auth"/>
+                    <input type="button" name="添加" id="userManage" value="添加"/>
+                </form>
+            </page>
         </pageType>
         <pageType name="操作管理" authorization="operationManage" icon="archive">
             <page name="订单查询" url="checkOrders" icon="calendar">
@@ -80,10 +67,10 @@
             </page>
         </pageType>
         <pageType name="游戏服务管理" authorization="gameServerManage" icon="calendar">
-            <page name="开关游戏服" url="operateServer" authorization="operateServer" >
+            <page name="开关游戏服" url="operateServer" authorization="operateServer">
                 <form name="queryAsset" action="/forward">
-                    <input type="text" name="userId" >0</input>
-                    <input type="text" name="days" >0</input>
+                    <input type="text" name="userId">0</input>
+                    <input type="text" name="days">0</input>
                     <select name="sel">
                         <option value="1">广州</option>
                         <option value="2">深圳</option>
@@ -94,14 +81,27 @@
                 </form>
             </page>
         </pageType>
-        <pageType name="系统管理" authorization="systemManage" icon="clock">
-            <page name="基础信息管理" url="basicInfoManage" authorization="basicInfoManage"  type="configManage">
+        <pageType name="配置管理" authorization="systemManage" icon="clock">
+            <page name="配置查询" url="basicInfoManage" authorization="basicInfoManage" type="configManage">
                 <return type="str"/>
-                <form name="queryMatch"  id="selectConfigBody">
-                    <input type="text" name="args" id="args" />
+                <form name="queryMatch" id="selectConfigBody">
+                    <input type="text" name="args" id="args"/>
                     <input type="button" name="button" value="查询" id="configManage">提交</input>
                 </form>
-
+            </page>
+            <page name="添加配置" url="addConfigs" authorization="addConfigs" type="configManage">
+                <form name="添加配置" id="addConfigs">
+                    <input type="text" name="name" id="name"/>
+                    <input type="text" name="body" id="body"/>
+                    <input type="text" name="type" id="type"/>
+                    <input type="button" name="添加" id="configManage" value="添加"/>
+                </form>
+            </page>
+            <page name="删除配置" url="deleteConfigs" authorization="deleteConfigs" >
+                <form name="删除配置" id="deleteConfigs">
+                    <input type="text" name="name" id="name"/>
+                    <input type="button" name="删除" id="configManage" value="删除"/>
+                </form>
             </page>
             <page name="操作员管理" url="operatorManage" authorization="operatorManage" type="configManage">
                 <form name="queryMatch" action="/forward">

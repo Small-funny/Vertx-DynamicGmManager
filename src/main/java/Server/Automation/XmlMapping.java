@@ -8,7 +8,9 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
+
 import java.util.*;
+
 import static Server.Automation.PageUtil.*;
 import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
 
@@ -270,7 +272,7 @@ public class XmlMapping {
                         stringBuilder.append("<td>").append(s).append("</td>");
                     }
 
-                    stringBuilder.append("<td><a href=\"404.html\"><button>aassdd</button></a></td>");
+
                     stringBuilder.append("</tr>");
                 }
                 stringBuilder.append("</tbody></table>").append("</div></div></div></form>");
@@ -284,13 +286,14 @@ public class XmlMapping {
                             .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")
                             .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">");
                 }
-
-                for (Map.Entry<String, String> entry : argsName.entrySet()) {
-                    stringBuilder.append("<input type=\"hidden\" name=\"")
-                            .append(entry.getKey())
-                            .append("\" value =\"")
-                            .append(entry.getValue())
-                            .append("\" class=\"form-control\" from=\"return\">");
+                if (argsName != null) {
+                    for (Map.Entry<String, String> entry : argsName.entrySet()) {
+                        stringBuilder.append("<input type=\"hidden\" name=\"")
+                                .append(entry.getKey())
+                                .append("\" value =\"")
+                                .append(entry.getValue())
+                                .append("\" class=\"form-control\" from=\"return\">");
+                    }
                 }
                 stringBuilder.append("</form>");
             }
