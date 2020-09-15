@@ -23,16 +23,16 @@ public class ManagerDatabaseHelper {
         HashMap<String, String> result = new HashMap<>();
         List<List<String>> tableBody = new ArrayList<>();
         List<Element> data = DatabaseConstants.loadDatabase().getChildren();
-        List<String> colName = new ArrayList<>(DatabaseConstants.HEADER_LIST);
-        colName.remove(DatabaseConstants.INDEX_OF_TOKEN);
-        colName.remove(DatabaseConstants.INDEX_OF_AUTH - 1);
+        int endIndex = DatabaseConstants.INDEX_OF_PASSWORD + 1;
+        List<String> colName = new ArrayList<>(DatabaseConstants.HEADER_LIST.subList(0, endIndex));
         try {
             result.put("colName", JSON.toJSONString(colName));
             for (Element record : data) {
                 List<String> rowData = new ArrayList<>();
-                for (int index = 0; index < record.getChildren().size() - 1; index++) {
-                    if (index != DatabaseConstants.INDEX_OF_TOKEN) {
-                        rowData.add(record.getChildren().get(index).getAttributeValue("value"));
+                for (int index = 0; index <= DatabaseConstants.INDEX_OF_PASSWORD; index ++) {
+                    String row = record.getChildren().get(index).getAttributeValue("value");
+                    if (!"root".equals(row)) {
+                        rowData.add(row);
                     }
                 }
                 tableBody.add(rowData);
@@ -154,29 +154,6 @@ public class ManagerDatabaseHelper {
                 newUser.getChildren().get(DatabaseConstants.INDEX_OF_AUTH).addContent(auth);
             }
             rootData.addContent(newUser);
-            DatabaseConstants.saveXml(rootData);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * 修改用户状态
-     *
-     * @param username
-     */
-    public static void updateUserStatus(String username) {
-        Element rootData = DatabaseConstants.loadDatabase();
-        try {
-            for (Element record : rootData.getChildren()) {
-                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
-                Element enableElemable = record.getChildren().get(DatabaseConstants.INDEX_OF_ENABLE);
-                if (username.equals(unameElement.getAttributeValue("value"))) {
-                    String str = enableElemable.getAttributeValue("value").equals("1") ? "0" : "1";
-                    record.getChildren().get(DatabaseConstants.INDEX_OF_ENABLE).setAttribute("value", str);
-                    break;
-                }
-            }
             DatabaseConstants.saveXml(rootData);
         } catch (Exception e) {
             e.printStackTrace();

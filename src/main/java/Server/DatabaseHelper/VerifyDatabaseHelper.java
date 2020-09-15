@@ -10,21 +10,44 @@ import java.util.List;
 public class VerifyDatabaseHelper {
 
     /**
-     * 用户是否存在
+     * 验证用户账号密码
      * 
      * @param username
      * @param password
      * @return
      */
-    public static boolean isExisted(String username, String password) {
+    public static boolean verifyIsExisted(String username, String password) {
         boolean result = false;
         List<Element> data = DatabaseConstants.loadDatabase().getChildren();
         try {
             for (Element user : data) {
                 Element unameElement = user.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
                 Element pwordElement = user.getChildren().get(DatabaseConstants.INDEX_OF_PASSWORD);
-                if (username.equals(unameElement.getAttributeValue("value"))
+                if (username.toLowerCase().equals(unameElement.getAttributeValue("value").toLowerCase())
                         && password.equals(pwordElement.getAttributeValue("value"))) {
+                    result = true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    /**
+     * 用户是否存在
+     * 
+     * @param username
+     * @param password
+     * @return
+     */
+    public static boolean isExisted(String username) {
+        boolean result = false;
+        List<Element> data = DatabaseConstants.loadDatabase().getChildren();
+        try {
+            for (Element user : data) {
+                Element unameElement = user.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
+                if (username.toLowerCase().equals(unameElement.getAttributeValue("value").toLowerCase())) {
                     result = true;
                 }
             }

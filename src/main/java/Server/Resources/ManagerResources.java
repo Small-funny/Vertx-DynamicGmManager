@@ -6,6 +6,8 @@ import java.util.List;
 
 import Server.Automation.XmlMapping;
 import Server.DatabaseHelper.ManagerDatabaseHelper;
+import Server.DatabaseHelper.VerifyDatabaseHelper;
+
 import com.alibaba.fastjson.JSON;
 import io.vertx.core.AsyncResult;
 import io.vertx.ext.web.Router;
@@ -71,20 +73,15 @@ public class ManagerResources {
                 routingContext.vertx().executeBlocking(future -> {
                     String username = data.get("username");
                     String password = data.get("password");
-                    List<String> userInfo = Arrays.asList(username, password, "token", "1");
-                    ManagerDatabaseHelper.addUser(userInfo);
-                    future.complete("Add succeed!");
+                    String response = "Add failed!";
+                    if (!VerifyDatabaseHelper.isExisted(username)) {
+                        List<String> userInfo = Arrays.asList(username, password, "token", "1");
+                        ManagerDatabaseHelper.addUser(userInfo);
+                        response = "Add succeed!";
+                    }
+                    future.complete(response);
                 }, false, asyncResult -> {
                     executeResult(routingContext, asyncResult, "Add failed!", "str", asyncResult.result().toString());
-                });
-                break;
-            case "updateUserStatus":
-                routingContext.vertx().executeBlocking(future -> {
-                    String username = data.get("username");
-                    ManagerDatabaseHelper.updateUserStatus(username);
-                    future.complete("Update succeed!");
-                }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Update failed!", "str", asyncResult.result().toString());
                 });
                 break;
             case "updateUserInfo":
@@ -120,7 +117,6 @@ public class ManagerResources {
         if ("table".equals(type)) {
 			routingContext.response().end(XmlMapping.createReturnString("table", JSON.toJSONString(resultData), false, null));
         } else if ("str".equals(type)) {
-            //routingContext.response().end(resultData.toString());
             routingContext.response().end(XmlMapping.createReturnString("str", JSON.toJSONString(resultData), false, null));
         }
     }

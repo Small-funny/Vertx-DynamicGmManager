@@ -23,7 +23,7 @@ import java.io.*;
 @Slf4j
 public class LoginResources extends AbstractVerticle {
 
-    public void registerResources(Router router){
+    public void registerResources(Router router) {
         router.get("/login").handler(this::login);
         router.get("/login/logout").handler(this::logout);
         router.get("/login/verifyCode").handler(this::verifyCode);
@@ -35,16 +35,19 @@ public class LoginResources extends AbstractVerticle {
 
     /**
      * 发送静态登录页面
+     * 
      * @param routingContext
      */
     private void login(RoutingContext routingContext) {
         log.info("Receive request: login web page");
 
-        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("src/main/java/resources/templates/login.html");
+        routingContext.response().setStatusCode(HttpResponseStatus.OK.code())
+                .sendFile("src/main/java/resources/templates/login.html");
     }
 
     /**
      * 登出后的数据处理
+     * 
      * @param routingContext
      */
     private void logout(RoutingContext routingContext) {
@@ -57,6 +60,7 @@ public class LoginResources extends AbstractVerticle {
 
     /**
      * 发送公钥
+     * 
      * @param routingContext
      */
     private void sendPublicKey(RoutingContext routingContext) {
@@ -69,9 +73,10 @@ public class LoginResources extends AbstractVerticle {
 
     /**
      * 为新登录的用户创建token
+     * 
      * @param routingContext
      */
-    private void createToken(RoutingContext routingContext){
+    private void createToken(RoutingContext routingContext) {
         log.info("Receive request: create token");
 
         JWTAuth jwtAuth = JwtUtils.createJwt(routingContext);
@@ -85,22 +90,24 @@ public class LoginResources extends AbstractVerticle {
         username = RSAUtil.decrypt(privateKey, username);
         password = RSAUtil.decrypt(privateKey, password);
 
-        if (VerifyDatabaseHelper.isExisted(username, password)) {
+        if (VerifyDatabaseHelper.verifyIsExisted(username, password)) {
             String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(3600L));
             routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(newToken);
-            
+
             VerifyDatabaseHelper.updateToken(username, newToken);
             log.info("Username or password right, Verification succeed!");
 
         } else {
             log.info("Username or password error, Verification failed!");
-            routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Username or password error, Verification failed!");
+            routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code())
+                    .end("Username or password error, Verification failed!");
         }
 
     }
 
     /**
      * 登录验证
+     * 
      * @param routingContext
      */
     private void authenticity(RoutingContext routingContext) {
@@ -108,25 +115,29 @@ public class LoginResources extends AbstractVerticle {
 
         String token = JwtUtils.findToken(routingContext);
         log.info("Receive token: " + token);
-        JWTAuth jwtAuth =  JwtUtils.createJwt(routingContext);
+        JWTAuth jwtAuth = JwtUtils.createJwt(routingContext);
         JsonObject config = new JsonObject().put("jwt", token);
 
-        //时效验证
+        // 时效验证
         jwtAuth.authenticate(config, res -> {
             if (res.succeeded()) {
                 if (VerifyDatabaseHelper.isTokenExisted(token)) {
-                    routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end("Verification succeeded!");
+                    routingContext.response().setStatusCode(HttpResponseStatus.OK.code())
+                            .end("Verification succeeded!");
                 } else {
-                    routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Token expired, Verification failed!");
+                    routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code())
+                            .end("Token expired, Verification failed!");
                 }
             } else {
-                routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code()).end("Token expired, Verification failed!");
+                routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code())
+                        .end("Token expired, Verification failed!");
             }
         });
     }
 
     /**
      * 发送验证码图片
+     * 
      * @param routingContext
      */
     private void verifyCodePic(RoutingContext routingContext) {
@@ -149,7 +160,7 @@ public class LoginResources extends AbstractVerticle {
             }
         }
 
-        File file = new File(dir,  "verifyCode.jpg");
+        File file = new File(dir, "verifyCode.jpg");
 
         try {
             log.info("Writing verify code picture ...");
@@ -157,18 +168,20 @@ public class LoginResources extends AbstractVerticle {
 
             log.info("Writing verify code file ...");
             FileOutputStream privateFileStream = new FileOutputStream("src/main/java/resources/verifies/code");
-            BufferedOutputStream privateBuffer =new BufferedOutputStream(privateFileStream);
-            privateBuffer.write(verifyCode.getBytes(),0,verifyCode.getBytes().length);
+            BufferedOutputStream privateBuffer = new BufferedOutputStream(privateFileStream);
+            privateBuffer.write(verifyCode.getBytes(), 0, verifyCode.getBytes().length);
             privateBuffer.flush();
             privateBuffer.close();
         } catch (Exception e) {
             log.error("asdasdsad");
         }
-        routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).sendFile("src/main/java/resources/verifies/verifyCode.jpg");
+        routingContext.response().setStatusCode(HttpResponseStatus.OK.code())
+                .sendFile("src/main/java/resources/verifies/verifyCode.jpg");
     }
 
     /**
      * 发送验证码
+     * 
      * @param routingContext
      */
     private void verifyCode(RoutingContext routingContext) {
@@ -180,6 +193,7 @@ public class LoginResources extends AbstractVerticle {
 
     /**
      * 获取文件内的字符串
+     * 
      * @param fileName
      * @return
      */
@@ -188,13 +202,13 @@ public class LoginResources extends AbstractVerticle {
         try {
             FileInputStream fis = new FileInputStream(fileName);
             BufferedInputStream bis = new BufferedInputStream(fis);
-            //自定义缓冲区
+            // 自定义缓冲区
             byte[] buffer = new byte[10240];
             int flag = 0;
             while ((flag = bis.read(buffer)) != -1) {
                 key += new String(buffer, 0, flag);
             }
-            //关闭的时候只需要关闭最外层的流就行了
+            // 关闭的时候只需要关闭最外层的流就行了
             bis.close();
         } catch (Exception e) {
             e.printStackTrace();

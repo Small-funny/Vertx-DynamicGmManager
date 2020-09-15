@@ -27,8 +27,8 @@ public class MainResources extends AbstractVerticle {
         thymeleafTemplateEngine = ThymeleafTemplateEngine.create(vertx);
         router.route("/main/home").handler(this::home);
         router.route("/main/:serverRouter/:pageRouter").handler(this::mainPage);
-        router.route("/main/configsName").handler(this::PreloadingList);
-        router.route("/main/userInfo").handler(this::PreloadingTable);
+        router.route("/main/configsName").handler(this::preloadingList);
+        router.route("/main/userInfo").handler(this::preloadingTable);
         router.route("/subMain/:serverRouter/:pageRouter").handler(this::subMain);
     }
 
@@ -82,7 +82,7 @@ public class MainResources extends AbstractVerticle {
      * 预加载页面表格
      * @param ctx
      */
-    private void PreloadingTable(RoutingContext ctx) {
+    private void preloadingTable(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
         if (USER_MANAGE_PAGES.contains(page)) {
             ctx.response().end(
@@ -100,7 +100,7 @@ public class MainResources extends AbstractVerticle {
      * 预加载页面列表
      * @param ctx
      */
-    private void PreloadingList(RoutingContext ctx) {
+    private void preloadingList(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
         if (CONFIG_MANAGE_PAGES.contains(page)) {
             JsonObject jsonObject = new JsonObject();
