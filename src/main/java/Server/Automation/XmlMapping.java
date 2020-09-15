@@ -5,38 +5,20 @@ import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
 import com.alibaba.fastjson.JSON;
 import io.vertx.core.Vertx;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.client.WebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
-import org.jdom2.input.SAXBuilder;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.STIconSetType;
-import org.openxmlformats.schemas.spreadsheetml.x2006.main.STRef;
-
-import java.io.IOException;
 import java.util.*;
-
 import static Server.Automation.PageUtil.*;
 import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
-import static Server.DatabaseHelper.VerifyDatabaseHelper.*;
 
 @Slf4j
 public class XmlMapping {
 
-    //页面名是键 对应的页面的element是值
-    private static final HashMap<String, Element> pageElement = new HashMap<>();
-    //页面类型是键 对应的类型element是值
-    private static final HashMap<String, Element> typeElement = new HashMap<>();
-    private static final HashMap<String, Element> serverElement = new HashMap<>();
     private static String returnType = null;
 
-    public XmlMapping() {
-    }
-
-
     //创建页面的字符串
-    public String createElementString(Element element, String route) {
+    public static String createElementString(Element element, String route) {
         StringBuilder stringBuilder = new StringBuilder();
 
         Iterator it = element.getContent().iterator();
@@ -174,12 +156,12 @@ public class XmlMapping {
     }
 
     //获取页面的element
-    public Element getElement(String str) {
+    public static Element getElement(String str) {
         return PAGE_ELEMENT.get(str);
     }
 
 
-    public String createAsideString(String token, String server) {
+    public static String createAsideString(String token, String server) {
         // List<String> urlList = JdbcMysqlHelper.selectAuthority(token);
         List<String> urlList = VerifyDatabaseHelper.selectAuthority(token, server);
         StringBuilder stringBuilder = new StringBuilder();
@@ -224,7 +206,7 @@ public class XmlMapping {
     }
 
 
-    public String createServerString(String selected) {
+    public static String createServerString(String selected) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<option value=\"0\"> 选择服务器 </option>");
         for (String string : SERVER_ELEMENT.keySet()) {
@@ -241,7 +223,7 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public String createConfigsList(String data) {
+    public static String createConfigsList(String data) {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">" +
@@ -257,7 +239,7 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) {
+    public static String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) {
         StringBuilder stringBuilder = new StringBuilder();
         if ("list".equals(type)) {
             List<String> list = JSON.parseObject(data, List.class);
@@ -289,7 +271,6 @@ public class XmlMapping {
                     }
 
                     stringBuilder.append("<td><a href=\"404.html\"><button>aassdd</button></a></td>");
-                    //stringBuilder.append("<td class=\"text-right\"><div class=\"dropdown\"><a href=\"#\" class=\"btn btn-sm\"data-toggle=\"dropdown\" aria-haspopup=\"true\" aria-expanded=\"false\"><i class=\"fa fa-ellipsis-v\" aria-hidden=\"true\"></i></a><div class=\"dropdown-menu dropdown-menu-right\"><button class=\"dropdown-item\" type=\"button\">Action</button><button class=\"dropdown-item\" type=\"button\">Another action</button><button class=\"dropdown-item\" type=\"button\">Something else here</button></div></div></td>");
                     stringBuilder.append("</tr>");
                 }
                 stringBuilder.append("</tbody></table>").append("</div></div></div></form>");
@@ -318,7 +299,7 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public String createPageString(String route, String type, String data, String pageRouter, List subAuthList, RoutingContext ctx, Vertx vertx) {
+    public static String createPageString(String route, String type, String data, String pageRouter, List subAuthList, RoutingContext ctx, Vertx vertx) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"card\">");
         if (!pageRouter.equals(MAIN_PAGE_ROUTER)) {
@@ -347,9 +328,7 @@ public class XmlMapping {
     public static void main(String[] args) throws Exception {
         System.out.println("\"");
 
-
-        XmlMapping xmlMapping = new XmlMapping();
-        System.out.println(xmlMapping.createAsideString("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTk3MjI0MjIsImV4cCI6MTU5OTcyNjAyMn0.Z7KGUnZyYg3T8J1UzgFXhZuuYmdZh4n1Dj0Uv6tPfcs", "sandbox"));
+        System.out.println(XmlMapping.createAsideString("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTk3MjI0MjIsImV4cCI6MTU5OTcyNjAyMn0.Z7KGUnZyYg3T8J1UzgFXhZuuYmdZh4n1Dj0Uv6tPfcs", "sandbox"));
         //System.out.println(xmlMapping.createAsideString("TOKEN","master"));
         //System.out.println(xmlMapping.createPageUrlList());
         //System.out.println(xmlMapping.createPageString("checkUserInfo"));

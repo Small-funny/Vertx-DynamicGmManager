@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import Server.Automation.XmlMapping;
 import Server.DatabaseHelper.ManagerDatabaseHelper;
 import com.alibaba.fastjson.JSON;
 import io.vertx.core.AsyncResult;
-import io.vertx.core.http.HttpServerRequest;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
@@ -28,27 +28,14 @@ public class ManagerResources {
      * @param routingContext
      */
     private void GmSystemServer(RoutingContext routingContext) {
-        log.info("Manager receive args：" + routingContext.getBodyAsString());
 
-        HttpServerRequest request = routingContext.request();
         HashMap<String, String> data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
 
-//        String route = data.get("route");
-//        String operation = data.get("operation");
+        log.info("Manager receive args：" + data);
+        
         String operation = data.get("operation");
-        String route = data.get("route");
-
 
         switch (operation) {
-            case "allManagerInfo":
-                routingContext.vertx().executeBlocking(future -> {
-                    HashMap<String, String> tableData;
-                    tableData = ManagerDatabaseHelper.allManagerInfo();
-                    future.complete(tableData);
-                }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Select failed!", "table", route, asyncResult.result().toString());
-                });
-                break;
             case "deleteAuth":
                 routingContext.vertx().executeBlocking(future -> {
                     String username = data.get("username");
@@ -57,7 +44,7 @@ public class ManagerResources {
                     ManagerDatabaseHelper.deleteAuth(username, server, auth);
                     future.complete("Delete succeed!");
                 }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Delete failed!", "str", route, "");
+                    executeResult(routingContext, asyncResult, "Delete failed!", "str", "");
                 });
                 break;
             case "addAuth":
@@ -68,7 +55,7 @@ public class ManagerResources {
                     ManagerDatabaseHelper.addAuth(username, server, auth);
                     future.complete("Add succeed!");
                 }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Add failed!", "str", route, asyncResult.result().toString());
+                    executeResult(routingContext, asyncResult, "Add failed!", "str", asyncResult.result().toString());
                 });
                 break;
             case "deleteUser":
@@ -77,7 +64,7 @@ public class ManagerResources {
                     ManagerDatabaseHelper.deleteUser(username);
                     future.complete("Delete succeed!");
                 }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Delete failed!", "str", route, asyncResult.result().toString());
+                    executeResult(routingContext, asyncResult, "Delete failed!", "str", asyncResult.result().toString());
                 });
                 break;
             case "addUser":
@@ -88,7 +75,7 @@ public class ManagerResources {
                     ManagerDatabaseHelper.addUser(userInfo);
                     future.complete("Add succeed!");
                 }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Add failed!", "str", route, asyncResult.result().toString());
+                    executeResult(routingContext, asyncResult, "Add failed!", "str", asyncResult.result().toString());
                 });
                 break;
             case "updateUserStatus":
@@ -97,7 +84,7 @@ public class ManagerResources {
                     ManagerDatabaseHelper.updateUserStatus(username);
                     future.complete("Update succeed!");
                 }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Update failed!", "str", route, asyncResult.result().toString());
+                    executeResult(routingContext, asyncResult, "Update failed!", "str", asyncResult.result().toString());
                 });
                 break;
             case "updateUserInfo":
@@ -107,7 +94,7 @@ public class ManagerResources {
                     ManagerDatabaseHelper.updateUserInfo(username, password);
                     future.complete("Update succeed!");
                 }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Update failed!", "str", route, asyncResult.result().toString());
+                    executeResult(routingContext, asyncResult, "Update failed!", "str", asyncResult.result().toString());
                 });
                 break;
             case "selectAuthList":
@@ -118,7 +105,7 @@ public class ManagerResources {
                     List<String> authList = ManagerDatabaseHelper.selectAuthList(username, type, server);
                     future.complete(authList);
                 }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Select failed!", "str", route, asyncResult.result().toString());
+                    executeResult(routingContext, asyncResult, "Select failed!", "table", asyncResult.result().toString());
                 });
                 break;
             default:
@@ -133,17 +120,19 @@ public class ManagerResources {
      * @param asyncResult
      * @param info
      * @param type
-     * @param route
      * @param resultData
      */
-    private void executeResult(RoutingContext routingContext, AsyncResult<Object> asyncResult, String info, String type, String route, String resultData) {
+    private void executeResult(RoutingContext routingContext, AsyncResult<Object> asyncResult, String info, String type, Object resultData) {
         if (asyncResult.failed()) {
             routingContext.fail(asyncResult.cause());
             log.info(info);
             return;
         }
-        //routingContext.put("type", type).put("data", resultData).put("route", route).reroute("/main" + route);
-        routingContext.response().end();
+        if ("table".equals(type)) {
+			routingContext.response().end(XmlMapping.createReturnString("table", JSON.toJSONString(resultData), false, null));
+        } else if ("str".equals(type)) {
+            routingContext.response().end(resultData.toString());
+        }
     }
 
 }

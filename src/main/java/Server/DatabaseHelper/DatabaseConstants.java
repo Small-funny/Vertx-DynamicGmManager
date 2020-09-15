@@ -53,5 +53,4 @@ public class DatabaseConstants {
         XMLOutputter outPutter = new XMLOutputter();
         outPutter.output(data, new FileOutputStream("src/main/java/resources/Database.xml"));
     }
-
 }

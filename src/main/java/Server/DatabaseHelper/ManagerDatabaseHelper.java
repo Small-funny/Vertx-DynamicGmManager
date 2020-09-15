@@ -2,6 +2,7 @@ package Server.DatabaseHelper;
 
 import org.jdom2.Element;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import com.alibaba.fastjson.JSON;
@@ -21,12 +22,15 @@ public class ManagerDatabaseHelper {
         List<List<String>> tableBody = new ArrayList<>();
         List<Element> data = DatabaseConstants.loadDatabase().getChildren();
         List<String> colName = new ArrayList<>(DatabaseConstants.HEADER_LIST);
+        colName.remove(DatabaseConstants.INDEX_OF_TOKEN);
         try {
             result.put("colName", JSON.toJSONString(colName));
             for (Element record : data) {
                 List<String> rowData = new ArrayList<>();
                 for (int index = 0; index < record.getChildren().size() - 1; index++) {
-                    rowData.add(record.getChildren().get(index).getAttributeValue("value"));
+                    if (index != DatabaseConstants.INDEX_OF_TOKEN) {
+                        rowData.add(record.getChildren().get(index).getAttributeValue("value"));
+                    }
                 }
                 tableBody.add(rowData);
             }
@@ -146,6 +150,7 @@ public class ManagerDatabaseHelper {
                 auth.setAttribute("value", server);
                 newUser.getChildren().get(DatabaseConstants.INDEX_OF_AUTH).addContent(auth);
             }
+            rootData.addContent(newUser);
             DatabaseConstants.saveXml(rootData);
         } catch (Exception e) {
             e.printStackTrace();
@@ -227,5 +232,4 @@ public class ManagerDatabaseHelper {
         }
         return result;
     }
-
 }

@@ -38,7 +38,6 @@ public class ForwardResources {
     private void forward(RoutingContext routingContext) {
         String server;
         String page;
-        XmlMapping xmlMapping = new XmlMapping();
         HashMap<String, String> data;
         data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
         JsonObject jsonObject = new JsonObject();
@@ -74,7 +73,7 @@ public class ForwardResources {
                 } else {
                     auth = true;
                 }
-                String returnString = xmlMapping.createReturnString(type, resultData, auth,
+                String returnString = XmlMapping.createReturnString(type, resultData, auth,
                         Cache.getArgs(JwtUtils.findToken(routingContext)));
                 routingContext.response().end(returnString);
             } else {
