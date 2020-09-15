@@ -93,8 +93,10 @@ public class XmlMapping {
                     //输入框的特殊属性
                 } else if ("input".equals(childName) && "file".equals(((Element) child).getAttribute("type").getValue())) {
                     stringBuilder.append("class=\"form-control-file\">");
-                } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type"))) {
-                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/forward')\">");
+                } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type")) && "configManage".equals(((Element) child).getAttributeValue("id"))) {
+                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/forward')\" value=\"修改\">");
+                } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type")) && "userManage".equals(((Element) child).getAttributeValue("id"))) {
+                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/manager')\" value=\"修改\">");
                 } else if ("input".equals(childName) && "text".equals(((Element) child).getAttributeValue("type"))) {
                     stringBuilder.append("class=\"form-control\" from=\"select\">");
                 } else if ("input".equals(childName) || "select".equals(childName)) {
@@ -297,10 +299,8 @@ public class XmlMapping {
                         .append(data)
                         .append("</textarea></div></div>");
                 if (auth) {
-                    stringBuilder.append("<div class=\"row form-group\">")
-                            .append("<div class=\"col col-md-3\"><label  class=\" form-control-label\">Textarea</label></div>")
-                            .append("<div class=\"col-12 col-md-9\">")
-                            .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\"></div></div>")
+                    stringBuilder
+                            .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")
                             .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">");
                 }
 

@@ -23,20 +23,20 @@
                         <checkbox value="22">22</checkbox>
                         <checkbox value="33">33</checkbox>
                     </formcheck>
-                    <input type="submit" name="submit" value="查询"/>
+                    <input type="button" name="button" value="查询"/>
                 </form>
             </page>
             <page name="封禁用户" url="banUser" authorization="banUser" type="userManage">
                 <form name="queryDisc">
                     <input type="text" name="userId">0</input>
                     <input type="text" name="days">0</input>
-                    <input type="submit" name="submit">提交</input>
+                    <input type="button" name="button">提交</input>
                 </form>
                 <form name="queryMatch" action="/forward">
                     <input type="text" name="userId"/>
                     <input type="text" name="days"/>
                     <input type="text" name="tour">0</input>
-                    <input type="submit" name="submit">提交</input>
+                    <input type="button" name="button">提交</input>
                 </form>
             </page >
             <page name="查询表结构" url="checkTable" authorization="checkTable" type="userManage">
@@ -44,13 +44,13 @@
                 <return type="table"/>
                 <form name="check" action="/forward">
                     <input type="text" name="args" id="args"/>
-                    <input type="submit" name="submit" value="查询"/>
+                    <input type="button" name="button" value="查询"/>
                 </form>
             </page>
             <page name="删除用户" url="deleteUser" authorization="deleteUser" type="userManage">
-                <form name="删除用户" action="/manager" id="deleteUser">
+                <form name="删除用户"  id="deleteUser">
                     <input type="text" name="username" id="username"/>
-                    <input type="submit" name="submit">删除</input>
+                    <input type="button" name="button" id="userManage">删除</input>
                 </form>
             </page>
             <page name="删除权限" url="deleteAuth" authorization="deleteUser" type="userManage">
@@ -61,6 +61,7 @@
                     <input type="button" name="删除"/>
                 </form>
             </page>
+
         </pageType>
         <pageType name="操作管理" authorization="operationManage" icon="archive">
             <page name="订单查询" url="checkOrders" icon="calendar">
@@ -74,7 +75,7 @@
                         <option value="3">山东</option>
                         <option value="4">北京</option>
                     </select>
-                    <input type="submit" name="ttt">提交</input>
+                    <input type="button" name="ttt">提交</input>
                 </form>
             </page>
         </pageType>
@@ -89,7 +90,7 @@
                         <option value="3">山东</option>
                         <option value="4">北京</option>
                     </select>
-                    <input type="submit" name="ttt">提交</input>
+                    <input type="button" name="ttt">提交</input>
                 </form>
             </page>
         </pageType>
@@ -98,7 +99,7 @@
                 <return type="str"/>
                 <form name="queryMatch"  id="selectConfigBody">
                     <input type="text" name="args" id="args" />
-                    <input type="button" name="submit" value="提交">提交</input>
+                    <input type="button" name="button" value="查询" id="configManage">提交</input>
                 </form>
 
             </page>
@@ -120,7 +121,7 @@
                         <radio value="22">22</radio>
                         <radio value="33">33</radio>
                     </formcheck>
-                    <input type="submit" name="submit">提交</input>
+                    <input type="button" name="button" id="configManage">提交</input>
                 </form>
             </page>
         </pageType>
