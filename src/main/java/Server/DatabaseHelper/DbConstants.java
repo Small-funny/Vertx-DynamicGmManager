@@ -5,14 +5,17 @@ import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.FileOutputStream;
-import java.text.Normalizer.Form;
 import java.util.Arrays;
 import java.util.List;
 
 /**
  * 数据库通用工具
  */
+@Slf4j
 public class DbConstants {
     // 数据库层级结构
     public static final List<String> DB_STRUCTURE = Arrays.asList("record", "column", "auth1", "auth2");
@@ -70,11 +73,15 @@ public class DbConstants {
      * @param data
      * @throws Exception
      */
-    public static void saveXml(Element data) throws Exception {
+    public static void saveXml(Element data) {
         Format format = Format.getCompactFormat();
         format.setEncoding("utf-8");
         format.setIndent("    ");
         XMLOutputter outPutter = new XMLOutputter(format);
-        outPutter.output(data, new FileOutputStream("src/main/java/resources/Database.xml"));
+        try {
+            outPutter.output(data, new FileOutputStream("src/main/java/resources/Database.xml"));
+        } catch(Exception e) {
+            log.error(e.getMessage());
+        }
     }
 }

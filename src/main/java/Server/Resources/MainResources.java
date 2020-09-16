@@ -10,12 +10,13 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
-import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 import static Server.Automation.PageUtil.*;
 import static Server.DatabaseHelper.ManagerDatabaseHelper.allManagerInfo;
 
-@Slf4j
+/**
+ * 系统主页路由
+ */
 public class MainResources extends AbstractVerticle {
 
     ThymeleafTemplateEngine thymeleafTemplateEngine;
@@ -34,6 +35,7 @@ public class MainResources extends AbstractVerticle {
 
     /**
      * 登陆后的主页
+     * 
      * @param ctx
      */
     private void home(RoutingContext ctx) {
@@ -49,6 +51,7 @@ public class MainResources extends AbstractVerticle {
 
     /**
      * 选择服务器后的主页
+     * 
      * @param ctx
      */
     private void mainPage(RoutingContext ctx) {
@@ -66,6 +69,7 @@ public class MainResources extends AbstractVerticle {
 
     /**
      * 点击目录页面局部刷新
+     * 
      * @param ctx
      */
     private void subMain(RoutingContext ctx) {
@@ -74,18 +78,13 @@ public class MainResources extends AbstractVerticle {
         String serverRouter = ctx.request().getParam("serverRouter");
         //总路由
         String route = "/" + serverRouter + "/" + pageRouter;
-        System.out.println("sout:"+XmlMapping.createElementString(XmlMapping.getElement(pageRouter), route));
-        System.out.println("sssssssss");
-
-        System.out.println("123123213");
-        System.out.println("ssssss");
         ctx.response().end(
                 XmlMapping.createElementString(XmlMapping.getElement(ctx.request().getParam("pageRouter")), route));
-
     }
 
     /**
      * 预加载页面表格
+     * 
      * @param ctx
      */
     private void preloadingTable(RoutingContext ctx) {
@@ -101,6 +100,7 @@ public class MainResources extends AbstractVerticle {
 
     /**
      * 预加载页面列表
+     * 
      * @param ctx
      */
     private void preloadingList(RoutingContext ctx) {
