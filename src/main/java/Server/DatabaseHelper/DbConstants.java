@@ -20,7 +20,7 @@ public class DbConstants {
     // 数据库层级结构
     public static final List<String> DB_STRUCTURE = Arrays.asList("record", "column", "auth1", "auth2");
     // 数据库用户记录表头
-    public static final List<String> DB_HEADER_RECORD = Arrays.asList("username", "password", "token", "enable", "auth"); 
+    public static final List<String> DB_HEADER_RECORD = Arrays.asList("username", "password", "token", "auth"); 
     // 数据库服务器记录表头
     public static final List<String> DB_HEADER_SERVER = Arrays.asList("沙箱", "测试服", "主服");
     // 用户名记录索引
@@ -29,10 +29,8 @@ public class DbConstants {
     public static final int INDEX_OF_PASSWORD = 1; 
     // 令牌记录索引
     public static final int INDEX_OF_TOKEN = 2;
-    // 账户状态记录索引 
-    public static final int INDEX_OF_ENABLE = 3; 
     // 权限记录索引
-    public static final int INDEX_OF_AUTH = 4;
+    public static final int INDEX_OF_AUTH = 3;
     // 数据名称
     public static final String DATA_NAME = "name";
     // 数据值

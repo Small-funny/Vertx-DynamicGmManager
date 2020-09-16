@@ -2,8 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAyNTI5MzYsImV4cCI6MTYwMDI1NjUzNn0.mmEjLXLJqa3ZKDs282yon4I4kEll_cC7ztFQ5z4wdOk" />
-        <column name="enable" value="1" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAyNTg2OTUsImV4cCI6MTYwMDI2MjI5NX0.d-uweZE2Hl9UOtFWHfzUOeiSm3-rmON9WuWOZv4zMRw" />
         <column name="auth">
             <auth1 name="server" value="沙箱">
                 <auth2 type="list" value="角色管理" />
@@ -33,7 +32,6 @@
         <column name="username" value="admin" />
         <column name="password" value="admin" />
         <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAxNjUyMTEsImV4cCI6MTYwMDE2ODgxMX0.xFMd_OMPR4Up8d9jnS3eqbxSyY2Z8LWcan4UDEE2TiY" />
-        <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="沙箱">
                 <auth2 type="list" value="角色管理" />
@@ -55,7 +53,6 @@
         <column name="username" value="username" />
         <column name="password" value="password" />
         <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTc5OTUwODYsImV4cCI6MTU5Nzk5ODY4Nn0.O452Izzbs6FAQvybQvCkcvOYUgX3XDU8ivu68B4I7qw" />
-        <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="沙箱">
                 <auth2 type="list" value="远程操作管理" />
@@ -67,16 +64,5 @@
                 <auth2 type="list" value="远程操作管理" />
             </auth1>
         </column>
-    </record>
-    <record>
-        <cloumn name="username" value="user1" />
-        <cloumn name="password" value="pass" />
-        <cloumn name="token" value="token" />
-        <cloumn name="enable" value="1" />
-        <cloumn name="auth">
-            <auth1 name="server" value="沙箱" />
-            <auth1 name="server" value="测试服" />
-            <auth1 name="server" value="主服" />
-        </cloumn>
     </record>
 </database>
