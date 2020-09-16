@@ -8,13 +8,13 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
-
 import java.util.*;
 
 import static Server.Automation.PageUtil.*;
 import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
 
 @Slf4j
+@SuppressWarnings("unchecked")
 public class XmlMapping {
 
     private static String returnType = null;

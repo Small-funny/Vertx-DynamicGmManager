@@ -19,6 +19,7 @@ public class ServerVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
+
         final Router router = Router.router(vertx);
 
         router.route().handler(BodyHandler.create());
@@ -29,7 +30,7 @@ public class ServerVerticle extends AbstractVerticle {
         registerResources(router);
 
         vertx.createHttpServer().requestHandler(router::accept).listen(8001);
-         log.info("================== GM Manager Server Start ====================");
+        log.info("================== GM Manager Server Start ====================");
     }
 
     private void registerResources(Router router) {
