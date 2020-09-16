@@ -74,8 +74,14 @@ public class MainResources extends AbstractVerticle {
         String serverRouter = ctx.request().getParam("serverRouter");
         //总路由
         String route = "/" + serverRouter + "/" + pageRouter;
+        System.out.println("sout:"+XmlMapping.createElementString(XmlMapping.getElement(pageRouter), route));
+        System.out.println("sssssssss");
+
+        System.out.println("123123213");
+        System.out.println("ssssss");
         ctx.response().end(
                 XmlMapping.createElementString(XmlMapping.getElement(ctx.request().getParam("pageRouter")), route));
+
     }
 
     /**

@@ -13,13 +13,18 @@ import java.util.*;
 import static Server.Automation.PageUtil.*;
 import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
 
+/**
+ * @author Wen
+ */
 @Slf4j
 @SuppressWarnings("unchecked")
 public class XmlMapping {
 
-    private static String returnType = null;
-
-    //创建页面的字符串
+    /**
+     *根据xml生成页面的内容
+     * @param element 页面的元素
+     * @param route 当前页面
+     */
     public static String createElementString(Element element, String route) {
         StringBuilder stringBuilder = new StringBuilder();
 
@@ -46,16 +51,12 @@ public class XmlMapping {
                             .append("</label></div><div class=\"col-12 col-md-9\"><div class=\"form-check\">");
                 } else if ("table".equals(childName)) {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"table-responsive\">");
-                } else if ("return".equals(childName)) {
-                    returnType = ((Element) child).getAttributeValue("type");
-                    continue;
-                }//不是option这种小标签的通用类 input select会用
+                } //不是option这种小标签的通用类 input select会用
                 else if (!("option".equals(childName) || "checkbox".equals(childName) || "radio".equals(childName))) {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">")
                             .append(((Element) child).getAttribute("name").getValue())
                             .append("</label></div><div class=\"col-12 col-md-9\">");
                 }
-
                 //添加标签头 checkbox 和radio 不用写属性 有特殊写法 clock也不写 date 也不写
                 if (!("checkbox".equals(childName) || "radio".equals(childName) || "time".equals(childName))) {
                     stringBuilder.append("<").append(childName);
@@ -66,7 +67,6 @@ public class XmlMapping {
                     }
                 }
                 ///////根据不同的元素添加特别的属性
-
                 //表单特殊属性 method="post" target="nm_iframe"  method="post"
                 if ("form".equals(childName)) {
                     stringBuilder.append(" id=\"selectForm\" class=\"form-horizontal\" >");
@@ -101,37 +101,25 @@ public class XmlMapping {
                             .append(childName)
                             .append("\" id=\"TIMESTAMP\" class=\"form-control\" autocomplete=\"off\">");
                 }
-
                 //添加标签头完毕 进入递归 table不能进入
                 if (!"table".equals(childName)) {
                     stringBuilder.append(createElementString((Element) child, route));
                 }
-
                 //添加标签尾
                 //如果不是input就意味着是那种小标签 直接加尾部就行
                 if ("form".equals(childName)) {
                     stringBuilder.append("<input type=\"hidden\" value=\"")
-                            .append(((Element) child).getAttributeValue("id"))
+                            .append(((Element) child).getAttributeValue("operation"))
                             .append("\" name=\"operation\" from=\"select\"/>");
                     stringBuilder.append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"select\"/>");
-//                    if ("table".equals(returnType)) {
-//                        stringBuilder.append("<input type=\"hidden\" value=\"selectTableData\" name=\"operation\"/>");
-//                    } else if ("str".equals(returnType)) {
-//                        stringBuilder.append("<input type=\"hidden\" value=\"selectConfigBody\" name=\"operation\"/>");
-//                    }
                 } else if (!("input".equals(childName) || "form-check".equals(childName))) {
                     stringBuilder.append("</").append(childName).append(" >");
                 }
-
                 //这里加结束的div
                 if ("form".equals(childName)) {
                     stringBuilder.append("</form></div>");
 
-                    if ("str".equals(returnType)) {
 
-                    } else if ("table".equals(returnType)) {
-
-                    }
                 } else if ("formcheck".equals(childName)) {
                     stringBuilder.append("</div></div></div>");
                 } else if (!"option".equals(childName) && !"checkbox".equals(childName) && !"radio".equals(childName)) {
@@ -148,7 +136,6 @@ public class XmlMapping {
     }
 
     public static String createAsideString(String token, String server) {
-        // List<String> urlList = JdbcMysqlHelper.selectAuthority(token);
         List<String> urlList = VerifyDatabaseHelper.selectAuthority(token, server);
         StringBuilder stringBuilder = new StringBuilder();
         //从外层div开始 div类是navigation-menu-body
@@ -157,35 +144,36 @@ public class XmlMapping {
         //这个是最大类别 暂时没什么用
         stringBuilder.append("<li class=\"navigation-divider\">最大类别</li>");
         for (Map.Entry<String, Element> entry : TYPE_ELEMENT.entrySet()) {
-            if (!urlList.contains(entry.getValue().getAttribute("authorization").getValue())) {
+            if (!urlList.contains(entry.getValue().getAttributeValue("authorization"))) {
                 continue;
             }
             stringBuilder.append("<li> <a href=\"");
-            if (entry.getValue().getAttribute("url") != null) {
-                stringBuilder.append(entry.getValue().getAttribute("authorization")).append("\">");
+            if (entry.getValue().getAttribute("authorization") != null) {
+                stringBuilder.append(entry.getValue().getAttributeValue("authorization")).append("\">");
             } else {
                 stringBuilder.append("#\">");
             }
             stringBuilder.append("<i class=\"nav-link-icon\" data-feather=\"")
-                    .append(entry.getValue().getAttribute("icon").getValue())
+                    .append(entry.getValue().getAttributeValue("icon"))
                     .append("\"></i>")
                     .append(entry.getKey())
                     .append("</a><ul>");
             for (Element element : entry.getValue().getChildren()) {
                 stringBuilder.append("<li id =\" ")
-                        .append(element.getAttribute("name").getValue())
+                        .append(element.getAttributeValue("name"))
                         .append("\"><a href=\"#\" onclick=\"changeAside('")
                         .append(server)
                         .append("','")
-                        .append(element.getAttributeValue("url"))
-                        .append("')\" id=\"").append(element.getAttributeValue("url")).append("\">")
-                        .append(element.getAttribute("name").getValue())
+                        .append(element.getAttributeValue("authorization"))
+                        .append("')\" id=\"").append(element.getAttributeValue("authorization")).append("\">")
+                        .append(element.getAttributeValue("name"))
                         .append("</a></li>");
             }
             stringBuilder.append("</ul>");
             stringBuilder.append("</li>");
         }
         stringBuilder.append("</ul>");
+        System.out.println("sout:" + stringBuilder.toString());
         return stringBuilder.toString();
     }
 

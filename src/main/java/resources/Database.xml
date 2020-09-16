@@ -2,7 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAyMzk1NjEsImV4cCI6MTYwMDI0MzE2MX0.Zy_DYCCN0hl3Ue-BctCOw1Czsl35dAJ81kMjrrNJPrg" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAyNDM3MDIsImV4cCI6MTYwMDI0NzMwMn0.eXIH1LWt7U91SolJy1tBVfrVAA3CFLnSCsnZmnFtjJ0" />
         <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="沙箱">
@@ -68,4 +68,4 @@
             </auth1>
         </column>
     </record>
-</database>
+<record><cloumn name="username" value="root3456541" /><cloumn name="password" value="passw" /><cloumn name="token" value="token" /><cloumn name="enable" value="1" /><cloumn name="auth"><auth1 name="server" value="sandbox" /><auth1 name="server" value="test" /><auth1 name="server" value="master" /></cloumn></record><record><cloumn name="username" value="QWER" /><cloumn name="password" value="password" /><cloumn name="token" value="token" /><cloumn name="enable" value="1" /><cloumn name="auth"><auth1 name="server" value="sandbox" /><auth1 name="server" value="test" /><auth1 name="server" value="master" /></cloumn></record><record><cloumn name="username" value="321" /><cloumn name="password" value="123" /><cloumn name="token" value="token" /><cloumn name="enable" value="1" /><cloumn name="auth"><auth1 name="server" value="sandbox" /><auth1 name="server" value="test" /><auth1 name="server" value="master" /></cloumn></record></database>

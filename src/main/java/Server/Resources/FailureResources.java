@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * 路由错误处理
+ * @author Betta
  */
 @Slf4j
 public class FailureResources {

@@ -277,10 +277,12 @@
         $("#" + prepage).removeClass("active")
         $("#" + page).addClass("active")
         prepage = page;
-
+        console.log("server:"+server)
+        console.log("page:"+page)
         refreshAjaxGet(server, page, "pageContent")
+        console.log("server:"+server)
+        console.log("page:"+page)
         history.pushState(null, null, "/main" + "/" + server + "/" + page);
-        console.log("server:" + server + page)
 
         refreshAjaxPost("/main/configsName", page, null, "configsName")
         refreshAjaxPost("/main/userInfo", page, null, "userInfo")

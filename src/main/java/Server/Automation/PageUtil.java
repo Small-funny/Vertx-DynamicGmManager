@@ -33,7 +33,7 @@ public class PageUtil {
             TYPE_ELEMENT.put(typeE.getAttributeValue("name"), typeE);
             List<Element> pageList = typeE.getChildren();
             for (Element pageE : pageList) {
-                PAGE_ELEMENT.put(pageE.getAttributeValue("url"), pageE);
+                PAGE_ELEMENT.put(pageE.getAttributeValue("authorization"), pageE);
                 if ("userManage".equals(pageE.getAttributeValue("type"))) {
                     USER_MANAGE_PAGES.add(pageE.getAttributeValue("authorization"));
                 } else if ("configManage".equals(pageE.getAttributeValue("type"))) {
