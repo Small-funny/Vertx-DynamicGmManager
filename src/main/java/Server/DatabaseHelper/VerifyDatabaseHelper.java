@@ -18,13 +18,13 @@ public class VerifyDatabaseHelper {
      */
     public static boolean verifyIsExisted(String username, String password) {
         boolean result = false;
-        List<Element> data = DatabaseConstants.loadDatabase().getChildren();
+        List<Element> data = DbConstants.loadDatabase().getChildren();
         try {
             for (Element user : data) {
-                Element unameElement = user.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
-                Element pwordElement = user.getChildren().get(DatabaseConstants.INDEX_OF_PASSWORD);
-                if (username.toLowerCase().equals(unameElement.getAttributeValue("value").toLowerCase())
-                        && password.equals(pwordElement.getAttributeValue("value"))) {
+                Element unameElement = user.getChildren().get(DbConstants.INDEX_OF_USERNAME);
+                Element pwordElement = user.getChildren().get(DbConstants.INDEX_OF_PASSWORD);
+                if (username.toLowerCase().equals(unameElement.getAttributeValue(DbConstants.DATA_VALUE).toLowerCase())
+                        && password.equals(pwordElement.getAttributeValue(DbConstants.DATA_VALUE))) {
                     result = true;
                 }
             }
@@ -43,11 +43,12 @@ public class VerifyDatabaseHelper {
      */
     public static boolean isExisted(String username) {
         boolean result = false;
-        List<Element> data = DatabaseConstants.loadDatabase().getChildren();
+        List<Element> data = DbConstants.loadDatabase().getChildren();
         try {
             for (Element user : data) {
-                Element unameElement = user.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
-                if (username.toLowerCase().equals(unameElement.getAttributeValue("value").toLowerCase())) {
+                Element unameElement = user.getChildren().get(DbConstants.INDEX_OF_USERNAME);
+                if (username.toLowerCase()
+                        .equals(unameElement.getAttributeValue(DbConstants.DATA_VALUE).toLowerCase())) {
                     result = true;
                 }
             }
@@ -66,16 +67,16 @@ public class VerifyDatabaseHelper {
      */
     public static List<String> selectAuthority(String token, String server) {
         List<String> result = new ArrayList<>();
-        List<Element> data = DatabaseConstants.loadDatabase().getChildren();
+        List<Element> data = DbConstants.loadDatabase().getChildren();
         try {
             for (Element user : data) {
-                Element tkElement = user.getChildren().get(DatabaseConstants.INDEX_OF_TOKEN);
-                Element authElement = user.getChildren().get(DatabaseConstants.INDEX_OF_AUTH);
-                if (token.equals(tkElement.getAttributeValue("value"))) {
+                Element tkElement = user.getChildren().get(DbConstants.INDEX_OF_TOKEN);
+                Element authElement = user.getChildren().get(DbConstants.INDEX_OF_AUTH);
+                if (token.equals(tkElement.getAttributeValue(DbConstants.DATA_VALUE))) {
                     for (Element serverAuth : authElement.getChildren()) {
-                        if (server.equals(serverAuth.getAttributeValue("value"))) {
+                        if (server.equals(serverAuth.getAttributeValue(DbConstants.DATA_VALUE))) {
                             for (Element list : serverAuth.getChildren()) {
-                                result.add(list.getAttributeValue("value"));
+                                result.add(list.getAttributeValue(DbConstants.DATA_VALUE));
                             }
                             break;
                         }
@@ -96,18 +97,18 @@ public class VerifyDatabaseHelper {
      * @param token
      */
     public static void updateToken(String username, String token) {
-        Element rootData = DatabaseConstants.loadDatabase();
+        Element rootData = DbConstants.loadDatabase();
         List<Element> data = rootData.getChildren();
         try {
             for (Element record : data) {
-                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
-                Element tkElement = record.getChildren().get(DatabaseConstants.INDEX_OF_TOKEN);
-                if (username.equals(unameElement.getAttributeValue("value"))) {
-                    tkElement.setAttribute("value", token);
+                Element unameElement = record.getChildren().get(DbConstants.INDEX_OF_USERNAME);
+                Element tkElement = record.getChildren().get(DbConstants.INDEX_OF_TOKEN);
+                if (username.equals(unameElement.getAttributeValue(DbConstants.DATA_VALUE))) {
+                    tkElement.setAttribute(DbConstants.DATA_VALUE, token);
                     break;
                 }
             }
-            DatabaseConstants.saveXml(rootData);
+            DbConstants.saveXml(rootData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -121,11 +122,11 @@ public class VerifyDatabaseHelper {
      */
     public static boolean isTokenExisted(String token) {
         boolean result = false;
-        List<Element> data = DatabaseConstants.loadDatabase().getChildren();
+        List<Element> data = DbConstants.loadDatabase().getChildren();
         try {
             for (Element record : data) {
-                Element tkElement = record.getChildren().get(DatabaseConstants.INDEX_OF_TOKEN);
-                if (token.equals(tkElement.getAttributeValue("value"))) {
+                Element tkElement = record.getChildren().get(DbConstants.INDEX_OF_TOKEN);
+                if (token.equals(tkElement.getAttributeValue(DbConstants.DATA_VALUE))) {
                     result = true;
                     break;
                 }
@@ -144,13 +145,13 @@ public class VerifyDatabaseHelper {
      */
     public static String tokenToUsername(String token) {
         String username = null;
-        List<Element> data = DatabaseConstants.loadDatabase().getChildren();
+        List<Element> data = DbConstants.loadDatabase().getChildren();
         try {
             for (Element record : data) {
-                Element tkElement = record.getChildren().get(DatabaseConstants.INDEX_OF_TOKEN);
-                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
-                if (token.equals(tkElement.getAttributeValue("value"))) {
-                    username = unameElement.getAttributeValue("value");
+                Element tkElement = record.getChildren().get(DbConstants.INDEX_OF_TOKEN);
+                Element unameElement = record.getChildren().get(DbConstants.INDEX_OF_USERNAME);
+                if (token.equals(tkElement.getAttributeValue(DbConstants.DATA_VALUE))) {
+                    username = unameElement.getAttributeValue(DbConstants.DATA_VALUE);
                 }
             }
         } catch (Exception e) {

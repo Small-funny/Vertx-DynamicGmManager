@@ -3,10 +3,8 @@ package Server.DatabaseHelper;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
 import com.alibaba.fastjson.JSON;
 
 /**
@@ -22,22 +20,21 @@ public class ManagerDatabaseHelper {
     public static HashMap<String, String> allManagerInfo() {
         HashMap<String, String> result = new HashMap<>();
         List<List<String>> tableBody = new ArrayList<>();
-        List<Element> data = DatabaseConstants.loadDatabase().getChildren();
-        int endIndex = DatabaseConstants.INDEX_OF_PASSWORD + 1;
-        List<String> colName = new ArrayList<>(DatabaseConstants.HEADER_LIST.subList(0, endIndex));
+        List<Element> data = DbConstants.loadDatabase().getChildren();
+        List<String> colName = new ArrayList<>(DbConstants.TABLE_USER_HEADER);
         try {
-            result.put("colName", JSON.toJSONString(colName));
+            result.put(DbConstants.COLUMN_KEY, JSON.toJSONString(colName));
             for (Element record : data) {
                 List<String> rowData = new ArrayList<>();
-                for (int index = 0; index <= DatabaseConstants.INDEX_OF_PASSWORD; index ++) {
-                    String row = record.getChildren().get(index).getAttributeValue("value");
-                    if (!"root".equals(row)) {
+                for (int index = 0; index <= DbConstants.INDEX_OF_PASSWORD; index++) {
+                    String row = record.getChildren().get(index).getAttributeValue(DbConstants.DATA_VALUE);
+                    if (!DbConstants.ROOT_USER.equals(row)) {
                         rowData.add(row);
                     }
                 }
                 tableBody.add(rowData);
             }
-            result.put("tableBody", JSON.toJSONString(tableBody));
+            result.put(DbConstants.TABLE_BODY_KEY, JSON.toJSONString(tableBody));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -52,16 +49,16 @@ public class ManagerDatabaseHelper {
      * @param auth
      */
     public static void deleteAuth(String username, String server, String auth) {
-        Element rootData = DatabaseConstants.loadDatabase();
+        Element rootData = DbConstants.loadDatabase();
         try {
             for (Element record : rootData.getChildren()) {
-                Element authElement = record.getChildren().get(DatabaseConstants.INDEX_OF_AUTH);
-                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
-                if (username.equals(unameElement.getAttributeValue("value"))) {
+                Element authElement = record.getChildren().get(DbConstants.INDEX_OF_AUTH);
+                Element unameElement = record.getChildren().get(DbConstants.INDEX_OF_USERNAME);
+                if (username.equals(unameElement.getAttributeValue(DbConstants.DATA_VALUE))) {
                     for (Element serverAuth : authElement.getChildren()) {
-                        if (server.equals(serverAuth.getAttributeValue("value", server))) {
+                        if (server.equals(serverAuth.getAttributeValue(DbConstants.DATA_VALUE, server))) {
                             for (Element auth2 : serverAuth.getChildren()) {
-                                if (auth.equals(auth2.getAttributeValue("value"))) {
+                                if (auth.equals(auth2.getAttributeValue(DbConstants.DATA_VALUE))) {
                                     serverAuth.removeContent(auth2);
                                     break;
                                 }
@@ -72,7 +69,7 @@ public class ManagerDatabaseHelper {
                     break;
                 }
             }
-            DatabaseConstants.saveXml(rootData);
+            DbConstants.saveXml(rootData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -85,18 +82,18 @@ public class ManagerDatabaseHelper {
      * @param server
      * @param auth
      */
-    public static void addAuth(String username, String server, String auth) {
+    public static void addAuth(String username, String server, String auth, String type) {
         Element newAuth = new Element("auth2");
-        newAuth.setAttribute("name", "list");
-        newAuth.setAttribute("value", auth);
-        Element rootData = DatabaseConstants.loadDatabase();
+        newAuth.setAttribute(DbConstants.DATA_NAME, type);
+        newAuth.setAttribute(DbConstants.DATA_VALUE, auth);
+        Element rootData = DbConstants.loadDatabase();
         try {
             for (Element record : rootData.getChildren()) {
-                Element authElement = record.getChildren().get(DatabaseConstants.INDEX_OF_AUTH);
-                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
-                if (username.equals(unameElement.getAttributeValue("value"))) {
+                Element authElement = record.getChildren().get(DbConstants.INDEX_OF_AUTH);
+                Element unameElement = record.getChildren().get(DbConstants.INDEX_OF_USERNAME);
+                if (username.equals(unameElement.getAttributeValue(DbConstants.DATA_VALUE))) {
                     for (Element serverAuth : authElement.getChildren()) {
-                        if (server.equals(serverAuth.getAttributeValue("value"))) {
+                        if (server.equals(serverAuth.getAttributeValue(DbConstants.DATA_VALUE))) {
                             serverAuth.addContent(newAuth);
                             break;
                         }
@@ -104,7 +101,7 @@ public class ManagerDatabaseHelper {
                     break;
                 }
             }
-            DatabaseConstants.saveXml(rootData);
+            DbConstants.saveXml(rootData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -116,15 +113,15 @@ public class ManagerDatabaseHelper {
      * @param username
      */
     public static void deleteUser(String username) {
-        Element rootData = DatabaseConstants.loadDatabase();
+        Element rootData = DbConstants.loadDatabase();
         try {
             for (Element record : rootData.getChildren()) {
-                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
-                if (username.equals(unameElement.getAttributeValue("value"))) {
+                Element unameElement = record.getChildren().get(DbConstants.INDEX_OF_USERNAME);
+                if (username.equals(unameElement.getAttributeValue(DbConstants.DATA_VALUE))) {
                     rootData.removeContent(record);
                 }
             }
-            DatabaseConstants.saveXml(rootData);
+            DbConstants.saveXml(rootData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -137,24 +134,24 @@ public class ManagerDatabaseHelper {
      */
     public static void addUser(List<String> userInfo) {
         Element newUser = new Element("record");
-        Element rootData = DatabaseConstants.loadDatabase();
+        Element rootData = DbConstants.loadDatabase();
         try {
-            for (int colIndex = 0; colIndex < DatabaseConstants.HEADER_LIST.size(); colIndex++) {
+            for (int colIndex = 0; colIndex < DbConstants.DB_HEADER_RECORD.size(); colIndex++) {
                 Element column = new Element("cloumn");
-                column.setAttribute("name", DatabaseConstants.HEADER_LIST.get(colIndex));
-                if (!"auth".equals(DatabaseConstants.HEADER_LIST.get(colIndex))) {
-                    column.setAttribute("value", userInfo.get(colIndex));
+                column.setAttribute(DbConstants.DATA_NAME, DbConstants.DB_HEADER_RECORD.get(colIndex));
+                if (DbConstants.INDEX_OF_AUTH != colIndex) {
+                    column.setAttribute(DbConstants.DATA_VALUE, userInfo.get(colIndex));
                 }
                 newUser.addContent(column);
             }
-            for (String server : DatabaseConstants.SERVER_LIST) {
+            for (String server : DbConstants.DB_HEADER_SERVER) {
                 Element auth = new Element("auth1");
-                auth.setAttribute("name", "server");
-                auth.setAttribute("value", server);
-                newUser.getChildren().get(DatabaseConstants.INDEX_OF_AUTH).addContent(auth);
+                auth.setAttribute(DbConstants.DATA_NAME, "server");
+                auth.setAttribute(DbConstants.DATA_VALUE, server);
+                newUser.getChildren().get(DbConstants.INDEX_OF_AUTH).addContent(auth);
             }
             rootData.addContent(newUser);
-            DatabaseConstants.saveXml(rootData);
+            DbConstants.saveXml(rootData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -167,16 +164,17 @@ public class ManagerDatabaseHelper {
      * @param password
      */
     public static void updateUserInfo(String username, String password) {
-        Element rootData = DatabaseConstants.loadDatabase();
+        Element rootData = DbConstants.loadDatabase();
         try {
             for (Element record : rootData.getChildren()) {
-                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
-                if (username.equals(unameElement.getAttributeValue("value"))) {
-                    record.getChildren().get(DatabaseConstants.INDEX_OF_PASSWORD).setAttribute("value", password);
+                Element unameElement = record.getChildren().get(DbConstants.INDEX_OF_USERNAME);
+                if (username.equals(unameElement.getAttributeValue(DbConstants.DATA_VALUE))) {
+                    record.getChildren().get(DbConstants.INDEX_OF_PASSWORD).setAttribute(DbConstants.DATA_VALUE,
+                            password);
                     break;
                 }
             }
-            DatabaseConstants.saveXml(rootData);
+            DbConstants.saveXml(rootData);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -192,16 +190,16 @@ public class ManagerDatabaseHelper {
      */
     public static List<String> selectAuthList(String username, String type, String server) {
         List<String> result = new ArrayList<>();
-        List<Element> data = DatabaseConstants.loadDatabase().getChildren();
+        List<Element> data = DbConstants.loadDatabase().getChildren();
         try {
             for (Element record : data) {
-                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
-                Element authElement = record.getChildren().get(DatabaseConstants.INDEX_OF_AUTH);
-                Element serverElement = authElement.getChildren().get(DatabaseConstants.SERVER_LIST.indexOf(server));
-                if (username.equals(unameElement.getAttributeValue("value"))) {
+                Element unameElement = record.getChildren().get(DbConstants.INDEX_OF_USERNAME);
+                Element authElement = record.getChildren().get(DbConstants.INDEX_OF_AUTH);
+                Element serverElement = authElement.getChildren().get(DbConstants.DB_HEADER_SERVER.indexOf(server));
+                if (username.equals(unameElement.getAttributeValue(DbConstants.DATA_VALUE))) {
                     for (Element auth : serverElement.getChildren()) {
-                        if (type.equals(auth.getAttributeValue("name"))) {
-                            result.add(auth.getAttributeValue("value"));
+                        if (type.equals(auth.getAttributeValue(DbConstants.DATA_NAME))) {
+                            result.add(auth.getAttributeValue(DbConstants.DATA_VALUE));
                         }
                     }
                     break;
@@ -222,19 +220,19 @@ public class ManagerDatabaseHelper {
      */
     public static HashMap<String, String> selectAuthTable(String username, String server) {
         HashMap<String, String> result = new HashMap<>();
-        List<String> colName = Arrays.asList("权限", "类型");
+        List<String> colName = DbConstants.TABLE_AUTH_HEADER;
         List<List<String>> body = new ArrayList<>();
-        List<Element> data = DatabaseConstants.loadDatabase().getChildren();
+        List<Element> data = DbConstants.loadDatabase().getChildren();
         try {
             for (Element record : data) {
-                Element unameElement = record.getChildren().get(DatabaseConstants.INDEX_OF_USERNAME);
-                Element authElement = record.getChildren().get(DatabaseConstants.INDEX_OF_AUTH);
-                Element serverElement = authElement.getChildren().get(DatabaseConstants.SERVER_LIST.indexOf(server));
-                if (username.equals(unameElement.getAttributeValue("value"))) {
+                Element unameElement = record.getChildren().get(DbConstants.INDEX_OF_USERNAME);
+                Element authElement = record.getChildren().get(DbConstants.INDEX_OF_AUTH);
+                Element serverElement = authElement.getChildren().get(DbConstants.DB_HEADER_SERVER.indexOf(server));
+                if (username.equals(unameElement.getAttributeValue(DbConstants.DATA_VALUE))) {
                     for (Element auth : serverElement.getChildren()) {
                         List<String> row = new ArrayList<>();
-                        row.add(auth.getAttributeValue("value"));
-                        row.add(auth.getAttributeValue("name"));
+                        row.add(auth.getAttributeValue(DbConstants.DATA_VALUE));
+                        row.add(auth.getAttributeValue(DbConstants.DATA_NAME));
                         body.add(row);
                     }
                     break;

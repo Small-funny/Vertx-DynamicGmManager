@@ -1,0 +1,75 @@
+package Server.DatabaseHelper;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.XMLOutputter;
+import java.io.FileOutputStream;
+import java.util.Arrays;
+import java.util.List;
+
+/**
+ * 数据库通用工具
+ */
+public class DbConstants {
+    // 数据库层级结构
+    public static final List<String> DB_STRUCTURE = Arrays.asList("record", "column", "auth1", "auth2");
+    // 数据库用户记录表头
+    public static final List<String> DB_HEADER_RECORD = Arrays.asList("username", "password", "token", "enable", "auth"); 
+    // 数据库服务器记录表头
+    public static final List<String> DB_HEADER_SERVER = Arrays.asList("sandbox", "test", "master"); 
+    // 用户名记录索引
+    public static final int INDEX_OF_USERNAME = 0; 
+    // 密码记录索引
+    public static final int INDEX_OF_PASSWORD = 1; 
+    // 令牌记录索引
+    public static final int INDEX_OF_TOKEN = 2;
+    // 账户状态记录索引 
+    public static final int INDEX_OF_ENABLE = 3; 
+    // 权限记录索引
+    public static final int INDEX_OF_AUTH = 4;
+    // 数据名称
+    public static final String DATA_NAME = "name";
+    // 数据值
+    public static final String DATA_VALUE = "value";
+    // 数据类型
+    public static final String DATA_TYPE = "type";
+    // 根用户
+    public static final String ROOT_USER = "root";
+    // 构造表格属性列表的key
+    public static final String COLUMN_KEY = "colName";
+    // 构造表格内容列表的key
+    public static final String TABLE_BODY_KEY = "tableBody";
+    // 用户信息表头
+    public static final List<String> TABLE_USER_HEADER = Arrays.asList("用户名", "密码");
+    // 权限信息表头
+    public static final List<String> TABLE_AUTH_HEADER = Arrays.asList("权限", "类型");
+
+    /**
+     * 获取数据库根元素
+     * 
+     * @return
+     */
+    public static Element loadDatabase() {
+        Element data = null;
+        try {
+            SAXBuilder sb = new SAXBuilder();
+            Document doc = sb.build("src/main/java/resources/Database.xml");
+            data = doc.getRootElement();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return data;
+    }
+
+    /**
+     * 保存数据库的修改结果
+     * 
+     * @param data
+     * @throws Exception
+     */
+    public static void saveXml(Element data) throws Exception {
+        XMLOutputter outPutter = new XMLOutputter();
+        outPutter.output(data, new FileOutputStream("src/main/java/resources/Database.xml"));
+    }
+}

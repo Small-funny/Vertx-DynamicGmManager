@@ -54,7 +54,8 @@ public class ManagerResources {
                     String username = data.get("username");
                     String server = data.get("server");
                     String auth = data.get("auth");
-                    ManagerDatabaseHelper.addAuth(username, server, auth);
+                    String type = data.get("type");
+                    ManagerDatabaseHelper.addAuth(username, server, auth, type);
                     future.complete("Add succeed!");
                 }, false, asyncResult -> {
                     executeResult(routingContext, asyncResult, "Add failed!", "str", asyncResult.result().toString());
