@@ -133,7 +133,9 @@ public class VerifyCode {
         return code;
     }
 
-    /** 字体样式类 */
+    /** 
+     * 字体样式类 
+     */
     class ImgFontByte {
         public Font getFont(int fontHeight) {
             try {
@@ -176,13 +178,10 @@ public class VerifyCode {
                 inputStream.close();
                 fontByteStr = new String(bytes, StandardCharsets.UTF_8);
                 return fontByteStr;
-
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             return "";
         }
     }
-    
 }

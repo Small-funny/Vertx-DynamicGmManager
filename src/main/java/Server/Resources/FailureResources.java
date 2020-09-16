@@ -24,5 +24,4 @@ public class FailureResources {
     private void failureNotFound(RoutingContext routingContext) {
         routingContext.response().sendFile("src/main/java/resources/templates/404.html");
     }
-    
 }

@@ -102,7 +102,6 @@ public class LoginResources extends AbstractVerticle {
             routingContext.response().setStatusCode(HttpResponseStatus.UNAUTHORIZED.code())
                     .end("Username or password error, Verification failed!");
         }
-
     }
 
     /**
@@ -215,5 +214,4 @@ public class LoginResources extends AbstractVerticle {
         }
         return key;
     }
-
 }

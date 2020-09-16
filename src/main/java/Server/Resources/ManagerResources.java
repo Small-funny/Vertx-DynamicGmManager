@@ -143,5 +143,4 @@ public class ManagerResources {
             routingContext.response().end(XmlMapping.createReturnString("str", JSON.toJSONString(resultData), false, null));
         }
     }
-
 }

@@ -17,6 +17,7 @@ public class JwtUtils {
 
     /**
      * 创建token
+     * 
      * @param routingContext
      * @return
      */
@@ -39,6 +40,7 @@ public class JwtUtils {
 
     /**
      * 用户发送的数据中提取token
+     * 
      * @param routingContext
      * @return
      */
@@ -55,5 +57,4 @@ public class JwtUtils {
         }
         return token;
     }
-    
 }

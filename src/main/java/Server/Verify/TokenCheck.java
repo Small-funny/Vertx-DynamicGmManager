@@ -44,5 +44,4 @@ public class TokenCheck implements Handler<RoutingContext> {
             e.printStackTrace();
         }
     }
-    
 }

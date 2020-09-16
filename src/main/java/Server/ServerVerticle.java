@@ -25,6 +25,8 @@ public class ServerVerticle extends AbstractVerticle {
         router.route().handler(BodyHandler.create());
         router.route("/main/*").handler(new TokenCheck());
         router.route("/forward").handler(new TokenCheck());
+        router.route("/manager").handler(new TokenCheck());
+        router.route("/subMain").handler(new TokenCheck());
         router.route("/*").handler(StaticHandler.create("src/main/java/resources"));
 
         registerResources(router);
@@ -40,5 +42,4 @@ public class ServerVerticle extends AbstractVerticle {
         new ForwardResources().registerResources(router, vertx);
         new FailureResources().registerResources(router);
     }
-    
 }

@@ -14,6 +14,7 @@ public class Cache {
 
     /**
      * 设置表单缓存
+     * 
      * @param token
      * @param args
      */
@@ -29,6 +30,7 @@ public class Cache {
 
     /**
      * 获取表单缓存
+     * 
      * @param token
      * @return
      */
@@ -46,6 +48,7 @@ public class Cache {
 
     /**
      * 删除表单缓存
+     * 
      * @param token
      */
     public static void removeArgs(String token) {
