@@ -19,7 +19,6 @@ public class ServerVerticle extends AbstractVerticle {
 
     @Override
     public void start() {
-
         final Router router = Router.router(vertx);
 
         router.route().handler(BodyHandler.create());
@@ -38,7 +37,7 @@ public class ServerVerticle extends AbstractVerticle {
         new MainResources().registerResources(router, vertx);
         new ManagerResources().registerResources(router);
         new ForwardResources().registerResources(router, vertx);
-        // new FailureResources().registerResources(router);
+        new FailureResources().registerResources(router);
     }
     
 }

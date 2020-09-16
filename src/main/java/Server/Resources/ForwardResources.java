@@ -16,7 +16,6 @@ import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * 数据转发接口
@@ -28,11 +27,9 @@ public class ForwardResources {
     private final WebClientOptions options = new WebClientOptions().setUserAgent("My-App/1.2.3").setKeepAlive(false);
 
     public void registerResources(Router router, Vertx vertx) {
-
         webClient = WebClient.create(vertx, options);
 
         router.post("/forward").handler(this::forward);
-
     }
 
     private void forward(RoutingContext routingContext) {
@@ -41,6 +38,7 @@ public class ForwardResources {
         HashMap<String, String> data;
         data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
         JsonObject jsonObject = new JsonObject();
+
         for (String key : data.keySet()) {
             String value = data.get(key);
             jsonObject.put(key, value);
@@ -77,7 +75,7 @@ public class ForwardResources {
                         Cache.getArgs(JwtUtils.findToken(routingContext)));
                 routingContext.response().end(returnString);
             } else {
-                System.out.println("Wrong :" + ar.cause().getMessage());
+                log.info("Wrong :" + ar.cause().getMessage());
                 routingContext.response().end("Operation failed !");
             }
         });

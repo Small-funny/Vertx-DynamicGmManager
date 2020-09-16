@@ -222,9 +222,8 @@ public class ManagerDatabaseHelper {
      */
     public static HashMap<String, String> selectAuthTable(String username, String server) {
         HashMap<String, String> result = new HashMap<>();
-        List<String> colName = Arrays.asList("list", "btn");
-        List<String> list = new ArrayList<>();
-        List<String> listBtn = new ArrayList<>();
+        List<String> colName = Arrays.asList("权限", "类型");
+        List<List<String>> body = new ArrayList<>();
         List<Element> data = DatabaseConstants.loadDatabase().getChildren();
         try {
             for (Element record : data) {
@@ -233,11 +232,10 @@ public class ManagerDatabaseHelper {
                 Element serverElement = authElement.getChildren().get(DatabaseConstants.SERVER_LIST.indexOf(server));
                 if (username.equals(unameElement.getAttributeValue("value"))) {
                     for (Element auth : serverElement.getChildren()) {
-                        if ("btn".equals(auth.getAttributeValue("name"))) {
-                            listBtn.add(auth.getAttributeValue("value"));
-                        } else if ("list".equals(auth.getAttributeValue("name"))) {
-                            list.add(auth.getAttributeValue("value"));
-                        }
+                        List<String> row = new ArrayList<>();
+                        row.add(auth.getAttributeValue("value"));
+                        row.add(auth.getAttributeValue("name"));
+                        body.add(row);
                     }
                     break;
                 }
@@ -245,7 +243,6 @@ public class ManagerDatabaseHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        List<List<String>> body = Arrays.asList(list, listBtn);
         result.put("colName", JSON.toJSONString(colName));
         result.put("tableBody", JSON.toJSONString(body));
         return result;

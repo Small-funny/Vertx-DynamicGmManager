@@ -23,9 +23,7 @@ public class TokenCheck implements Handler<RoutingContext> {
             log.info("Interceptor receive token: " + token);
 
             JWTAuth jwtAuth = JwtUtils.createJwt(routingContext);
-
             JsonObject config = new JsonObject().put("jwt", token);
-
             jwtAuth.authenticate(config, res -> {
                 if (!res.succeeded()) {
                     log.info("Token authenticate failed");

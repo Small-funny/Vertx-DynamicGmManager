@@ -166,9 +166,7 @@ public class VerifyCode {
 
         // 字体文件的十六进制字符串
         private String getFontByteStr() {
-
             try {
-
                 String fontByteStr = "";
                 File file = new File("src/main/java/resources/VerifyCodeFontByte");
                 FileInputStream inputStream = new FileInputStream(file);

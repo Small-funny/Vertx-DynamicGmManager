@@ -2,10 +2,12 @@ package Server.Resources;
 
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 路由错误处理
  */
+@Slf4j
 public class FailureResources {
 
     public void registerResources(Router router) {
@@ -14,7 +16,7 @@ public class FailureResources {
     }
 
     private void failure(RoutingContext routingContext) {
-        System.out.println("页面异常");
+        log.info("Page error 404");
         routingContext.reroute("/404");
     }
 

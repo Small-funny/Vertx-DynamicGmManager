@@ -33,10 +33,9 @@ public class ManagerResources {
     private void GmSystemServer(RoutingContext routingContext) {
 
         HashMap<String, String> data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
+        String operation = data.get("operation");
 
         log.info("Manager receive args：" + data);
-
-        String operation = data.get("operation");
 
         switch (operation) {
             case "deleteAuth":
@@ -101,8 +100,6 @@ public class ManagerResources {
                     String server = data.get("server");
                     HashMap<String, String> resultHashMap = ManagerDatabaseHelper.selectAuthTable(username, server);
                     String hashStr = JSON.toJSONString(resultHashMap);
-                    System.out.println("++++++++++++++++++++++++++++");
-                    System.out.println(resultHashMap);
                     future.complete(hashStr);
                 }, false, asyncResult -> {
                     executeResult(routingContext, asyncResult, "Select failed!", "table", asyncResult.result().toString());

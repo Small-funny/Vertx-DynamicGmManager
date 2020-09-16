@@ -44,9 +44,7 @@ public class XmlMapping {
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">")
                             .append(((Element) child).getAttribute("name").getValue())
                             .append("</label></div><div class=\"col-12 col-md-9\"><div class=\"form-check\">");
-
                 } else if ("table".equals(childName)) {
-
                     stringBuilder.append("<div class=\"row form-group\"><div class=\"table-responsive\">");
                 } else if ("return".equals(childName)) {
                     returnType = ((Element) child).getAttributeValue("type");
@@ -58,7 +56,6 @@ public class XmlMapping {
                             .append("</label></div><div class=\"col-12 col-md-9\">");
                 }
 
-
                 //添加标签头 checkbox 和radio 不用写属性 有特殊写法 clock也不写 date 也不写
                 if (!("checkbox".equals(childName) || "radio".equals(childName) || "time".equals(childName))) {
                     stringBuilder.append("<").append(childName);
@@ -66,7 +63,6 @@ public class XmlMapping {
                     for (Attribute attribute : ((Element) child).getAttributes()) {
                         stringBuilder.append(" ").append(attribute.getName()).append("=");
                         stringBuilder.append("\"").append(attribute.getValue()).append("\"");
-
                     }
                 }
                 ///////根据不同的元素添加特别的属性
@@ -98,7 +94,6 @@ public class XmlMapping {
                                 .append("\"").append(((Element) child).getAttribute("name"))
                                 .append(" class=\"form-check-input\">")
                                 .append(childElement.getValue()).append("</label></div>");
-
                     }
                 } else if ("time".equals(childName)) {
 
@@ -107,12 +102,10 @@ public class XmlMapping {
                             .append("\" id=\"TIMESTAMP\" class=\"form-control\" autocomplete=\"off\">");
                 }
 
-
                 //添加标签头完毕 进入递归 table不能进入
                 if (!"table".equals(childName)) {
                     stringBuilder.append(createElementString((Element) child, route));
                 }
-
 
                 //添加标签尾
                 //如果不是input就意味着是那种小标签 直接加尾部就行
@@ -126,21 +119,17 @@ public class XmlMapping {
 //                    } else if ("str".equals(returnType)) {
 //                        stringBuilder.append("<input type=\"hidden\" value=\"selectConfigBody\" name=\"operation\"/>");
 //                    }
-
                 } else if (!("input".equals(childName) || "form-check".equals(childName))) {
                     stringBuilder.append("</").append(childName).append(" >");
                 }
 
-
                 //这里加结束的div
                 if ("form".equals(childName)) {
-
                     stringBuilder.append("</form></div>");
 
                     if ("str".equals(returnType)) {
 
                     } else if ("table".equals(returnType)) {
-
 
                     }
                 } else if ("formcheck".equals(childName)) {
@@ -149,19 +138,14 @@ public class XmlMapping {
                     stringBuilder.append("</div>");
                     stringBuilder.append("</div>");
                 }
-
-
             }
-
         }
-
     }
 
     //获取页面的element
     public static Element getElement(String str) {
         return PAGE_ELEMENT.get(str);
     }
-
 
     public static String createAsideString(String token, String server) {
         // List<String> urlList = JdbcMysqlHelper.selectAuthority(token);
@@ -197,16 +181,13 @@ public class XmlMapping {
                         .append("')\" id=\"").append(element.getAttributeValue("url")).append("\">")
                         .append(element.getAttribute("name").getValue())
                         .append("</a></li>");
-
             }
             stringBuilder.append("</ul>");
             stringBuilder.append("</li>");
-
         }
         stringBuilder.append("</ul>");
         return stringBuilder.toString();
     }
-
 
     public static String createServerString(String selected) {
         StringBuilder stringBuilder = new StringBuilder();
@@ -237,7 +218,6 @@ public class XmlMapping {
         }
         stringBuilder.append("</select></div></div></div></div>");
 
-
         return stringBuilder.toString();
     }
 
@@ -248,7 +228,6 @@ public class XmlMapping {
             for (String s : list) {
                 stringBuilder.append("<option/>").append(s);
             }
-
             return stringBuilder.toString();
         } else {
 
@@ -268,8 +247,6 @@ public class XmlMapping {
                     for (String s : subTableBody) {
                         stringBuilder.append("<td>").append(s).append("</td>");
                     }
-
-
                     stringBuilder.append("</tr>");
                 }
                 stringBuilder.append("</tbody></table>").append("</div></div></div></form>");
@@ -300,7 +277,6 @@ public class XmlMapping {
             }
         }
 
-
         return stringBuilder.toString();
     }
 
@@ -310,7 +286,6 @@ public class XmlMapping {
         if (!pageRouter.equals(MAIN_PAGE_ROUTER)) {
             stringBuilder.append(createElementString(getElement(pageRouter), route));
         }
-
         stringBuilder.append("</div>")
                 .append("<div class=\"card\" style=\"width: auto\">");
         if (type != null) {
@@ -328,16 +303,5 @@ public class XmlMapping {
                 .append(" <div class=\"col-lg-3\" style=\"flex: 0 0 auto;margin-left:50px\">");
 
         return stringBuilder.toString();
-    }
-
-    public static void main(String[] args) throws Exception {
-        System.out.println("\"");
-
-        System.out.println(XmlMapping.createAsideString("eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTk3MjI0MjIsImV4cCI6MTU5OTcyNjAyMn0.Z7KGUnZyYg3T8J1UzgFXhZuuYmdZh4n1Dj0Uv6tPfcs", "sandbox"));
-        //System.out.println(xmlMapping.createAsideString("TOKEN","master"));
-        //System.out.println(xmlMapping.createPageUrlList());
-        //System.out.println(xmlMapping.createPageString("checkUserInfo"));
-        //System.out.println(xmlMapping.createPageString("basicInfoManage"));
-        //System.out.println(xmlMapping.createReturnString("table", "", true));
     }
 }
