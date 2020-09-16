@@ -2,7 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAxNTc3MzMsImV4cCI6MTYwMDE2MTMzM30.Yq31Qeek7CkbTFjM0WxWORQPl7XWhJRLkh_NpZECn2c" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAyMjI4NjksImV4cCI6MTYwMDIyNjQ2OX0.1WVgpeF_CGiFKwwvZ6aWB-ehNuq88R00bbhWpWZ_cCA" />
         <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="sandbox">
@@ -32,7 +32,7 @@
     <record>
         <column name="username" value="admin" />
         <column name="password" value="admin" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTc5ODE3ODEsImV4cCI6MTU5Nzk4NTM4MX0.-7oul23Dzl34ET5badpZrkoha0MXCvypq2jUJzNOOJs" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAxNjUyMTEsImV4cCI6MTYwMDE2ODgxMX0.xFMd_OMPR4Up8d9jnS3eqbxSyY2Z8LWcan4UDEE2TiY" />
         <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="sandbox">
@@ -60,6 +60,7 @@
             <auth1 name="server" value="sandbox">
                 <auth2 name="list" value="operationManage" />
                 <auth2 name="list" value="systemManage" />
+                <auth2 name="list" value="playerManage" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 name="list" value="playerManage" />
@@ -79,5 +80,18 @@
             <auth1 name="server" value="master" />
         </cloumn>
     </record>
+
+    <record>
+        <cloumn name="username" value="tim" />
+        <cloumn name="password" value="123" />
+        <cloumn name="token" value="token" />
+        <cloumn name="enable" value="0" />
+        <cloumn name="auth">
+            <auth1 name="server" value="sandbox" />
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
+    </record>
     
-<record><cloumn name="username" value="tim" /><cloumn name="password" value="123" /><cloumn name="token" value="token" /><cloumn name="enable" value="0" /><cloumn name="auth"><auth1 name="server" value="sandbox" /><auth1 name="server" value="test" /><auth1 name="server" value="master" /></cloumn></record></database>
+    
+</database>

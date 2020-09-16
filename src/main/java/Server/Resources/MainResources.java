@@ -87,9 +87,6 @@ public class MainResources extends AbstractVerticle {
         if (USER_MANAGE_PAGES.contains(page)) {
             ctx.response().end(
                     XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, null));
-        }else if (USER_AUTH_MANAGE_PAGES.contains(page)){
-            ctx.response().end(
-                    XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, null));
         }
         else {
             ctx.response().end("");

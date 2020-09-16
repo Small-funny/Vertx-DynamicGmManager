@@ -9,6 +9,7 @@ import Server.DatabaseHelper.ManagerDatabaseHelper;
 import Server.DatabaseHelper.VerifyDatabaseHelper;
 
 import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.databind.util.ObjectBuffer;
 import io.vertx.core.AsyncResult;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -34,7 +35,7 @@ public class ManagerResources {
         HashMap<String, String> data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
 
         log.info("Manager receive args：" + data);
-        
+
         String operation = data.get("operation");
 
         switch (operation) {
@@ -94,6 +95,19 @@ public class ManagerResources {
                     executeResult(routingContext, asyncResult, "Update failed!", "str", asyncResult.result().toString());
                 });
                 break;
+            case "selectAuthList":
+                routingContext.vertx().executeBlocking(future -> {
+                    String username = data.get("username");
+                    String server = data.get("server");
+                    HashMap<String, String> resultHashMap = ManagerDatabaseHelper.selectAuthTable(username, server);
+                    String hashStr = JSON.toJSONString(resultHashMap);
+                    System.out.println("++++++++++++++++++++++++++++");
+                    System.out.println(resultHashMap);
+                    future.complete(hashStr);
+                }, false, asyncResult -> {
+                    executeResult(routingContext, asyncResult, "Select failed!", "table", asyncResult.result().toString());
+                });
+                break;
             default:
                 break;
         }
@@ -108,14 +122,14 @@ public class ManagerResources {
      * @param type
      * @param resultData
      */
-    private void executeResult(RoutingContext routingContext, AsyncResult<Object> asyncResult, String info, String type, Object resultData) {
+    private void executeResult(RoutingContext routingContext, AsyncResult<Object> asyncResult, String info, String type, String resultData) {
         if (asyncResult.failed()) {
             routingContext.fail(asyncResult.cause());
             log.info(info);
             return;
         }
         if ("table".equals(type)) {
-			routingContext.response().end(XmlMapping.createReturnString("table", JSON.toJSONString(resultData), false, null));
+            routingContext.response().end(XmlMapping.createReturnString("table", resultData, false, null));
         } else if ("str".equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("str", JSON.toJSONString(resultData), false, null));
         }

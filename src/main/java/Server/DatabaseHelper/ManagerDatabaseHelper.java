@@ -218,11 +218,10 @@ public class ManagerDatabaseHelper {
      *
      * @param username
      * @param server
-     * @param type
      * @return
      */
-    public static HashMap<String, Object> selectAuthTable(String username, String server) {
-        HashMap<String, Object> result = new HashMap<>();
+    public static HashMap<String, String> selectAuthTable(String username, String server) {
+        HashMap<String, String> result = new HashMap<>();
         List<String> colName = Arrays.asList("list", "btn");
         List<String> list = new ArrayList<>();
         List<String> listBtn = new ArrayList<>();
@@ -247,8 +246,8 @@ public class ManagerDatabaseHelper {
             e.printStackTrace();
         }
         List<List<String>> body = Arrays.asList(list, listBtn);
-        result.put("colName", colName);
-        result.put("tableBody", body);
+        result.put("colName", JSON.toJSONString(colName));
+        result.put("tableBody", JSON.toJSONString(body));
         return result;
     }
 }

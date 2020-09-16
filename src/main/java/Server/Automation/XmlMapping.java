@@ -78,9 +78,9 @@ public class XmlMapping {
                 } else if ("input".equals(childName) && "file".equals(((Element) child).getAttribute("type").getValue())) {
                     stringBuilder.append("class=\"form-control-file\">");
                 } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type")) && "configManage".equals(((Element) child).getAttributeValue("id"))) {
-                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/forward')\" value=\"修改\">");
+                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/forward')\" ");
                 } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type")) && "userManage".equals(((Element) child).getAttributeValue("id"))) {
-                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/manager')\" value=\"修改\">");
+                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/manager')\" ");
                 } else if ("input".equals(childName) && "text".equals(((Element) child).getAttributeValue("type"))) {
                     stringBuilder.append("class=\"form-control\" from=\"select\">");
                 } else if ("input".equals(childName) || "select".equals(childName)) {
@@ -251,10 +251,7 @@ public class XmlMapping {
 
             return stringBuilder.toString();
         } else {
-            stringBuilder.append("<div class=\"card-body card-block\" style=\"width: auto\">")
-                    .append("<form id=\"updateForm\" class=\"form-horizontal\" style=\"width: auto\">")
-                    .append("<div class=\"row form-group\" style=\"width: auto\">")
-                    .append("<div class=\"col-12 col-md-9\">");
+
             if ("table".equals(type)) {
                 System.out.println("data:" + data);
                 HashMap<String, String> hashMap1 = JSON.parseObject(data, HashMap.class);
@@ -278,6 +275,10 @@ public class XmlMapping {
                 stringBuilder.append("</tbody></table>").append("</div></div></div></form>");
 
             } else if ("str".equals(type)) {
+                stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
+                        .append("<form id=\"updateForm\" class=\"form-horizontal\" style=\"width: auto\">")
+                        .append("<div class=\"row form-group\" style=\"width: auto\">")
+                        .append("<div class=\"col-12 col-md-9\">");
                 stringBuilder.append("<textarea id=\"text\" name=\"body\" rows=\"19\" placeholder=\"Cont.\" class=\"form-control\" style=\"height:700px\" from=\"return\">")
                         .append(data)
                         .append("</textarea></div></div>");
@@ -295,9 +296,10 @@ public class XmlMapping {
                                 .append("\" class=\"form-control\" from=\"return\">");
                     }
                 }
-                stringBuilder.append("</form>");
+                stringBuilder.append("</form></div>");
             }
         }
+
 
         return stringBuilder.toString();
     }

@@ -100,15 +100,15 @@
 <div id="right-panel" class="right-panel" style="width: 1500px;margin: 35px auto">
 
     <!-- Header-->
-<!--    <header id="header" class="header">-->
-<!--        <div class="top-left">-->
+    <!--    <header id="header" class="header">-->
+    <!--        <div class="top-left">-->
 
-<!--        </div>-->
-<!--        <div class="top-right">-->
+    <!--        </div>-->
+    <!--        <div class="top-right">-->
 
 
-<!--        </div>-->
-<!--    </header>&lt;!&ndash; /header &ndash;&gt;-->
+    <!--        </div>-->
+    <!--    </header>&lt;!&ndash; /header &ndash;&gt;-->
     <!-- Header-->
 
     <div class="content" style="margin: auto">
@@ -119,7 +119,7 @@
                     <div class="card" th:utext="${contentString}" id="pageContent">
 
                     </div>
-                    <div class="card" style="width: auto" th:utext="${returnString}" id="returnContent"></div>
+                    <div  th:utext="${returnString}" id="returnContent"></div>
                     <div th:utext="${userInfo}" id="userInfo"></div>
                 </div>
                 <div class="col-lg-3" style="flex: 0 0 auto;margin-left:50px" th:utext="${configsName}"
@@ -193,7 +193,7 @@
             console.log(key);
             console.log(value);
         })
-        
+
     })
 
     function logout() {
@@ -230,9 +230,9 @@
 
             data: JSON.stringify({
                 "URLS": server + page
-            }),success: function (data) {
+            }), success: function (data) {
                 $("#" + section).html(data)
-            },error: function () {
+            }, error: function () {
                 toastr.error("操作失败")
             }
         })
@@ -246,9 +246,9 @@
             data: JSON.stringify({
                 'page': page,
                 'arguments': arguments
-            }),success: function (data) {
+            }), success: function (data) {
                 $("#" + section).html(data)
-            },error: function () {
+            }, error: function () {
                 toastr.error("操作失败")
             }
         })
@@ -262,10 +262,10 @@
             data: JSON.stringify({
                 'page': page,
                 'arguments': arguments
-            }),success: function (data) {
+            }), success: function (data) {
                 toastr.success("操作成功")
                 $("#" + section).html(data)
-            },error: function () {
+            }, error: function () {
                 toastr.success("操作失败")
             }
         })
@@ -283,7 +283,7 @@
         console.log("server:" + server + page)
 
         refreshAjaxPost("/main/configsName", page, null, "configsName")
-        refreshAjaxPost("/main/userInfo", page,  null, "userInfo")
+        refreshAjaxPost("/main/userInfo", page, null, "userInfo")
 
         $("input[type='hidden']").each(function () {
             console.log($(this).attr("value"))
@@ -299,7 +299,7 @@
         })
         console.log(JSON.stringify(json))
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
-        refreshAjaxPost("/main/userInfo", pageName,  null, "userInfo")
+        refreshAjaxPost("/main/userInfo", pageName, null, "userInfo")
     }
 
     function updateReturn(urls) {
@@ -311,7 +311,7 @@
         console.log(JSON.stringify(json))
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
     }
-    
+
 </script>
 <!---->
 

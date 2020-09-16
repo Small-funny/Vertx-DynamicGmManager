@@ -17,15 +17,23 @@
             <page name="删除用户" url="deleteUser" authorization="deleteUser" type="userManage">
                 <form name="删除用户" id="deleteUser">
                     <input type="text" name="username" id="username"/>
-                    <input type="button" name="button" id="userManage">删除</input>
+                    <input type="button" name="button" id="userManage" value="删除"/>
                 </form>
             </page>
             <page name="删除权限" url="deleteAuth" authorization="deleteUser" type="userAuthManage">
-                <form name="删除用户权限"  id="deleteAuth">
+
+                <form name="删除用户权限" id="deleteAuth">
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="server" id="server"/>
                     <input type="text" name="auth" id="auth"/>
-                    <input type="button" name="删除" id="userManage"/>
+                    <input type="button" name="删除" id="userManage" value="删除"/>
+                </form>
+            </page>
+            <page name="查询权限" url="selectAuthList" authorization="selectAuthList" type="userAuthManage">
+                <form name="查询用户权限" id="selectAuthList">
+                    <input type="text" name="username" id="username"/>
+                    <input type="text" name="server" id="server"/>
+                    <input type="button" name="查询" id="userManage" value="查询"/>
                 </form>
             </page>
             <page name="修改用户状态" url="updateUserStatus" authorization="updateUserStatus" type="userManage">
@@ -40,7 +48,8 @@
                     <input type="text" name="password" id="password"/>
                     <input type="button" name="修改" id="userManage" value="修改"/>
                 </form>
-            </page>3
+            </page>
+            3
             <page name="添加权限" url="addAuth" authorization="addAuth" type="userAuthManage">
                 <form name="添加权限" id="addAuth">
                     <input type="text" name="username" id="username"/>
@@ -50,19 +59,11 @@
                 </form>
             </page>
         </pageType>
-        <pageType name="操作管理" authorization="operationManage" icon="archive">
-            <page name="订单查询" url="checkOrders" icon="calendar">
-                <form name="queryAsset" action="/forward">
-                    <input type="text" name="userId">0</input>
-                    <input type="text" name="days">0</input>
-                    <time name="time"/>
-                    <select name="sel">
-                        <option value="1">广州</option>
-                        <option value="2">深圳</option>
-                        <option value="3">山东</option>
-                        <option value="4">北京</option>
-                    </select>
-                    <input type="button" name="ttt">提交</input>
+        <pageType name="远程操作管理" authorization="operationManage" icon="archive">
+            <page name="表结构查询" url="checkTable" authorization="checkTable" icon="calendar">
+                <form name="表查询" id="selectTableData">
+                    <input type="text" name="tableName" id="tableName"/>
+                    <input type="button" name="查询" id="configManage" value="查询"/>
                 </form>
             </page>
         </pageType>
@@ -97,7 +98,7 @@
                     <input type="button" name="添加" id="configManage" value="添加"/>
                 </form>
             </page>
-            <page name="删除配置" url="deleteConfigs" authorization="deleteConfigs" >
+            <page name="删除配置" url="deleteConfigs" authorization="deleteConfigs">
                 <form name="删除配置" id="deleteConfigs">
                     <input type="text" name="name" id="name"/>
                     <input type="button" name="删除" id="configManage" value="删除"/>
