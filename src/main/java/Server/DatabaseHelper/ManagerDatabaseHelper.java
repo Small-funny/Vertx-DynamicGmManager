@@ -84,7 +84,7 @@ public class ManagerDatabaseHelper {
      */
     public static void addAuth(String username, String server, String auth, String type) {
         Element newAuth = new Element("auth2");
-        newAuth.setAttribute(DbConstants.DATA_NAME, type);
+        newAuth.setAttribute(DbConstants.DATA_TYPE, type);
         newAuth.setAttribute(DbConstants.DATA_VALUE, auth);
         Element rootData = DbConstants.loadDatabase();
         try {
@@ -198,7 +198,7 @@ public class ManagerDatabaseHelper {
                 Element serverElement = authElement.getChildren().get(DbConstants.DB_HEADER_SERVER.indexOf(server));
                 if (username.equals(unameElement.getAttributeValue(DbConstants.DATA_VALUE))) {
                     for (Element auth : serverElement.getChildren()) {
-                        if (type.equals(auth.getAttributeValue(DbConstants.DATA_NAME))) {
+                        if (type.equals(auth.getAttributeValue(DbConstants.DATA_TYPE))) {
                             result.add(auth.getAttributeValue(DbConstants.DATA_VALUE));
                         }
                     }
@@ -241,8 +241,8 @@ public class ManagerDatabaseHelper {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        result.put("colName", JSON.toJSONString(colName));
-        result.put("tableBody", JSON.toJSONString(body));
+        result.put(DbConstants.COLUMN_KEY, JSON.toJSONString(colName));
+        result.put(DbConstants.TABLE_BODY_KEY, JSON.toJSONString(body));
         return result;
     }
 }

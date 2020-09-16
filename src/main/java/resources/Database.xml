@@ -2,30 +2,30 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAyMjQ1MDMsImV4cCI6MTYwMDIyODEwM30.XOHDNRujb3iwI5zQF0fQuuH2MxHaY9zlfLz9sK2qgdU" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAyMzk1NjEsImV4cCI6MTYwMDI0MzE2MX0.Zy_DYCCN0hl3Ue-BctCOw1Czsl35dAJ81kMjrrNJPrg" />
         <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="沙箱">
-                <auth2 name="list" value="角色管理" />
-                <auth2 name="list" value="checkUserInfo" />
-                <auth2 name="list" value="远程操作管理" />
-                <auth2 name="list" value="游戏服务管理" />
-                <auth2 name="list" value="配置管理" />
-                <auth2 name="btn" value="配置查询" />
+                <auth2 type="list" value="角色管理" />
+                <auth2 type="list" value="checkUserInfo" />
+                <auth2 type="list" value="远程操作管理" />
+                <auth2 type="list" value="游戏服务管理" />
+                <auth2 type="list" value="配置管理" />
+                <auth2 type="btn" value="配置查询" />
             </auth1>
             <auth1 name="server" value="测试服">
-                <auth2 name="list" value="角色管理" />
-                <auth2 name="list" value="远程操作管理" />
-                <auth2 name="list" value="游戏服务管理" />
-                <auth2 name="list" value="配置管理" />
+                <auth2 type="list" value="角色管理" />
+                <auth2 type="list" value="远程操作管理" />
+                <auth2 type="list" value="游戏服务管理" />
+                <auth2 type="list" value="配置管理" />
             </auth1>
             <auth1 name="server" value="主服">
-                <auth2 name="list" value="角色管理" />
-                <auth2 name="list" value="checkUserInfo" />
-                <auth2 name="list" value="远程操作管理" />
-                <auth2 name="list" value="游戏服务管理" />
-                <auth2 name="list" value="配置管理" />
-                <auth2 name="list" value="配置查询" />
+                <auth2 type="list" value="角色管理" />
+                <auth2 type="list" value="checkUserInfo" />
+                <auth2 type="list" value="远程操作管理" />
+                <auth2 type="list" value="游戏服务管理" />
+                <auth2 type="list" value="配置管理" />
+                <auth2 type="list" value="配置查询" />
             </auth1>
         </column>
     </record>
@@ -36,18 +36,18 @@
         <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="沙箱">
-                <auth2 name="list" value="角色管理" />
-                <auth2 name="list" value="远程操作管理" />
-                <auth2 name="list" value="配置管理" />
+                <auth2 type="list" value="角色管理" />
+                <auth2 type="list" value="远程操作管理" />
+                <auth2 type="list" value="配置管理" />
             </auth1>
             <auth1 name="server" value="测试服">
-                <auth2 name="list" value="角色管理" />
-                <auth2 name="list" value="远程操作管理" />
-                <auth2 name="list" value="配置管理" />
+                <auth2 type="list" value="角色管理" />
+                <auth2 type="list" value="远程操作管理" />
+                <auth2 type="list" value="配置管理" />
             </auth1>
             <auth1 name="server" value="主服">
-                <auth2 name="list" value="角色管理" />
-                <auth2 name="list" value="配置管理" />
+                <auth2 type="list" value="角色管理" />
+                <auth2 type="list" value="配置管理" />
             </auth1>
         </column>
     </record>
@@ -58,30 +58,14 @@
         <column name="enable" value="1" />
         <column name="auth">
             <auth1 name="server" value="沙箱">
-                <auth2 name="list" value="远程操作管理" />
-                <auth2 name="list" value="配置管理" />
-                <auth2 name="list" value="角色管理" />
+                <auth2 type="list" value="远程操作管理" />
+                <auth2 type="list" value="配置管理" />
+                <auth2 type="list" value="角色管理" />
             </auth1>
             <auth1 name="server" value="测试服">
-                <auth2 name="list" value="角色管理" />
-                <auth2 name="list" value="远程操作管理" />
+                <auth2 type="list" value="角色管理" />
+                <auth2 type="list" value="远程操作管理" />
             </auth1>
         </column>
     </record>
-
-    
-
-    <record>
-        <cloumn name="username" value="tim" />
-        <cloumn name="password" value="123" />
-        <cloumn name="token" value="token" />
-        <cloumn name="enable" value="0" />
-        <cloumn name="auth">
-            <auth1 name="server" value="沙箱" />
-            <auth1 name="server" value="测试服" />
-            <auth1 name="server" value="主服" />
-        </cloumn>
-    </record>
-    
-    
 </database>

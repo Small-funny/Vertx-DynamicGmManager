@@ -9,7 +9,6 @@ import Server.DatabaseHelper.ManagerDatabaseHelper;
 import Server.DatabaseHelper.VerifyDatabaseHelper;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.databind.util.ObjectBuffer;
 import io.vertx.core.AsyncResult;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -20,6 +19,18 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 public class ManagerResources {
+    // 删除权限
+    private static final String OPERATION_DELETE_AUTH = "deleteAuth";
+    // 增加权限
+    private static final String OPERATION_ADD_AUTH = "addAuth";
+    // 删除用户
+    private static final String OPERATION_DELETE_USER = "deleteUser";
+    // 增加用户
+    private static final String OPERATION_ADD_USER = "addUser";
+    // 更新用户信息
+    private static final String OPERATION_UPDATE_USERINFO = "updateUserInfo";
+    // 查询权限列表
+    private static final String OPERATION_SELECT_AUTHLIST = "selectAuthList";
 
     public void registerResources(Router router) {
         router.route("/manager").handler(this::GmSystemServer);
@@ -30,15 +41,15 @@ public class ManagerResources {
      *
      * @param routingContext
      */
+    @SuppressWarnings("unchecked")
     private void GmSystemServer(RoutingContext routingContext) {
-
         HashMap<String, String> data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
         String operation = data.get("operation");
 
         log.info("Manager receive args：" + data);
 
         switch (operation) {
-            case "deleteAuth":
+            case OPERATION_DELETE_AUTH:
                 routingContext.vertx().executeBlocking(future -> {
                     String username = data.get("username");
                     String server = data.get("server");
@@ -49,7 +60,7 @@ public class ManagerResources {
                     executeResult(routingContext, asyncResult, "Delete failed!", "str", "");
                 });
                 break;
-            case "addAuth":
+            case OPERATION_ADD_AUTH:
                 routingContext.vertx().executeBlocking(future -> {
                     String username = data.get("username");
                     String server = data.get("server");
@@ -61,7 +72,7 @@ public class ManagerResources {
                     executeResult(routingContext, asyncResult, "Add failed!", "str", asyncResult.result().toString());
                 });
                 break;
-            case "deleteUser":
+            case OPERATION_DELETE_USER:
                 routingContext.vertx().executeBlocking(future -> {
                     String username = data.get("username");
                     ManagerDatabaseHelper.deleteUser(username);
@@ -70,7 +81,7 @@ public class ManagerResources {
                     executeResult(routingContext, asyncResult, "Delete failed!", "str", asyncResult.result().toString());
                 });
                 break;
-            case "addUser":
+            case OPERATION_ADD_USER:
                 routingContext.vertx().executeBlocking(future -> {
                     String username = data.get("username");
                     String password = data.get("password");
@@ -85,7 +96,7 @@ public class ManagerResources {
                     executeResult(routingContext, asyncResult, "Add failed!", "str", asyncResult.result().toString());
                 });
                 break;
-            case "updateUserInfo":
+            case OPERATION_UPDATE_USERINFO:
                 routingContext.vertx().executeBlocking(future -> {
                     String username = data.get("username");
                     String password = data.get("password");
@@ -95,7 +106,7 @@ public class ManagerResources {
                     executeResult(routingContext, asyncResult, "Update failed!", "str", asyncResult.result().toString());
                 });
                 break;
-            case "selectAuthList":
+            case OPERATION_SELECT_AUTHLIST:
                 routingContext.vertx().executeBlocking(future -> {
                     String username = data.get("username");
                     String server = data.get("server");

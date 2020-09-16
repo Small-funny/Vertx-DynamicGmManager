@@ -3,8 +3,10 @@ package Server.DatabaseHelper;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import java.io.FileOutputStream;
+import java.text.Normalizer.Form;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class DbConstants {
     public static final String DATA_VALUE = "value";
     // 数据类型
     public static final String DATA_TYPE = "type";
-    // 根用户
+    // 根用户名
     public static final String ROOT_USER = "root";
     // 构造表格属性列表的key
     public static final String COLUMN_KEY = "colName";
@@ -69,7 +71,10 @@ public class DbConstants {
      * @throws Exception
      */
     public static void saveXml(Element data) throws Exception {
-        XMLOutputter outPutter = new XMLOutputter();
+        Format format = Format.getCompactFormat();
+        format.setEncoding("utf-8");
+        format.setIndent("    ");
+        XMLOutputter outPutter = new XMLOutputter(format);
         outPutter.output(data, new FileOutputStream("src/main/java/resources/Database.xml"));
     }
 }
