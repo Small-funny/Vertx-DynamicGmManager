@@ -117,9 +117,8 @@
 
                 <div class="col-lg-6" style="flex: 0 0 auto;margin-left:150px">
                     <div class="card" th:utext="${contentString}" id="pageContent">
-
                     </div>
-                    <div  th:utext="${returnString}" id="returnContent"></div>
+                    <div th:utext="${returnString}" id="returnContent"></div>
                     <div th:utext="${userInfo}" id="userInfo"></div>
                 </div>
                 <div class="col-lg-3" style="flex: 0 0 auto;margin-left:50px" th:utext="${configsName}"
@@ -277,11 +276,11 @@
         $("#" + prepage).removeClass("active")
         $("#" + page).addClass("active")
         prepage = page;
-        console.log("server:"+server)
-        console.log("page:"+page)
+        console.log("server:" + server)
+        console.log("page:" + page)
         refreshAjaxGet(server, page, "pageContent")
-        console.log("server:"+server)
-        console.log("page:"+page)
+        console.log("server:" + server)
+        console.log("page:" + page)
         history.pushState(null, null, "/main" + "/" + server + "/" + page);
 
         refreshAjaxPost("/main/configsName", page, null, "configsName")
@@ -301,6 +300,14 @@
         })
         console.log(JSON.stringify(json))
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+        refreshAjaxPost("/main/userInfo", pageName, null, "userInfo")
+    }
+
+    function tableDelete(column) {
+        var subjson = {}
+        subjson["operation"] = "deleteUser"
+        subjson["username"] = column.parent().parent().find("td").get(0).innerHTML
+        refreshAjaxPostAlert("/manager", pageName, JSON.stringify(subjson), "returnContent")
         refreshAjaxPost("/main/userInfo", pageName, null, "userInfo")
     }
 

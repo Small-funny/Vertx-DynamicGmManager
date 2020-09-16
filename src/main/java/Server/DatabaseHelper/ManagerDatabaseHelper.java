@@ -5,6 +5,7 @@ import org.jdom2.Element;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import com.alibaba.fastjson.JSON;
 
 /**
@@ -23,7 +24,7 @@ public class ManagerDatabaseHelper {
         List<Element> data = DbConstants.loadDatabase().getChildren();
         List<String> colName = new ArrayList<>(DbConstants.TABLE_USER_HEADER);
         result.put(DbConstants.COLUMN_KEY, JSON.toJSONString(colName));
-        
+
         for (Element record : data) {
             List<String> rowData = new ArrayList<>();
             for (int index = 0; index <= DbConstants.INDEX_OF_PASSWORD; index++) {
@@ -32,7 +33,9 @@ public class ManagerDatabaseHelper {
                     rowData.add(row);
                 }
             }
-            tableBody.add(rowData);
+            if (rowData.size() != 0) {
+                tableBody.add(rowData);
+            }
         }
         result.put(DbConstants.TABLE_BODY_KEY, JSON.toJSONString(tableBody));
         return result;
@@ -66,7 +69,7 @@ public class ManagerDatabaseHelper {
                     }
                 }
             }
-        }   
+        }
     }
 
     /**
@@ -154,7 +157,7 @@ public class ManagerDatabaseHelper {
             Element unameElement = record.getChildren().get(DbConstants.INDEX_OF_USERNAME);
             if (username.equals(unameElement.getAttributeValue(DbConstants.DATA_VALUE))) {
                 record.getChildren().get(DbConstants.INDEX_OF_PASSWORD)
-                .setAttribute(DbConstants.DATA_VALUE, password);
+                        .setAttribute(DbConstants.DATA_VALUE, password);
                 break;
             }
         }
@@ -163,7 +166,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 按类型获取权限(列表)
-     * 
+     *
      * @param username
      * @param server
      * @param type

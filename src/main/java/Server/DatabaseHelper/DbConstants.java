@@ -22,7 +22,7 @@ public class DbConstants {
     // 数据库用户记录表头
     public static final List<String> DB_HEADER_RECORD = Arrays.asList("username", "password", "token", "enable", "auth"); 
     // 数据库服务器记录表头
-    public static final List<String> DB_HEADER_SERVER = Arrays.asList("sandbox", "test", "master"); 
+    public static final List<String> DB_HEADER_SERVER = Arrays.asList("沙箱", "测试服", "主服");
     // 用户名记录索引
     public static final int INDEX_OF_USERNAME = 0; 
     // 密码记录索引

@@ -220,7 +220,6 @@ public class XmlMapping {
         } else {
 
             if ("table".equals(type)) {
-                System.out.println("data:" + data);
                 HashMap<String, String> hashMap1 = JSON.parseObject(data, HashMap.class);
                 List<String> colName = JSON.parseObject(hashMap1.get("colName"), List.class);
                 List<List<String>> tableBody = JSON.parseObject(hashMap1.get("tableBody"), List.class);
@@ -228,13 +227,13 @@ public class XmlMapping {
                 for (String s : colName) {
                     stringBuilder.append("<th scope=\"col\">").append(s).append("</th>");
                 }
-
                 stringBuilder.append("</tr></thead><tbody>");
                 for (List<String> subTableBody : tableBody) {
                     stringBuilder.append("<tr>");
                     for (String s : subTableBody) {
                         stringBuilder.append("<td>").append(s).append("</td>");
                     }
+                    stringBuilder.append("<td><input type=\"button\" onclick=\"tableDelete($(this))\" value=\"删除\"/></td>");
                     stringBuilder.append("</tr>");
                 }
                 stringBuilder.append("</tbody></table>").append("</div></div></div></form>");
@@ -264,7 +263,6 @@ public class XmlMapping {
                 stringBuilder.append("</form></div>");
             }
         }
-
         return stringBuilder.toString();
     }
 
