@@ -21,6 +21,7 @@ import java.util.HashMap;
  * 数据转发接口
  */
 @Slf4j
+@SuppressWarnings("unchecked")
 public class ForwardResources {
 
     private WebClient webClient;
