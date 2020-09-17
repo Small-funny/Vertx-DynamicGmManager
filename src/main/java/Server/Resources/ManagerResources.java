@@ -57,7 +57,7 @@ public class ManagerResources {
                     ManagerDatabaseHelper.deleteAuth(username, server, auth);
                     future.complete("Delete succeed!");
                 }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Delete failed!", "str", "");
+                    executeResult(routingContext, asyncResult, "Delete failed!", "str", asyncResult.result().toString());
                 });
                 break;
             case OPERATION_ADD_AUTH:
@@ -78,7 +78,7 @@ public class ManagerResources {
                     ManagerDatabaseHelper.deleteUser(username);
                     future.complete("Delete succeed!");
                 }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Delete failed!", "str", asyncResult.result().toString());
+                    executeResult(routingContext, asyncResult, "Delete failed!", "return", asyncResult.result().toString());
                 });
                 break;
             case OPERATION_ADD_USER:
@@ -93,7 +93,7 @@ public class ManagerResources {
                     }
                     future.complete(response);
                 }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Add failed!", "str", asyncResult.result().toString());
+                    executeResult(routingContext, asyncResult, "Add failed!", "return", asyncResult.result().toString());
                 });
                 break;
             case OPERATION_UPDATE_USERINFO:
@@ -110,7 +110,9 @@ public class ManagerResources {
                 routingContext.vertx().executeBlocking(future -> {
                     String username = data.get("username");
                     String server = data.get("server");
+                    System.out.println("server:"+server);
                     HashMap<String, String> resultHashMap = ManagerDatabaseHelper.selectAuthTable(username, server);
+                    System.out.println(resultHashMap);
                     String hashStr = JSON.toJSONString(resultHashMap);
                     future.complete(hashStr);
                 }, false, asyncResult -> {
@@ -141,6 +143,8 @@ public class ManagerResources {
             routingContext.response().end(XmlMapping.createReturnString("table", resultData, false, null));
         } else if ("str".equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("str", JSON.toJSONString(resultData), false, null));
+        } else if ("return".equals(type)) {
+            routingContext.response().end(XmlMapping.createReturnString("return", resultData, false, null));
         }
     }
 }

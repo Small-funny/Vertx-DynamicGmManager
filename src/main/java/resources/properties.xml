@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <system>
+
     <servers>
         <server value="沙箱">沙箱</server>
         <server value="测试服">测试服</server>
@@ -48,6 +49,7 @@
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="server" id="server"/>
                     <input type="text" name="auth" id="auth"/>
+                    <input type="text" name="type" id="type"/>
                     <input type="button" name="添加" id="userManage" value="添加"/>
                 </form>
             </page>
@@ -83,8 +85,8 @@
                 </form>
             </page>
             <page name="添加配置"  authorization="添加配置" type="configManage">
-                <form name="添加配置" operation="addConfigs">
-                    <input type="text" name="name" id="name"/>
+                <form name="添加配置" operation="addConfigs" >
+                    <input type="text" name="name" id="name" from=""/>
                     <input type="text" name="body" id="body"/>
                     <input type="text" name="type" id="type"/>
                     <input type="button" name="添加" id="configManage" value="添加"/>

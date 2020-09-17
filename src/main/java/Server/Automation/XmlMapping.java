@@ -242,7 +242,7 @@ public class XmlMapping {
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
                         .append("<form id=\"updateForm\" class=\"form-horizontal\" style=\"width: auto\">")
                         .append("<div class=\"row form-group\" style=\"width: auto\">")
-                        .append("<div class=\"col-12 col-md-9\">");
+                        .append("<div class=\"col-12 \">");
                 stringBuilder.append("<textarea id=\"text\" name=\"body\" rows=\"19\" placeholder=\"Cont.\" class=\"form-control\" style=\"height:700px\" from=\"return\">")
                         .append(data)
                         .append("</textarea></div></div>");
@@ -261,6 +261,20 @@ public class XmlMapping {
                     }
                 }
                 stringBuilder.append("</form></div>");
+            } else if ("return".equals(type)) {
+                stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
+                        .append("<div class=\"row form-group\" style=\"width: auto\">")
+                        .append("<div class=\"col-12 \">");
+                stringBuilder.append("<p id=\"text\" name=\"body\" class=\"form-control\"  from=\"return\">")
+                        .append(data)
+                        .append("</p></div></div>");
+                if (auth) {
+                    stringBuilder
+                            .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")
+                            .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">");
+                }
+
+                stringBuilder.append("</div>");
             }
         }
         return stringBuilder.toString();

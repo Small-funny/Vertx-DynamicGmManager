@@ -213,7 +213,7 @@ public class ManagerDatabaseHelper {
                 for (Element auth : serverElement.getChildren()) {
                     List<String> row = new ArrayList<>();
                     row.add(auth.getAttributeValue(DATA_VALUE));
-                    row.add(auth.getAttributeValue(DATA_NAME));
+                    row.add(auth.getAttributeValue(DATA_TYPE));
                     body.add(row);
                 }
                 break;
