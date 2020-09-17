@@ -38,7 +38,6 @@ public class VerifyDatabaseHelper {
      * 用户是否存在
      * 
      * @param username
-     * @param password
      * @return
      */
     public static boolean isExisted(String username) {

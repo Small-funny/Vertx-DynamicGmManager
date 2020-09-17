@@ -23,6 +23,8 @@ import java.io.*;
 @Slf4j
 public class LoginResources extends AbstractVerticle {
 
+    private static final Long TOKEN_TIME_LIMIT = 36000L;
+
     public void registerResources(Router router) {
         router.get("/login").handler(this::login);
         router.get("/login/logout").handler(this::logout);
@@ -91,7 +93,7 @@ public class LoginResources extends AbstractVerticle {
         password = RSAUtil.decrypt(privateKey, password);
 
         if (VerifyDatabaseHelper.verifyIsExisted(username, password)) {
-            String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(3600L));
+            String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(TOKEN_TIME_LIMIT));
             routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(newToken);
 
             VerifyDatabaseHelper.updateToken(username, newToken);

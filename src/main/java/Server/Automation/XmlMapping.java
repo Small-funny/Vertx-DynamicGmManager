@@ -173,7 +173,6 @@ public class XmlMapping {
             stringBuilder.append("</li>");
         }
         stringBuilder.append("</ul>");
-        System.out.println("sout:" + stringBuilder.toString());
         return stringBuilder.toString();
     }
 
