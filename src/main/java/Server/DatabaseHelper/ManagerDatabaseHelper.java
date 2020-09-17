@@ -157,8 +157,7 @@ public class ManagerDatabaseHelper {
         for (Element record : rootData.getChildren()) {
             Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
             if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
-                record.getChildren().get(INDEX_OF_PASSWORD)
-                        .setAttribute(DATA_VALUE, password);
+                record.getChildren().get(INDEX_OF_PASSWORD).setAttribute(DATA_VALUE, password);
                 break;
             }
         }
