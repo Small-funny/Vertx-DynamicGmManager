@@ -55,12 +55,10 @@ public class DbConstants {
     public static final String AUTH_ROOT = "角色管理";
     // 根管理员(拥有所有权限，可根据需要分配多个)
     public static final String USER_ROOT = "root";
-    // 最高等级管理员
+    // 超级管理员
     public static final String LEVEL_SUPER = "sup";
-    // 第二等级管理员
-    public static final String LEVEL_MIDDLE = "mid";
-    // 最低等级管理员
-    public static final String LEVEL_LOW = "low";
+    // 管理员
+    public static final String LEVEL_ORDINARY = "ord";
 
     /**
      * 获取数据库根元素

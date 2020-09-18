@@ -165,6 +165,8 @@ public class ManagerDatabaseHelper {
                 column.setAttribute(DATA_NAME, DB_HEADER_RECORD.get(colIndex));
                 if (INDEX_OF_AUTH != colIndex) {
                     column.setAttribute(DATA_VALUE, userInfo.get(colIndex));
+                } else {
+                    column.setAttribute(DATA_VALUE, LEVEL_ORDINARY);
                 }
                 newUser.addContent(column);
             }

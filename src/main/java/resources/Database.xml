@@ -3,7 +3,7 @@
         <column name="username" value="root" />
         <column name="password" value="root" />
         <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA0MTAxMTgsImV4cCI6MTYwMDQxMzcxOH0.weVSlNLTe_BZcG0ELxNBtTm6uylLIpggCGL4TjL0FiI" />
-        <column name="auth">
+        <column name="auth" value="sup">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="playerManage" />
                 <auth2 type="list" value="checkUserInfo" />
@@ -33,7 +33,7 @@
         <column name="username" value="admin" />
         <column name="password" value="admin" />
         <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAxNjUyMTEsImV4cCI6MTYwMDE2ODgxMX0.xFMd_OMPR4Up8d9jnS3eqbxSyY2Z8LWcan4UDEE2TiY" />
-        <column name="auth">
+        <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="playerManage" />
                 <auth2 type="list" value="databaseManage" />
@@ -54,7 +54,7 @@
         <column name="username" value="username" />
         <column name="password" value="password" />
         <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTc5OTUwODYsImV4cCI6MTU5Nzk5ODY4Nn0.O452Izzbs6FAQvybQvCkcvOYUgX3XDU8ivu68B4I7qw" />
-        <column name="auth">
+        <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="configManage" />
@@ -70,7 +70,7 @@
         <cloumn name="username" value="user1" />
         <cloumn name="password" value="pass" />
         <cloumn name="token" value="token" />
-        <cloumn name="auth">
+        <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />
             <auth1 name="server" value="test" />
             <auth1 name="server" value="master" />
