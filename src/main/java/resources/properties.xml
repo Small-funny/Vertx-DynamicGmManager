@@ -2,26 +2,26 @@
 <system>
 
     <servers>
-        <server value="沙箱">沙箱</server>
-        <server value="测试服">测试服</server>
-        <server value="主服">主服</server>
+        <server name="沙箱" value="sandbox" url="localhost" port="8000"/>
+        <server name="测试服" value="test" url="localhost" port="8000"/>
+        <server name="主服" value="master"  url="localhost" port="8000"/>
     </servers>
     <pages>
-        <pageType name="角色管理" authorization="角色管理" icon="anchor">
-            <page name="添加用户"  authorization="添加用户" type="userManage">
+        <pageType name="角色管理" authorization="playerManage" icon="anchor">
+            <page name="添加用户"  authorization="addUser" type="userManage">
                 <form name="添加用户" operation="addUser">
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="password" id="password"/>
                     <input type="button" name="button" id="userManage" value="添加用户"/>
                 </form>
             </page>
-            <page name="删除用户"  authorization="删除用户" type="userManage">
+            <page name="删除用户"  authorization="deleteUser" type="userManage">
                 <form name="删除用户" operation="deleteUser">
                     <input type="text" name="username" id="username"/>
                     <input type="button" name="button" id="userManage" value="删除"/>
                 </form>
             </page>
-            <page name="删除权限"  authorization="删除权限" type="userAuthManage">
+            <page name="删除权限"  authorization="deleteAuth" type="userAuthManage">
                 <form name="删除用户权限" operation="deleteAuth">
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="server" id="server"/>
@@ -29,7 +29,7 @@
                     <input type="button" name="删除" id="userManage" value="删除"/>
                 </form>
             </page>
-            <page name="查询权限"  authorization="查询权限" type="userAuthManage">
+            <page name="查询权限"  authorization="selectAuthList" type="userAuthManage">
                 <form name="查询用户权限" operation="selectAuthList">
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="server" id="server"/>
@@ -37,7 +37,7 @@
                 </form>
             </page>
 
-            <page name="修改用户信息"  authorization="修改用户信息" type="userManage">
+            <page name="修改用户信息"  authorization="updateUserInfo" type="userManage">
                 <form name="修改用户信息" operation="updateUserInfo">
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="password" id="password"/>
@@ -54,17 +54,17 @@
                 </form>
             </page>
         </pageType>
-        <pageType name="远程操作管理" authorization="远程操作管理" icon="archive">
-            <page name="表结构查询" url="表结构查询" authorization="表结构查询" icon="calendar">
+        <pageType name="数据库管理" authorization="databaseManage" icon="archive">
+            <page name="表结构查询"  authorization="selectTableData" icon="calendar">
                 <form name="表查询" operation="selectTableData">
                     <input type="text" name="tableName" id="tableName"/>
                     <input type="button" name="查询" id="configManage" value="查询"/>
                 </form>
             </page>
         </pageType>
-        <pageType name="游戏服务管理" authorization="游戏服务管理" icon="calendar">
-            <page name="开关游戏服"  authorization="开关游戏服">
-                <form name="queryAsset" action="/forward">
+        <pageType name="游戏服务管理" authorization="gameManage" icon="calendar">
+            <page name="开关游戏服"  authorization="queryAsset">
+                <form name="queryAsset">
                     <input type="text" name="userId">0</input>
                     <input type="text" name="days">0</input>
                     <select name="sel">
@@ -77,14 +77,14 @@
                 </form>
             </page>
         </pageType>
-        <pageType name="配置管理" authorization="配置管理" icon="clock">
-            <page name="配置查询"  authorization="配置查询" type="configManage">
-                <form name="queryMatch" operation="selectConfigBody">
+        <pageType name="配置管理" authorization="configManage" icon="clock">
+            <page name="配置查询"  authorization="selectConfig" type="configManage">
+                <form name="配置查询" operation="selectConfigBody">
                     <input type="text" name="args" id="args"/>
                     <input type="button" name="button" value="查询" id="configManage">提交</input>
                 </form>
             </page>
-            <page name="添加配置"  authorization="添加配置" type="configManage">
+            <page name="添加配置"  authorization="addConfigs" type="configManage">
                 <form name="添加配置" operation="addConfigs" >
                     <input type="text" name="name" id="name" from=""/>
                     <input type="text" name="body" id="body"/>
@@ -92,14 +92,14 @@
                     <input type="button" name="添加" id="configManage" value="添加"/>
                 </form>
             </page>
-            <page name="删除配置"  authorization="删除配置">
+            <page name="删除配置"  authorization="deleteConfigs">
                 <form name="删除配置" operation="deleteConfigs">
                     <input type="text" name="name" id="name"/>
                     <input type="button" name="删除" id="configManage" value="删除"/>
                 </form>
             </page>
-            <page name="操作员管理"  authorization="操作员管理" type="configManage">
-                <form name="queryMatch" action="/forward">
+            <page name="操作员管理"  authorization="queryMatch" type="configManage">
+                <form name="queryMatch" >
                     <input type="text" name="userId"/>
                     <input type="text" name="days"/>
                     <input type="text" name="tour"/>

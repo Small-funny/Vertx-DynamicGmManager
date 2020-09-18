@@ -51,13 +51,9 @@ public class ForwardResources {
         data.remove("operation");
         Cache.setArgs(token, data);
 
-        if (url != null) {
-            server = url.split("/")[1];
-            page = url.split("/")[2];
-        } else {
-            server = null;
-            page = null;
-        }
+        server = url.split("/")[1];
+        page = url.split("/")[2];
+
         webClient.post(8000, "localhost", "/GmServer").sendJsonObject(jsonObject, ar -> {
             if (ar.succeeded()) {
                 JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());

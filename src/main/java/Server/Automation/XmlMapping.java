@@ -188,7 +188,7 @@ public class XmlMapping {
                 stringBuilder.append(" selected");
             }
             stringBuilder.append(">")
-                    .append(SERVER_ELEMENT.get(string).getValue())
+                    .append(SERVER_ELEMENT.get(string).getAttributeValue("name"))
                     .append("</option>");
         }
         return stringBuilder.toString();

@@ -10,7 +10,10 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
+import org.jdom2.Element;
+
 import java.util.List;
+
 import static Server.Automation.PageUtil.*;
 import static Server.DatabaseHelper.ManagerDatabaseHelper.allManagerInfo;
 
@@ -35,7 +38,7 @@ public class MainResources extends AbstractVerticle {
 
     /**
      * 登陆后的主页
-     * 
+     *
      * @param ctx
      */
     private void home(RoutingContext ctx) {
@@ -51,7 +54,7 @@ public class MainResources extends AbstractVerticle {
 
     /**
      * 选择服务器后的主页
-     * 
+     *
      * @param ctx
      */
     private void mainPage(RoutingContext ctx) {
@@ -69,7 +72,7 @@ public class MainResources extends AbstractVerticle {
 
     /**
      * 点击目录页面局部刷新
-     * 
+     *
      * @param ctx
      */
     private void subMain(RoutingContext ctx) {
@@ -78,13 +81,17 @@ public class MainResources extends AbstractVerticle {
         String serverRouter = ctx.request().getParam("serverRouter");
         //总路由
         String route = "/" + serverRouter + "/" + pageRouter;
+        Element element;
+        element = XmlMapping.getElement(ctx.request().getParam("pageRouter"));
         ctx.response().end(
-                XmlMapping.createElementString(XmlMapping.getElement(ctx.request().getParam("pageRouter")), route));
+
+                XmlMapping.createElementString(element, route)
+        );
     }
 
     /**
      * 预加载页面表格
-     * 
+     *
      * @param ctx
      */
     private void preloadingTable(RoutingContext ctx) {
@@ -92,15 +99,14 @@ public class MainResources extends AbstractVerticle {
         if (USER_MANAGE_PAGES.contains(page)) {
             ctx.response().end(
                     XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, null));
-        }
-        else {
+        } else {
             ctx.response().end("");
         }
     }
 
     /**
      * 预加载页面列表
-     * 
+     *
      * @param ctx
      */
     private void preloadingList(RoutingContext ctx) {
