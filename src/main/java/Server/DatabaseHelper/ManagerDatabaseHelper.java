@@ -3,11 +3,13 @@ package Server.DatabaseHelper;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 import static Server.DatabaseHelper.DbConstants.*;
+import static Server.DatabaseHelper.VerifyDatabaseHelper.*;
 
 /**
  * GM管理系统数据库基本操作帮助类
@@ -44,132 +46,170 @@ public class ManagerDatabaseHelper {
 
     /**
      * 删除用户权限
-     *
+     * 
      * @param username
      * @param server
      * @param auth
+     * @param type
+     * @return
      */
-    public static void deleteAuth(String username, String server, String auth) {
+    public static String deleteAuth(String username, String server, String auth, String type) {
         Element rootData = loadDatabase();
-        for (Element record : rootData.getChildren()) {
-            Element authElement = record.getChildren().get(INDEX_OF_AUTH);
-            Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
-            // 定位username
-            if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
-                for (Element serverAuth : authElement.getChildren()) {
-                    // 定位server
-                    if (server.equals(serverAuth.getAttributeValue(DATA_VALUE, server))) {
-                        for (Element auth2 : serverAuth.getChildren()) {
-                            // 定位要删除的auth
-                            if (auth.equals(auth2.getAttributeValue(DATA_VALUE))) {
-                                serverAuth.removeContent(auth2);
-                                saveXml(rootData);
-                                return;
+
+        if (!isExisted(username)) {
+            return "用户不存在，添加失败";
+        } else {
+            for (Element record : rootData.getChildren()) {
+                Element authElement = record.getChildren().get(INDEX_OF_AUTH);
+                Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
+                // 定位username
+                if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+                    for (Element serverAuth : authElement.getChildren()) {
+                        // 定位server
+                        if (server.equals(serverAuth.getAttributeValue(DATA_VALUE, server))) {
+                            for (Element auth2 : serverAuth.getChildren()) {
+                                // 定位要删除的auth
+                                if (auth.equals(auth2.getAttributeValue(DATA_VALUE)) && type.equals(auth2.getAttributeValue(DATA_TYPE))) {
+                                    serverAuth.removeContent(auth2);
+                                    saveXml(rootData);
+                                    return "删除成功";
+                                }
                             }
                         }
                     }
                 }
             }
         }
+        return "权限不存在，删除失败";
     }
 
     /**
      * 添加用户权限
-     *
+     * 
      * @param username
      * @param server
      * @param auth
+     * @param type
+     * @return
      */
-    public static void addAuth(String username, String server, String auth, String type) {
+    public static String addAuth(String username, String server, String auth, String type) {
         Element newAuth = new Element("auth2");
         newAuth.setAttribute(DATA_TYPE, type);
         newAuth.setAttribute(DATA_VALUE, auth);
         Element rootData = loadDatabase();
+        List<String> authList = selectAuthList(username, type, server);
+        List<String> rootAuthList = selectAuthList(USER_ROOT, type, server);
 
-        for (Element record : rootData.getChildren()) {
-            Element authElement = record.getChildren().get(INDEX_OF_AUTH);
-            Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
-            if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
-                for (Element serverAuth : authElement.getChildren()) {
-                    if (server.equals(serverAuth.getAttributeValue(DATA_VALUE))) {
-                        serverAuth.addContent(newAuth);
-                        saveXml(rootData);
-                        return;
+        if (!isExisted(username)) {
+            return "用户不存在，添加失败";
+        } else if (authList.contains(auth)) {
+            return "权限已存在，添加失败";
+        } else if (!rootAuthList.contains(auth)) {
+            return "权限输入错误，不可添加";
+        } else {
+            for (Element record : rootData.getChildren()) {
+                Element authElement = record.getChildren().get(INDEX_OF_AUTH);
+                Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
+                if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+                    for (Element serverAuth : authElement.getChildren()) {
+                        if (server.equals(serverAuth.getAttributeValue(DATA_VALUE))) {
+                            serverAuth.addContent(newAuth);
+                            saveXml(rootData);
+                            return "添加成功";
+                        }
                     }
                 }
             }
         }
+        return "服务器填写错误，添加失败";
     }
+
 
     /**
      * 删除用户所有相关记录
-     *
+     * 
      * @param username
+     * @return
      */
-    public static void deleteUser(String username) {
+    public static String deleteUser(String username) {
         Element rootData = loadDatabase();
-
-        for (Element record : rootData.getChildren()) {
-            Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
-            if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
-                rootData.removeContent(record);
+        if (!isExisted(username)) {
+            return "用户不存在，删除失败";
+        } else {
+            for (Element record : rootData.getChildren()) {
+                Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
+                if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+                    rootData.removeContent(record);
+                }
             }
+            saveXml(rootData);
+            return "删除成功";
         }
-        saveXml(rootData);
     }
 
     /**
      * 增加新用户
-     *
+     * 
      * @param userInfo
+     * @return
      */
-    public static void addUser(List<String> userInfo) {
+    public static String addUser(List<String> userInfo) {
         Element newUser = new Element("record");
         Element rootData = loadDatabase();
 
-        for (int colIndex = 0; colIndex < DB_HEADER_RECORD.size(); colIndex++) {
-            Element column = new Element("cloumn");
-            column.setAttribute(DATA_NAME, DB_HEADER_RECORD.get(colIndex));
-            if (INDEX_OF_AUTH != colIndex) {
-                column.setAttribute(DATA_VALUE, userInfo.get(colIndex));
+        if (isExisted(userInfo.get(INDEX_OF_USERNAME))) {
+            return "用户存在，添加失败";
+        } else {
+            for (int colIndex = 0; colIndex < DB_HEADER_RECORD.size(); colIndex++) {
+                Element column = new Element("cloumn");
+                column.setAttribute(DATA_NAME, DB_HEADER_RECORD.get(colIndex));
+                if (INDEX_OF_AUTH != colIndex) {
+                    column.setAttribute(DATA_VALUE, userInfo.get(colIndex));
+                }
+                newUser.addContent(column);
             }
-            newUser.addContent(column);
+            for (String server : DB_HEADER_SERVER) {
+                Element auth = new Element("auth1");
+                auth.setAttribute(DATA_NAME, "server");
+                auth.setAttribute(DATA_VALUE, server);
+                newUser.getChildren().get(INDEX_OF_AUTH).addContent(auth);
+            }
+            rootData.addContent(newUser);
+            saveXml(rootData);
+            return "添加成功";
         }
-        for (String server : DB_HEADER_SERVER) {
-            Element auth = new Element("auth1");
-            auth.setAttribute(DATA_NAME, "server");
-            auth.setAttribute(DATA_VALUE, server);
-            newUser.getChildren().get(INDEX_OF_AUTH).addContent(auth);
-        }
-        rootData.addContent(newUser);
-        saveXml(rootData);
     }
 
     /**
      * 修改用户密码
-     *
+     * 
      * @param username
      * @param password
+     * @return
      */
-    public static void updateUserInfo(String username, String password) {
+    public static String updateUserInfo(String username, String password) {
         Element rootData = loadDatabase();
-
-        for (Element record : rootData.getChildren()) {
-            Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
-            if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
-                record.getChildren().get(INDEX_OF_PASSWORD).setAttribute(DATA_VALUE, password);
-                break;
+        if (!isExisted(username)) {
+            return "用户不存在，修改失败";
+        } else {
+            for (Element record : rootData.getChildren()) {
+                Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
+                if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+                    record.getChildren().get(INDEX_OF_PASSWORD).setAttribute(DATA_VALUE, password);
+                    break;
+                }
             }
+            saveXml(rootData);
+            return "修改成功";
         }
-        saveXml(rootData);
     }
 
     /**
      * 按类型获取权限(列表)
-     *
+     * 
      * @param username
-     * @param server
      * @param type
+     * @param server
      * @return
      */
     public static List<String> selectAuthList(String username, String type, String server) {
@@ -194,29 +234,38 @@ public class ManagerDatabaseHelper {
 
     /**
      * 获取所有权限(表格)
-     *
+     * 
      * @param username
      * @param server
      * @return
      */
     public static HashMap<String, String> selectAuthTable(String username, String server) {
+
         HashMap<String, String> result = new HashMap<>();
         List<String> colName = TABLE_AUTH_HEADER;
         List<List<String>> body = new ArrayList<>();
         List<Element> data = loadDatabase().getChildren();
-
-        for (Element record : data) {
-            Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
-            Element authElement = record.getChildren().get(INDEX_OF_AUTH);
-            Element serverElement = authElement.getChildren().get(DB_HEADER_SERVER.indexOf(server));
-            if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
-                for (Element auth : serverElement.getChildren()) {
-                    List<String> row = new ArrayList<>();
-                    row.add(auth.getAttributeValue(DATA_VALUE));
-                    row.add(auth.getAttributeValue(DATA_TYPE));
-                    body.add(row);
+        List<String> authList = selectAuthList(username, TYPE_AUTH_CATALOG, server);
+        if (authList.contains(AUTH_ROOT)) {
+            List<String> row = Arrays.asList("权限不足无法查看", "无");
+            body.add(row);
+        } else if (!VerifyDatabaseHelper.isExisted(username)) {
+            List<String> row = Arrays.asList("无此用户", "无");
+            body.add(row);
+        } else {
+            for (Element record : data) {
+                Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
+                Element authElement = record.getChildren().get(INDEX_OF_AUTH);
+                Element serverElement = authElement.getChildren().get(DB_HEADER_SERVER.indexOf(server));
+                if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+                    for (Element auth : serverElement.getChildren()) {
+                        List<String> row = new ArrayList<>();
+                        row.add(auth.getAttributeValue(DATA_VALUE));
+                        row.add(auth.getAttributeValue(DATA_TYPE));
+                        body.add(row);
+                    }
+                    break;
                 }
-                break;
             }
         }
         result.put(COLUMN_KEY, JSON.toJSONString(colName));
