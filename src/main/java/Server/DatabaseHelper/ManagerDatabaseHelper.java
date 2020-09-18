@@ -32,7 +32,7 @@ public class ManagerDatabaseHelper {
             List<String> rowData = new ArrayList<>();
             for (int index = 0; index <= INDEX_OF_PASSWORD; index++) {
                 String row = record.getChildren().get(index).getAttributeValue(DATA_VALUE);
-                if (!ROOT_USER.equals(row)) {
+                if (!VerifyDatabaseHelper.isSupLevel(row)) {
                     rowData.add(row);
                 }
             }
