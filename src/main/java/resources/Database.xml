@@ -2,7 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAzMzk4MTIsImV4cCI6MTYwMDM0MzQxMn0.uoNKLPJfrfbKqUhHMgta2HUr5Hjfm6DRE1ZW8JYinuE" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA2NTQwNjAsImV4cCI6MTYwMDY1NzY2MH0.6dkgCMNSrQqjpVA2gbHx5914REFrsz7poRN3_0AqfuU" />
         <column name="auth">
             <auth1 name="server" value="沙箱">
                 <auth2 type="list" value="角色管理" />
@@ -67,16 +67,6 @@
         </column>
     </record>
     <record>
-        <cloumn name="username" value="user1" />
-        <cloumn name="password" value="pass" />
-        <cloumn name="token" value="token" />
-        <cloumn name="auth">
-            <auth1 name="server" value="沙箱" />
-            <auth1 name="server" value="测试服" />
-            <auth1 name="server" value="主服" />
-        </cloumn>
-    </record>
-    <record>
         <cloumn name="username" value="tim" />
         <cloumn name="password" value="password" />
         <cloumn name="token" value="token" />
@@ -87,8 +77,8 @@
         </cloumn>
     </record>
     <record>
-        <cloumn name="username" value="admin21" />
-        <cloumn name="password" value="123" />
+        <cloumn name="username" value="user1" />
+        <cloumn name="password" value="111" />
         <cloumn name="token" value="token" />
         <cloumn name="auth">
             <auth1 name="server" value="沙箱" />

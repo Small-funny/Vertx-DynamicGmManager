@@ -8,6 +8,7 @@ import io.vertx.core.Vertx;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
+
 import java.util.*;
 
 import static Server.Automation.PageUtil.*;
@@ -21,116 +22,205 @@ import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
 public class XmlMapping {
 
     /**
-     *根据xml生成页面的内容
+     * 根据xml生成页面的内容
+     *
      * @param element 页面的元素
-     * @param route 当前页面
+     * @param route   当前页面
      */
-    public static String createElementString(Element element, String route) {
-        StringBuilder stringBuilder = new StringBuilder();
-
-        Iterator it = element.getContent().iterator();
-        while (true) {
-            Content child;
-            do {
-                if (!it.hasNext()) {
-                    return stringBuilder.toString();
-                }
-                child = (Content) it.next();
-            } while (!(child instanceof Element) && !(child instanceof Text));
-            if (child instanceof Element) {
-                //当前标签外层所需要的标签和类
-                String childName = ((Element) child).getName();
-                if ("form".equals(childName)) {
-                    stringBuilder.append("<div class=\"card-header\"><strong>")
-                            .append(((Element) child).getAttribute("name").getValue())
-                            .append("</strong></div>")
-                            .append("<div class=\"card-body card-block\">");
-                } else if ("formcheck".equals(childName)) {
-                    stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">")
-                            .append(((Element) child).getAttribute("name").getValue())
-                            .append("</label></div><div class=\"col-12 col-md-9\"><div class=\"form-check\">");
-                } else if ("table".equals(childName)) {
-                    stringBuilder.append("<div class=\"row form-group\"><div class=\"table-responsive\">");
-                } //不是option这种小标签的通用类 input select会用
-                else if (!("option".equals(childName) || "checkbox".equals(childName) || "radio".equals(childName))) {
-                    stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">")
-                            .append(((Element) child).getAttribute("name").getValue())
-                            .append("</label></div><div class=\"col-12 col-md-9\">");
-                }
-                //添加标签头 checkbox 和radio 不用写属性 有特殊写法 clock也不写 date 也不写
-                if (!("checkbox".equals(childName) || "radio".equals(childName) || "time".equals(childName))) {
-                    stringBuilder.append("<").append(childName);
-                    //添加属性
-                    for (Attribute attribute : ((Element) child).getAttributes()) {
-                        stringBuilder.append(" ").append(attribute.getName()).append("=");
-                        stringBuilder.append("\"").append(attribute.getValue()).append("\"");
-                    }
-                }
-                ///////根据不同的元素添加特别的属性
-                //表单特殊属性 method="post" target="nm_iframe"  method="post"
-                if ("form".equals(childName)) {
-                    stringBuilder.append(" id=\"selectForm\" class=\"form-horizontal\" >");
-                    //输入框的特殊属性
-                } else if ("input".equals(childName) && "file".equals(((Element) child).getAttribute("type").getValue())) {
-                    stringBuilder.append("class=\"form-control-file\">");
-                } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type")) && "configManage".equals(((Element) child).getAttributeValue("id"))) {
-                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/forward')\" ");
-                } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type")) && "userManage".equals(((Element) child).getAttributeValue("id"))) {
-                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/manager')\" ");
-                } else if ("input".equals(childName) && "text".equals(((Element) child).getAttributeValue("type"))) {
-                    stringBuilder.append("class=\"form-control\" from=\"select\">");
-                } else if ("input".equals(childName) || "select".equals(childName)) {
-                    stringBuilder.append("class=\"form-control\">");
-                } else if ("option".equals(childName)) {
-                    stringBuilder.append(">");
-                    stringBuilder.append(child.getValue());
-                } else if ("formcheck".equals(childName)) {
-                    stringBuilder.append("class=\"form-check\">");
-                    for (Element childElement : ((Element) child).getChildren()) {
-                        stringBuilder.append("<div class=\"")
-                                .append(childElement.getName())
-                                .append("\"><label  class=\"form-check-label \"><input type=\"radio\" value=\"")
-                                .append(childElement.getAttribute("value").getValue())
-                                .append("\"").append(((Element) child).getAttribute("name"))
-                                .append(" class=\"form-check-input\">")
-                                .append(childElement.getValue()).append("</label></div>");
-                    }
-                } else if ("time".equals(childName)) {
-
-                    stringBuilder.append("<input type=\"text\" name=\"")
-                            .append(childName)
-                            .append("\" id=\"TIMESTAMP\" class=\"form-control\" autocomplete=\"off\">");
-                }
-                //添加标签头完毕 进入递归 table不能进入
-                if (!"table".equals(childName)) {
-                    stringBuilder.append(createElementString((Element) child, route));
-                }
-                //添加标签尾
-                //如果不是input就意味着是那种小标签 直接加尾部就行
-                if ("form".equals(childName)) {
-                    stringBuilder.append("<input type=\"hidden\" value=\"")
-                            .append(((Element) child).getAttributeValue("operation"))
-                            .append("\" name=\"operation\" from=\"select\"/>");
-                    stringBuilder.append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"select\"/>");
-                } else if (!("input".equals(childName) || "form-check".equals(childName))) {
-                    stringBuilder.append("</").append(childName).append(" >");
-                }
-                //这里加结束的div
-                if ("form".equals(childName)) {
-                    stringBuilder.append("</form></div>");
-
-
-                } else if ("formcheck".equals(childName)) {
-                    stringBuilder.append("</div></div></div>");
-                } else if (!"option".equals(childName) && !"checkbox".equals(childName) && !"radio".equals(childName)) {
-                    stringBuilder.append("</div>");
-                    stringBuilder.append("</div>");
-                }
-            }
-        }
-    }
+//    public static String createElementString(Element element, String route) {
+//        StringBuilder stringBuilder = new StringBuilder();
+//
+//        Iterator it = element.getContent().iterator();
+//        while (true) {
+//            Content child;
+//            do {
+//                if (!it.hasNext()) {
+//                    return stringBuilder.toString();
+//                }
+//                child = (Content) it.next();
+//            } while (!(child instanceof Element) && !(child instanceof Text));
+//            if (child instanceof Element) {
+//                //当前标签外层所需要的标签和类
+//                String childName = ((Element) child).getName();
+//                if ("form".equals(childName)) {
+//                    stringBuilder.append("<div class=\"card-header\"><strong>")
+//                            .append(((Element) child).getAttribute("name").getValue())
+//                            .append("</strong></div>")
+//                            .append("<div class=\"card-body card-block\">");
+//                } else if ("formcheck".equals(childName)) {
+//                    stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">")
+//                            .append(((Element) child).getAttribute("name").getValue())
+//                            .append("</label></div><div class=\"col-12 col-md-9\"><div class=\"form-check\">");
+//                } else if ("table".equals(childName)) {
+//                    stringBuilder.append("<div class=\"row form-group\"><div class=\"table-responsive\">");
+//                } //不是option这种小标签的通用类 input select会用
+//                else if (!("option".equals(childName) || "checkbox".equals(childName) || "radio".equals(childName))) {
+//                    stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" form-control-label\">")
+//                            .append(((Element) child).getAttribute("name").getValue())
+//                            .append("</label></div><div class=\"col-12 col-md-9\">");
+//                }
+//                //添加标签头 checkbox 和radio 不用写属性 有特殊写法 clock也不写 date 也不写
+//                if (!("checkbox".equals(childName) || "radio".equals(childName) || "time".equals(childName))) {
+//                    stringBuilder.append("<").append(childName);
+//                    //添加属性
+//                    for (Attribute attribute : ((Element) child).getAttributes()) {
+//                        stringBuilder.append(" ").append(attribute.getName()).append("=");
+//                        stringBuilder.append("\"").append(attribute.getValue()).append("\"");
+//                    }
+//                }
+//                ///////根据不同的元素添加特别的属性
+//                //表单特殊属性 method="post" target="nm_iframe"  method="post"
+//                if ("form".equals(childName)) {
+//                    stringBuilder.append("  class=\"form-horizontal\" >");
+//                    //输入框的特殊属性
+//                } else if ("input".equals(childName) && "file".equals(((Element) child).getAttribute("type").getValue())) {
+//                    stringBuilder.append("class=\"form-control-file\">");
+//                } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type")) && "configManage".equals(((Element) child).getAttributeValue("id"))) {
+//                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/forward')\" ");
+//                } else if ("input".equals(childName) && "button".equals(((Element) child).getAttributeValue("type")) && "userManage".equals(((Element) child).getAttributeValue("id"))) {
+//                    stringBuilder.append("class=\"form-control\" onclick=\"changeReturn('/manager')\" ");
+//                } else if ("input".equals(childName) && "text".equals(((Element) child).getAttributeValue("type"))) {
+//                    stringBuilder.append("class=\"form-control\" from=\"select\">");
+//                } else if ("input".equals(childName) || "select".equals(childName)) {
+//                    stringBuilder.append("class=\"form-control\">");
+//                } else if ("option".equals(childName)) {
+//                    stringBuilder.append(">");
+//                    stringBuilder.append(child.getValue());
+//                } else if ("formcheck".equals(childName)) {
+//                    stringBuilder.append("class=\"form-check\">");
+//                    for (Element childElement : ((Element) child).getChildren()) {
+//                        stringBuilder.append("<div class=\"")
+//                                .append(childElement.getName())
+//                                .append("\"><label  class=\"form-check-label \"><input type=\"radio\" value=\"")
+//                                .append(childElement.getAttribute("value").getValue())
+//                                .append("\"").append(((Element) child).getAttribute("name"))
+//                                .append(" class=\"form-check-input\">")
+//                                .append(childElement.getValue()).append("</label></div>");
+//                    }
+//                } else if ("time".equals(childName)) {
+//
+//                    stringBuilder.append("<input type=\"text\" name=\"")
+//                            .append(childName)
+//                            .append("\" id=\"TIMESTAMP\" class=\"form-control\" autocomplete=\"off\">");
+//                }
+//                //添加标签头完毕 进入递归 table不能进入
+//                if (!"table".equals(childName)) {
+//                    stringBuilder.append(createElementString((Element) child, route));
+//                }
+//                //添加标签尾
+//                //如果不是input就意味着是那种小标签 直接加尾部就行
+//                if ("form".equals(childName)) {
+//                    stringBuilder.append("<input type=\"hidden\" value=\"")
+//                            .append(((Element) child).getAttributeValue("operation"))
+//                            .append("\" name=\"operation\" from=\"select\"/>");
+//                    stringBuilder.append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"select\"/>");
+//                } else if (!("input".equals(childName) || "form-check".equals(childName))) {
+//                    stringBuilder.append("</").append(childName).append(" >");
+//                }
+//                //这里加结束的div
+//                if ("form".equals(childName)) {
+//                    stringBuilder.append("</form></div>");
+//
+//
+//                } else if ("formcheck".equals(childName)) {
+//                    stringBuilder.append("</div></div></div>");
+//                } else if (!"option".equals(childName) && !"checkbox".equals(childName) && !"radio".equals(childName)) {
+//                    stringBuilder.append("</div>");
+//                    stringBuilder.append("</div>");
+//                }
+//            }
+//        }
+//    }
 
     //获取页面的element
+    public static String createElementString(Element element, String route) {
+        String authorization = element.getAttributeValue("authorization");
+        String pageType = element.getAttributeValue("type");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Element child : element.getChildren()) {
+            stringBuilder.append(elementForm(child, route));
+        }
+
+        return stringBuilder.toString();
+    }
+
+    private static String elementForm(Element element, String route) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div class=\"card-header\"><strong>")
+                .append(element.getAttributeValue("name"))
+                .append("</strong></div>")
+                .append("<div class=\"card-body card-block\">")
+                .append("<form name=\"").append(element.getAttributeValue("name"))
+                .append("\" operation=\"").append(element.getAttributeValue("operation")).append("\" class=\"form-horizontal\">");
+        for (Element child : element.getChildren()) {
+            switch (child.getName()) {
+                case "input":
+                    stringBuilder.append(elementInput(child));
+                    break;
+                case "select":
+                    stringBuilder.append(elementSelect(child));
+                    break;
+                case "formcheck":
+                    stringBuilder.append(elementFormCheck(child));
+                    break;
+                default:
+                    break;
+
+            }
+        }
+
+        stringBuilder.append("<input type=\"hidden\" value=\"").append(element.getAttributeValue("operation")).append("\" name=\"operation\" from=\"select\"/>")
+                .append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"select\"/>")
+                .append("</form>")
+                .append("</div>");
+        return stringBuilder.toString();
+
+    }
+
+    private static String elementInput(Element element) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div class=\"row form-group\">")
+                .append("<div class=\"col col-md-3\">")
+                .append("<label  class=\" form-control-label\">")
+                .append(element.getAttributeValue("name"))
+                .append("</label>")
+                .append("</div>")
+                .append("<div class=\"col-12 col-md-9\">")
+                .append("<input class=\"form-control\" type=\"")
+                .append(element.getAttributeValue("type"))
+                .append("\" name=\"")
+                .append(element.getAttributeValue("name"))
+                .append("\" id=\"")
+                .append(element.getAttributeValue("id"))
+                .append("\" from=\"select\"");
+        if (element.getAttributeValue("type").equals("button")) {
+            stringBuilder.append("value=\"")
+                    .append(element.getAttributeValue("value"))
+                    .append("\" onclick=\"changeReturn('/");
+            if (element.getAttributeValue("id").equals("userManage")) {
+                stringBuilder.append("manager");
+            } else if (element.getAttributeValue("id").equals("configManage")) {
+                stringBuilder.append("forward");
+            }
+            stringBuilder.append("')\"");
+        }
+
+
+        stringBuilder.append("/>").append("</div>").append("</div>");
+
+        return stringBuilder.toString();
+    }
+
+    private static String elementSelect(Element element) {
+        StringBuilder stringBuilder = new StringBuilder();
+        return stringBuilder.toString();
+    }
+
+    private static String elementFormCheck(Element element) {
+        StringBuilder stringBuilder = new StringBuilder();
+        return stringBuilder.toString();
+    }
+
     public static Element getElement(String str) {
         return PAGE_ELEMENT.get(str);
     }
