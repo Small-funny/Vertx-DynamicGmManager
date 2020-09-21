@@ -2,7 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA2NjA1MjcsImV4cCI6MTYwMDY5NjUyN30.VDd1wYomVj9M_uMUd57TpqW5V2CUSJYk3vJgc2YBdCQ" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA2NjE4MTgsImV4cCI6MTYwMDY5NzgxOH0.HEMPiGNyBe7yrp2iSqiT1U0aVxpyr94Wtzfhm1R8_Uk" />
         <column name="auth" value="sup">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="playerManage" />
@@ -68,7 +68,7 @@
     </record>
     <record>
         <cloumn name="username" value="QWER" />
-        <cloumn name="password" value="12321" />
+        <cloumn name="password" value="880" />
         <cloumn name="token" value="token" />
         <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />
@@ -78,7 +78,7 @@
     </record>
     <record>
         <cloumn name="username" value="tim" />
-        <cloumn name="password" value="123" />
+        <cloumn name="password" value="234" />
         <cloumn name="token" value="token" />
         <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />

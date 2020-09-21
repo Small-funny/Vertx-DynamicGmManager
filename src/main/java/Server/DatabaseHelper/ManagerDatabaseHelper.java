@@ -63,7 +63,7 @@ public class ManagerDatabaseHelper {
                 Element authElement = record.getChildren().get(INDEX_OF_AUTH);
                 Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
                 // 定位username
-                if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+                if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
                     for (Element serverAuth : authElement.getChildren()) {
                         // 定位server
                         if (server.equals(serverAuth.getAttributeValue(DATA_VALUE, server))) {
@@ -110,7 +110,7 @@ public class ManagerDatabaseHelper {
             for (Element record : rootData.getChildren()) {
                 Element authElement = record.getChildren().get(INDEX_OF_AUTH);
                 Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
-                if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+                if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
                     for (Element serverAuth : authElement.getChildren()) {
                         if (server.equals(serverAuth.getAttributeValue(DATA_VALUE))) {
                             serverAuth.addContent(newAuth);
@@ -123,7 +123,6 @@ public class ManagerDatabaseHelper {
         }
         return "服务器填写错误，添加失败";
     }
-
 
     /**
      * 删除用户所有相关记录
@@ -138,7 +137,7 @@ public class ManagerDatabaseHelper {
         } else {
             for (Element record : rootData.getChildren()) {
                 Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
-                if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+                if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
                     rootData.removeContent(record);
                 }
             }
@@ -156,6 +155,7 @@ public class ManagerDatabaseHelper {
     public static String addUser(List<String> userInfo) {
         Element newUser = new Element("record");
         Element rootData = loadDatabase();
+//        userInfo.set(INDEX_OF_USERNAME, userInfo.get(INDEX_OF_USERNAME).toLowerCase());
 
         if (isExisted(userInfo.get(INDEX_OF_USERNAME))) {
             return "用户存在，添加失败";
@@ -196,7 +196,7 @@ public class ManagerDatabaseHelper {
         } else {
             for (Element record : rootData.getChildren()) {
                 Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
-                if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+                if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
                     record.getChildren().get(INDEX_OF_PASSWORD).setAttribute(DATA_VALUE, password);
                     break;
                 }
@@ -222,7 +222,7 @@ public class ManagerDatabaseHelper {
             Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
             Element authElement = record.getChildren().get(INDEX_OF_AUTH);
             Element serverElement = authElement.getChildren().get(DB_HEADER_SERVER.indexOf(server));
-            if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+            if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
                 for (Element auth : serverElement.getChildren()) {
                     if (type.equals(auth.getAttributeValue(DATA_TYPE))) {
                         result.add(auth.getAttributeValue(DATA_VALUE));
@@ -247,9 +247,8 @@ public class ManagerDatabaseHelper {
         List<String> colName = TABLE_AUTH_HEADER;
         List<List<String>> body = new ArrayList<>();
         List<Element> data = loadDatabase().getChildren();
-        List<String> authList = selectAuthList(username, TYPE_AUTH_CATALOG, server);
-        if (authList.contains(AUTH_ROOT)) {
-            List<String> row = Arrays.asList("权限不足无法查看", "无");
+        if (ROOT_USER.equals(username)) {
+            List<String> row = Arrays.asList("无法查看", "无");
             body.add(row);
         } else if (!VerifyDatabaseHelper.isExisted(username)) {
             List<String> row = Arrays.asList("无此用户", "无");
@@ -259,7 +258,7 @@ public class ManagerDatabaseHelper {
                 Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
                 Element authElement = record.getChildren().get(INDEX_OF_AUTH);
                 Element serverElement = authElement.getChildren().get(DB_HEADER_SERVER.indexOf(server));
-                if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+                if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
                     for (Element auth : serverElement.getChildren()) {
                         List<String> row = new ArrayList<>();
                         row.add(auth.getAttributeValue(DATA_VALUE));

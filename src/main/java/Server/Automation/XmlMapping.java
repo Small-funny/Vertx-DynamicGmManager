@@ -166,7 +166,6 @@ public class XmlMapping {
                     break;
                 default:
                     break;
-
             }
         }
 

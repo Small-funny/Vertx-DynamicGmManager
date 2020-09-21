@@ -95,7 +95,7 @@ public class VerifyDatabaseHelper {
         for (Element record : data) {
             Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
             Element tkElement = record.getChildren().get(INDEX_OF_TOKEN);
-            if (username.equals(unameElement.getAttributeValue(DATA_VALUE))) {
+            if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
                 tkElement.setAttribute(DATA_VALUE, token);
                 break;
             }
@@ -155,7 +155,7 @@ public class VerifyDatabaseHelper {
         for (Element record : data) {
             Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
             Element authElement = record.getChildren().get(INDEX_OF_AUTH);
-            if (username.equals(unameElement.getAttributeValue(DATA_VALUE))
+            if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())
                     && LEVEL_SUPER.equals(authElement.getAttributeValue(DATA_VALUE))) {
                 return true;
             }
