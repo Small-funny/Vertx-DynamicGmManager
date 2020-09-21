@@ -2,7 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA0MTAxMTgsImV4cCI6MTYwMDQxMzcxOH0.weVSlNLTe_BZcG0ELxNBtTm6uylLIpggCGL4TjL0FiI" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA2NjA1MjcsImV4cCI6MTYwMDY5NjUyN30.VDd1wYomVj9M_uMUd57TpqW5V2CUSJYk3vJgc2YBdCQ" />
         <column name="auth" value="sup">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="playerManage" />
@@ -67,8 +67,8 @@
         </column>
     </record>
     <record>
-        <cloumn name="username" value="user1" />
-        <cloumn name="password" value="pass" />
+        <cloumn name="username" value="QWER" />
+        <cloumn name="password" value="12321" />
         <cloumn name="token" value="token" />
         <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />
@@ -78,19 +78,29 @@
     </record>
     <record>
         <cloumn name="username" value="tim" />
-        <cloumn name="password" value="password" />
+        <cloumn name="password" value="123" />
         <cloumn name="token" value="token" />
-        <cloumn name="auth">
+        <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />
             <auth1 name="server" value="test" />
             <auth1 name="server" value="master" />
         </cloumn>
     </record>
     <record>
-        <cloumn name="username" value="admin21" />
+        <cloumn name="username" value="user1" />
         <cloumn name="password" value="123" />
         <cloumn name="token" value="token" />
-        <cloumn name="auth">
+        <cloumn name="auth" value="ord">
+            <auth1 name="server" value="sandbox" />
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
+    </record>
+    <record>
+        <cloumn name="username" value="user11123" />
+        <cloumn name="password" value="123" />
+        <cloumn name="token" value="token" />
+        <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />
             <auth1 name="server" value="test" />
             <auth1 name="server" value="master" />

@@ -146,6 +146,7 @@ public class XmlMapping {
 
     private static String elementForm(Element element, String route) {
         StringBuilder stringBuilder = new StringBuilder();
+        String from = element.getAttributeValue("from");
         stringBuilder.append("<div class=\"card-header\"><strong>")
                 .append(element.getAttributeValue("name"))
                 .append("</strong></div>")
@@ -155,7 +156,7 @@ public class XmlMapping {
         for (Element child : element.getChildren()) {
             switch (child.getName()) {
                 case "input":
-                    stringBuilder.append(elementInput(child));
+                    stringBuilder.append(elementInput(child, from));
                     break;
                 case "select":
                     stringBuilder.append(elementSelect(child));
@@ -169,15 +170,15 @@ public class XmlMapping {
             }
         }
 
-        stringBuilder.append("<input type=\"hidden\" value=\"").append(element.getAttributeValue("operation")).append("\" name=\"operation\" from=\"select\"/>")
-                .append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"select\"/>")
+        stringBuilder.append("<input type=\"hidden\" value=\"").append(element.getAttributeValue("operation")).append("\" name=\"operation\" from=\"").append(from).append("\"/>")
+                .append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"").append(from).append("\"/>")
                 .append("</form>")
                 .append("</div>");
         return stringBuilder.toString();
 
     }
 
-    private static String elementInput(Element element) {
+    private static String elementInput(Element element, String from) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
                 .append("<div class=\"col col-md-3\">")
@@ -192,7 +193,7 @@ public class XmlMapping {
                 .append(element.getAttributeValue("name"))
                 .append("\" id=\"")
                 .append(element.getAttributeValue("id"))
-                .append("\" from=\"select\"");
+                .append("\" from=\"").append(from).append("\"");
         if (element.getAttributeValue("type").equals("button")) {
             stringBuilder.append("value=\"")
                     .append(element.getAttributeValue("value"))
@@ -202,7 +203,7 @@ public class XmlMapping {
             } else if (element.getAttributeValue("id").equals("configManage")) {
                 stringBuilder.append("forward");
             }
-            stringBuilder.append("')\"");
+            stringBuilder.append("','").append(from).append("')\"");
         }
 
 
@@ -322,7 +323,7 @@ public class XmlMapping {
                     for (String s : subTableBody) {
                         stringBuilder.append("<td>").append(s).append("</td>");
                     }
-                    stringBuilder.append("<td><input type=\"button\" onclick=\"tableDelete($(this))\" value=\"删除\"/></td>");
+                    stringBuilder.append("<td><input type=\"button\" operation=\"delete \" onclick=\"tableDelete($(this))\" value=\"删除\"/></td>");
                     stringBuilder.append("</tr>");
                 }
                 stringBuilder.append("</tbody></table>").append("</div></div></div></form>");

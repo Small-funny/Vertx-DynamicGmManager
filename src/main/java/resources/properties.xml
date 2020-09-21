@@ -9,18 +9,18 @@
     <pages>
         <pageType name="角色管理" authorization="playerManage" icon="anchor">
             <page name="添加用户"  authorization="addUser" type="userManage">
-                <form name="添加用户" operation="addUser">
+                <form name="添加用户" operation="addUser" from="add">
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="password" id="password"/>
                     <input type="button" name="button" id="userManage" value="添加用户"/>
                 </form>
             </page>
-            <page name="删除用户"  authorization="deleteUser" type="userManage">
-                <form name="删除用户" operation="deleteUser">
-                    <input type="text" name="username" id="username"/>
-                    <input type="button" name="button" id="userManage" value="删除"/>
-                </form>
-            </page>
+<!--            <page name="删除用户"  authorization="deleteUser" type="userManage">-->
+<!--                <form name="删除用户" operation="deleteUser">-->
+<!--                    <input type="text" name="username" id="username"/>-->
+<!--                    <input type="button" name="button" id="userManage" value="删除"/>-->
+<!--                </form>-->
+<!--            </page>-->
             <page name="删除权限"  authorization="deleteAuth" type="userAuthManage">
                 <form name="删除用户权限" operation="deleteAuth">
                     <input type="text" name="username" id="username"/>

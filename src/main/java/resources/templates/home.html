@@ -173,6 +173,7 @@
     var prepage = null;
     var pageName = null
     var userName = null
+    var route
     $(function () {
         //再提交后把输入框的内容变成刚刚查找的配置名
         var selectName = [[${selectName}]]
@@ -279,7 +280,7 @@
         console.log("server:" + server)
         console.log("page:" + page)
         history.pushState(null, null, "/main" + "/" + server + "/" + page);
-
+        route="/"+server+"/"+page
         refreshAjaxPost("/main/configsName", page, null, "configsName")
         refreshAjaxPost("/main/userInfo", page, null, "userInfo")
 
@@ -290,9 +291,11 @@
         $("#returnContent").html(" ")
     }
 
-    function changeReturn(urls) {
+    function changeReturn(urls,fromValue) {
         var json = {};
-        $("input[from='select']").each(function () {
+        console.log(fromValue)
+        $("input[from='"+fromValue+"']").each(function () {
+            console.log(fromValue)
             json[$(this).attr('name')] = $(this).val()
         })
         console.log(JSON.stringify(json))
@@ -304,6 +307,7 @@
         var subjson = {}
         subjson["operation"] = "deleteUser"
         subjson["username"] = column.parent().parent().find("td").get(0).innerHTML
+        subjson["route"]=route
         refreshAjaxPostAlert("/manager", pageName, JSON.stringify(subjson), "returnContent")
         refreshAjaxPost("/main/userInfo", pageName, null, "userInfo")
     }
