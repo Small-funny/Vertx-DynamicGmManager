@@ -6,7 +6,6 @@ import java.util.List;
 
 import Server.Automation.XmlMapping;
 import Server.DatabaseHelper.ManagerDatabaseHelper;
-import Server.DatabaseHelper.VerifyDatabaseHelper;
 
 import com.alibaba.fastjson.JSON;
 import io.vertx.core.AsyncResult;
