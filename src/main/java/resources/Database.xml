@@ -2,7 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA3NDY3NDgsImV4cCI6MTYwMDc4Mjc0OH0.xH8MQilGpsHfPSSFt_GSHSKUsPOyLr0VP7VfoCtNJWg" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA3NTc3NjgsImV4cCI6MTYwMDc5Mzc2OH0.PN7b_QbDiX1Jj7RchseOh4fGlao7u19tYq1x8qx-95o" />
         <column name="auth" value="sup">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="checkUserInfo" />
@@ -67,6 +67,26 @@
     <record>
         <cloumn name="username" value="tim32" />
         <cloumn name="password" value="pass" />
+        <cloumn name="token" value="token" />
+        <cloumn name="auth" value="ord">
+            <auth1 name="server" value="sandbox" />
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
+    </record>
+    <record>
+        <cloumn name="username" value="usernam" />
+        <cloumn name="password" value="123" />
+        <cloumn name="token" value="token" />
+        <cloumn name="auth" value="ord">
+            <auth1 name="server" value="sandbox" />
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
+    </record>
+    <record>
+        <cloumn name="username" value="user1" />
+        <cloumn name="password" value="password" />
         <cloumn name="token" value="token" />
         <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />

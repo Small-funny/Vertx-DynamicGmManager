@@ -165,6 +165,12 @@ public class XmlMapping {
                 case "formcheck":
                     stringBuilder.append(elementFormCheck(child));
                     break;
+                case "file":
+                    stringBuilder.append(elementFile(child));
+                    break;
+                case "time":
+                    stringBuilder.append(elementTime(child));
+                    break;
                 default:
                     break;
             }
@@ -188,13 +194,18 @@ public class XmlMapping {
         stringBuilder.append("</label>")
                 .append("</div>")
                 .append("<div class=\"col-12 col-md-9\">")
-                .append("<input class=\"form-control\" type=\"")
+                .append("<input class=\"");
+        if ("file".equals(element.getAttributeValue("type"))) {
+            stringBuilder.append("form-control-file");
+        } else {
+            stringBuilder.append("form-control");
+        }
+        stringBuilder.append("\" type=\"")
                 .append(element.getAttributeValue("type"))
                 .append("\" name=\"")
                 .append(element.getAttributeValue("name"))
-                .append("\" id=\"")
-                .append(element.getAttributeValue("id"))
-                .append("\" from=\"").append(operation).append("\"");
+                .append("\"")
+                .append(" from=\"").append(operation).append("\"");
         if ("button".equals(element.getAttributeValue("type"))) {
             stringBuilder.append("value=\"")
                     .append(element.getAttributeValue("value"))
@@ -215,11 +226,89 @@ public class XmlMapping {
 
     private static String elementSelect(Element element) {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div class=\"row form-group\">")
+                .append("<div class=\"col col-md-3\">")
+                .append("<label  class=\" form-control-label\">");
+        stringBuilder.append(element.getAttributeValue("name") == null ? " " : element.getAttributeValue("name"));
+        stringBuilder.append("</label>")
+                .append("</div>")
+                .append("<div class=\"col-12 col-md-9\">")
+                .append("<select class=\"form-control\" name=\"")
+                .append(element.getAttributeValue("name")).append("\">");
+        for (Element child : element.getChildren()) {
+            stringBuilder.append("<option value=\"").append(child.getAttributeValue("value")).append("\">")
+                    .append(child.getValue())
+                    .append("</option>");
+        }
+        stringBuilder.append("</select>")
+                .append("</div>")
+                .append("</div>");
+
         return stringBuilder.toString();
     }
 
     private static String elementFormCheck(Element element) {
         StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div class=\"row form-group\">")
+                .append("<div class=\"col col-md-3\">")
+                .append("<label  class=\" form-control-label\">");
+        stringBuilder.append(element.getAttributeValue("name") == null ? " " : element.getAttributeValue("name"));
+        stringBuilder.append("</label>")
+                .append("</div>")
+                .append("<div class=\"col-12 col-md-9\">")
+                .append("<div class=\"form-check\">");
+        for (Element child : element.getChildren()) {
+            stringBuilder.append("<div class=\"").append(child.getName()).append("\">")
+                    .append("<label class=\"form-check-label \">")
+                    .append("<input type=\"").append(child.getName()).append("\" name=\"").append(element.getAttributeValue("name")).append("\" value=\"").append(child.getAttributeValue("value")).append("\" class=\"form-check-input\">")
+                    .append(child.getValue())
+                    .append("</label>")
+                    .append("</div>");
+        }
+        stringBuilder.append("</div>")
+                .append("</div>")
+                .append("</div>");
+
+        return stringBuilder.toString();
+    }
+
+    private static String elementFile(Element element) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div class=\"row form-group\">")
+                .append("<div class=\"col col-md-3\">")
+                .append("<label  class=\" form-control-label\">");
+        stringBuilder.append(element.getAttributeValue("name") == null ? " " : element.getAttributeValue("name"));
+        stringBuilder.append("</label>")
+                .append("</div>")
+                .append("<div class=\"col-12 col-md-9\">")
+                .append("<input type=\"file\" name=\"").append(element.getAttributeValue("name")).append("\" id=\"11122333\" class=\"form-file\">")
+                .append("</div>")
+                .append("</div>");
+        return stringBuilder.toString();
+    }
+
+    private static String elementTime(Element element) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div class=\"row form-group\">")
+                .append("<div class=\"col col-md-3\">")
+                .append("<label  class=\" form-control-label\">");
+        stringBuilder.append(element.getAttributeValue("name") == null ? " " : element.getAttributeValue("name"));
+        stringBuilder.append("</label>")
+                .append("</div>")
+                .append("<div class=\"col-12 col-md-9\">")
+                .append("<input type=\"text\" name=\"")
+                .append(element.getAttributeValue("name"))
+                .append("\" id=\"timestamp\" class=\"form-control\" autocomplete=\"off\">")
+                .append("<script>\n" +
+                        "    lay('#version').html('-v' + laydate.v);\n" +
+                        "    laydate.render({\n" +
+                        "        elem: '#timestamp'\n" +
+                        "        , type: 'datetime'\n" +
+                        "\n" +
+                        "    });\n" +
+                        "</script>")
+                .append("</div>")
+                .append("</div>");
         return stringBuilder.toString();
     }
 
@@ -269,7 +358,7 @@ public class XmlMapping {
         }
         if (VerifyDatabaseHelper.isSupLevel(VerifyDatabaseHelper.tokenToUsername(token))) {
             stringBuilder.append("<li><a href=\"playerManage\"><i class=\"nav-link-icon\" data-feather=\"anchor\"></i>角色管理</a><ul>");
-            for (Element element :TYPE_ELEMENT.get("playerManage").getChildren()) {
+            for (Element element : TYPE_ELEMENT.get("playerManage").getChildren()) {
                 stringBuilder.append("<li id =\" ")
                         .append(element.getAttributeValue("name"))
                         .append("\"><a href=\"#\" onclick=\"changeAside('")
@@ -411,28 +500,7 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public static String createPageString(String route, String type, String data, String pageRouter, List subAuthList, RoutingContext ctx, Vertx vertx) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<div class=\"card\">");
-        if (!pageRouter.equals(MAIN_PAGE_ROUTER)) {
-            stringBuilder.append(createElementString(getElement(pageRouter), route));
-        }
-        stringBuilder.append("</div>")
-                .append("<div class=\"card\" style=\"width: auto\">");
-        if (type != null) {
-            if (!type.equals(TYPE_LIST)) {
-                stringBuilder.append(createReturnString(type, data, subAuthList.contains(pageRouter), Cache.getArgs(JwtUtils.findToken(ctx))));
-            }
-        }
-        stringBuilder.append("</div>")
-                .append("<div>");
-        if (USER_MANAGE_PAGES.contains(pageRouter)) {
-            stringBuilder.append(createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, null));
-        }
-        stringBuilder.append("</div>")
-                .append("</div>")
-                .append(" <div class=\"col-lg-3\" style=\"flex: 0 0 auto;margin-left:50px\">");
-
-        return stringBuilder.toString();
+    public static void main(String[] args) {
+        System.out.println(createElementString(PAGE_ELEMENT.get("queryAsset"), "route"));
     }
 }

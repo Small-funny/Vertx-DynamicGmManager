@@ -99,18 +99,6 @@
 
 <div id="right-panel" class="right-panel" style="width: 1500px;margin: 35px auto">
 
-    <!-- Header-->
-    <!--    <header id="header" class="header">-->
-    <!--        <div class="top-left">-->
-
-    <!--        </div>-->
-    <!--        <div class="top-right">-->
-
-
-    <!--        </div>-->
-    <!--    </header>&lt;!&ndash; /header &ndash;&gt;-->
-    <!-- Header-->
-
     <div class="content" style="margin: auto">
         <div class="animated fadeIn">
             <div class="row">
@@ -155,20 +143,13 @@
 
 <script src="/webroot/assets/js/main.js"></script>
 <script src="/webroot/vendors/bundle.js"></script>
-<script src="/vendors/clockpicker/bootstrap-clockpicker.min.js"></script>
+
 <script type="text/javascript" src="/webroot/vendors/datepicker/daterangepicker.js"></script>
 
 <script src="/webroot/laydate/laydate.js"></script>
-<script>
-    lay('#version').html('-v' + laydate.v);
 
-    //执行一个laydate实例
-    laydate.render({
-        elem: '#TIMESTAMP' //指定元素
-        , type: 'datetime'
 
-    });
-</script>
+
 <script type="text/javascript" th:inline="javascript">
     var flag
     var prepage = null;
@@ -177,16 +158,17 @@
     var route
     $(function () {
         //再提交后把输入框的内容变成刚刚查找的配置名
-        var selectName = [[${selectName}]]
-        toastr.success("登陆成功")
-        var argsName = [[${args}]];
-        var subArgsName = argsName["map"];
-        $.each(subArgsName, function (key, value) {
-            if (document.getElementById(key) !== null) {
-                document.getElementById(key).value = value;
-            }
-        })
 
+        toastr.success("登陆成功")
+
+        lay('#version').html('-v' + laydate.v);
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#timestamp' //指定元素
+            , type: 'datetime'
+
+        });
     })
 
     function logout() {
@@ -194,18 +176,6 @@
         window.location.href = "/login";
     }
 
-    $('#Clock').clockpicker()
-        .find('input').change(function () {
-    });
-    $(document).ready(function () {
-        $('#Date').daterangepicker({
-            singleDatePicker: true
-        })
-    })
-
-    function configClick(config) {
-        var clickItem = config;
-    }
 
     function submitForm() {
         var server = $("#selServer").val();
@@ -270,12 +240,12 @@
         $("#" + page).addClass("active")
         prepage = page;
         refreshAjaxGet(server, page, "pageContent")
-        var json={}
-        console.log(server+page)
+        var json = {}
+        console.log(server + page)
         history.pushState(null, null, "/main" + "/" + server + "/" + page);
         route = "/" + server + "/" + page
-        json["route"]=route
-        console.log("route"+route)
+        json["route"] = route
+        console.log("route" + route)
         console.log(json)
         refreshAjaxPost("/main/configsName", page, null, "configsName")
         refreshAjaxPost("/main/userInfo", page, JSON.stringify(json), "userInfo")
@@ -284,6 +254,8 @@
             $(this).attr({from: "return"})
         })
         $("#returnContent").html(" ")
+
+
     }
 
     function changeReturn(urls, fromValue) {
