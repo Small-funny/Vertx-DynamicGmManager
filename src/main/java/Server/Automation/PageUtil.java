@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PageUtil {
     public static final String MAIN_PAGE_ROUTER = "0";
@@ -30,7 +31,7 @@ public class PageUtil {
         }
         List<Element> typeList = root.getChild("pages").getChildren();
         for (Element typeE : typeList) {
-            TYPE_ELEMENT.put(typeE.getAttributeValue("name"), typeE);
+            TYPE_ELEMENT.put(typeE.getAttributeValue("authorization"), typeE);
             List<Element> pageList = typeE.getChildren();
             for (Element pageE : pageList) {
                 PAGE_ELEMENT.put(pageE.getAttributeValue("authorization"), pageE);
@@ -38,8 +39,8 @@ public class PageUtil {
                     USER_MANAGE_PAGES.add(pageE.getAttributeValue("authorization"));
                 } else if ("configManage".equals(pageE.getAttributeValue("type"))) {
                     CONFIG_MANAGE_PAGES.add(pageE.getAttributeValue("authorization"));
-                }else if ("userAuthMange".equals(pageE.getAttributeValue("authorization"))){
-                    USER_AUTH_MANAGE_PAGES.equals(pageE.getAttributeValue("authorization"));
+                } else if ("userAuthManage".equals(pageE.getAttributeValue("type"))) {
+                    USER_AUTH_MANAGE_PAGES.add(pageE.getAttributeValue("authorization"));
                 }
             }
         }
@@ -47,5 +48,28 @@ public class PageUtil {
         for (Element element : serverList) {
             SERVER_ELEMENT.put(element.getAttributeValue("value"), element);
         }
+    }
+
+    public static String enAuth2zh(String enAuth) {
+        if (PAGE_ELEMENT.containsKey(enAuth)) {
+            return PAGE_ELEMENT.get(enAuth).getAttributeValue("name");
+        } else if (TYPE_ELEMENT.containsKey(enAuth)) {
+            return TYPE_ELEMENT.get(enAuth).getAttributeValue("name");
+        }
+        return null;
+    }
+
+    public static String zhAuth2en(String zhAuth) {
+        for (Map.Entry<String, Element> entry : PAGE_ELEMENT.entrySet()) {
+            if (entry.getValue().getAttributeValue("name").equals(zhAuth)) {
+                return entry.getKey();
+            }
+        }
+        for (Map.Entry<String, Element> entry : TYPE_ELEMENT.entrySet()) {
+            if (entry.getValue().getAttributeValue("name").equals(zhAuth)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
 }

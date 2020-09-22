@@ -13,6 +13,8 @@ import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 
+import static Server.Automation.PageUtil.*;
+
 /**
  * 管理员相关操作接口
  */
@@ -30,6 +32,7 @@ public class ManagerResources {
     private static final String OPERATION_UPDATE_USERINFO = "updateUserInfo";
     // 查询权限列表
     private static final String OPERATION_SELECT_AUTHLIST = "selectAuthList";
+    private HashMap<String, String> data;
 
     public void registerResources(Router router) {
         router.route("/manager").handler(this::GmSystemServer);
@@ -42,17 +45,17 @@ public class ManagerResources {
      */
     @SuppressWarnings("unchecked")
     private void GmSystemServer(RoutingContext routingContext) {
-        HashMap<String, String> data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
+        data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
         String operation = data.get("operation");
         String username = data.get("username");
         String server = data.get("route").split("/")[1];
-
+        String page = data.get("route").split("/")[0];
         log.info("Manager receive args：" + data);
 
         switch (operation) {
             case OPERATION_DELETE_AUTH:
                 routingContext.vertx().executeBlocking(future -> {
-                    String auth = data.get("auth");
+                    String auth = zhAuth2en(data.get("auth"));
                     String type = data.get("type");
                     future.complete(ManagerDatabaseHelper.deleteAuth(username, server, auth, type));
                 }, false, asyncResult -> {
@@ -122,9 +125,10 @@ public class ManagerResources {
             return;
         }
         if ("table".equals(type)) {
-            routingContext.response().end(XmlMapping.createReturnString("table", resultData, false, null));
+
+            routingContext.response().end(XmlMapping.createReturnString("table", resultData, false, data));
         } else if ("str".equals(type)) {
-            routingContext.response().end(XmlMapping.createReturnString("str", JSON.toJSONString(resultData), false, null));
+            routingContext.response().end(XmlMapping.createReturnString("str", JSON.toJSONString(resultData), false, data));
         } else if ("return".equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("return", resultData, false, null));
         }

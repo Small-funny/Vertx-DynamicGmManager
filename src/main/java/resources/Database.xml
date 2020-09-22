@@ -2,10 +2,9 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA2NjE4MTgsImV4cCI6MTYwMDY5NzgxOH0.HEMPiGNyBe7yrp2iSqiT1U0aVxpyr94Wtzfhm1R8_Uk" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA3NDY3NDgsImV4cCI6MTYwMDc4Mjc0OH0.xH8MQilGpsHfPSSFt_GSHSKUsPOyLr0VP7VfoCtNJWg" />
         <column name="auth" value="sup">
             <auth1 name="server" value="sandbox">
-                <auth2 type="list" value="playerManage" />
                 <auth2 type="list" value="checkUserInfo" />
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
@@ -13,14 +12,12 @@
                 <auth2 type="btn" value="selectConfig" />
             </auth1>
             <auth1 name="server" value="test">
-                <auth2 type="list" value="playerManage" />
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
                 <auth2 type="btn" value="selectConfig" />
             </auth1>
             <auth1 name="server" value="master">
-                <auth2 type="list" value="playerManage" />
                 <auth2 type="list" value="checkUserInfo" />
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
@@ -35,17 +32,13 @@
         <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAxNjUyMTEsImV4cCI6MTYwMDE2ODgxMX0.xFMd_OMPR4Up8d9jnS3eqbxSyY2Z8LWcan4UDEE2TiY" />
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
-                <auth2 type="list" value="playerManage" />
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="configManage" />
             </auth1>
             <auth1 name="server" value="test">
-                <auth2 type="list" value="playerManage" />
-                <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="configManage" />
             </auth1>
             <auth1 name="server" value="master">
-                <auth2 type="list" value="playerManage" />
                 <auth2 type="list" value="configManage" />
             </auth1>
         </column>
@@ -53,32 +46,17 @@
     <record>
         <column name="username" value="username" />
         <column name="password" value="password" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE1OTc5OTUwODYsImV4cCI6MTU5Nzk5ODY4Nn0.O452Izzbs6FAQvybQvCkcvOYUgX3XDU8ivu68B4I7qw" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA2NzU2MzQsImV4cCI6MTYwMDcxMTYzNH0.mxswkEQ8zB9ubv-ZuRAdpKigLk44_QHOvKO9W0IdCVo" />
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
-                <auth2 type="list" value="configManage" />
-                <auth2 type="list" value="playerManage" />
             </auth1>
-            <auth1 name="server" value="test">
-                <auth2 type="list" value="playerManage" />
-                <auth2 type="list" value="databaseManage" />
-            </auth1>
+            <auth1 name="server" value="test" />
         </column>
     </record>
     <record>
-        <cloumn name="username" value="QWER" />
-        <cloumn name="password" value="880" />
-        <cloumn name="token" value="token" />
-        <cloumn name="auth" value="ord">
-            <auth1 name="server" value="sandbox" />
-            <auth1 name="server" value="test" />
-            <auth1 name="server" value="master" />
-        </cloumn>
-    </record>
-    <record>
         <cloumn name="username" value="tim" />
-        <cloumn name="password" value="234" />
+        <cloumn name="password" value="pass" />
         <cloumn name="token" value="token" />
         <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />
@@ -87,18 +65,8 @@
         </cloumn>
     </record>
     <record>
-        <cloumn name="username" value="user1" />
-        <cloumn name="password" value="123" />
-        <cloumn name="token" value="token" />
-        <cloumn name="auth" value="ord">
-            <auth1 name="server" value="sandbox" />
-            <auth1 name="server" value="test" />
-            <auth1 name="server" value="master" />
-        </cloumn>
-    </record>
-    <record>
-        <cloumn name="username" value="user11123" />
-        <cloumn name="password" value="123" />
+        <cloumn name="username" value="tim32" />
+        <cloumn name="password" value="pass" />
         <cloumn name="token" value="token" />
         <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />

@@ -12,6 +12,7 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import org.jdom2.Element;
 
+import java.util.HashMap;
 import java.util.List;
 
 import static Server.Automation.PageUtil.*;
@@ -59,9 +60,11 @@ public class MainResources extends AbstractVerticle {
      */
     private void mainPage(RoutingContext ctx) {
         var obj = new JsonObject();
+
         //侧边栏菜单
         asideString = XmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
         obj.put("sidePanal", asideString);
+        System.out.println(asideString);
         String serverRouter = ctx.request().getParam("serverRouter");
         serverString = XmlMapping.createServerString(serverRouter);
         obj.put("servers", serverString);
@@ -82,11 +85,8 @@ public class MainResources extends AbstractVerticle {
         //总路由
         String route = "/" + serverRouter + "/" + pageRouter;
         Element element;
-        element = XmlMapping.getElement(ctx.request().getParam("pageRouter"));
-        ctx.response().end(
-
-                XmlMapping.createElementString(element, route)
-        );
+        element = XmlMapping.getElement(pageRouter);
+        ctx.response().end(XmlMapping.createElementString(element, route));
     }
 
     /**
@@ -96,9 +96,12 @@ public class MainResources extends AbstractVerticle {
      */
     private void preloadingTable(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
+        System.out.println(ctx.getBodyAsJson());
+        HashMap<String,String> hashMap =JSON.parseObject(ctx.getBodyAsJson().getString("arguments"),HashMap.class);
+        System.out.println(hashMap);
         if (USER_MANAGE_PAGES.contains(page)) {
             ctx.response().end(
-                    XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, null));
+                    XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, hashMap));
         } else {
             ctx.response().end("");
         }

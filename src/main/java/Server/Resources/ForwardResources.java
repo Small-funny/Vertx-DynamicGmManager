@@ -45,12 +45,8 @@ public class ForwardResources {
             jsonObject.put(key, value);
         }
         String url = jsonObject.getString("route");
-        jsonObject.remove("route");
         String token = JwtUtils.findToken(routingContext);
-        data.remove("route");
-        data.remove("operation");
         Cache.setArgs(token, data);
-
         server = url.split("/")[1];
         page = url.split("/")[2];
 

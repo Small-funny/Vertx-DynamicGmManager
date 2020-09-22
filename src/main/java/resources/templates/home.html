@@ -39,7 +39,8 @@
         <g>
             <path d="M75.4 126.63a11.43 11.43 0 0 1-2.1-22.65 40.9 40.9 0 0 0 30.5-30.6 11.4 11.4 0 1 1 22.27 4.87h.02a63.77 63.77 0 0 1-47.8 48.05v-.02a11.38 11.38 0 0 1-2.93.37z"
                   fill="#000000" fill-opacity="1"/>
-            <animateTransform attributeName="transform" type="rotate" from="0 64 64" to="360 64 64" dur="500ms" repeatCount="indefinite">
+            <animateTransform attributeName="transform" type="rotate" from="0 64 64" to="360 64 64" dur="500ms"
+                              repeatCount="indefinite">
             </animateTransform>
         </g>
     </svg>
@@ -177,18 +178,13 @@
     $(function () {
         //再提交后把输入框的内容变成刚刚查找的配置名
         var selectName = [[${selectName}]]
-        console.log("name" + selectName);
         toastr.success("登陆成功")
         var argsName = [[${args}]];
-        console.log(argsName);
         var subArgsName = argsName["map"];
-        console.log(subArgsName);
         $.each(subArgsName, function (key, value) {
             if (document.getElementById(key) !== null) {
                 document.getElementById(key).value = value;
             }
-            console.log(key);
-            console.log(value);
         })
 
     })
@@ -209,7 +205,6 @@
 
     function configClick(config) {
         var clickItem = config;
-        console.log(clickItem.value());
     }
 
     function submitForm() {
@@ -274,40 +269,50 @@
         $("#" + prepage).removeClass("active")
         $("#" + page).addClass("active")
         prepage = page;
-        console.log("server:" + server)
-        console.log("page:" + page)
         refreshAjaxGet(server, page, "pageContent")
-        console.log("server:" + server)
-        console.log("page:" + page)
+        var json={}
+        console.log(server+page)
         history.pushState(null, null, "/main" + "/" + server + "/" + page);
-        route="/"+server+"/"+page
+        route = "/" + server + "/" + page
+        json["route"]=route
+        console.log("route"+route)
+        console.log(json)
         refreshAjaxPost("/main/configsName", page, null, "configsName")
-        refreshAjaxPost("/main/userInfo", page, null, "userInfo")
+        refreshAjaxPost("/main/userInfo", page, JSON.stringify(json), "userInfo")
 
         $("input[type='hidden']").each(function () {
-            console.log($(this).attr("value"))
             $(this).attr({from: "return"})
         })
         $("#returnContent").html(" ")
     }
 
-    function changeReturn(urls,fromValue) {
+    function changeReturn(urls, fromValue) {
         var json = {};
-        console.log(fromValue)
-        $("input[from='"+fromValue+"']").each(function () {
-            console.log(fromValue)
+        $("input[from='" + fromValue + "']").each(function () {
             json[$(this).attr('name')] = $(this).val()
         })
-        console.log(JSON.stringify(json))
+        console.log(json)
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
-        refreshAjaxPost("/main/userInfo", pageName, null, "userInfo")
+        refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
     }
 
-    function tableDelete(column) {
+    function userDelete(column, operation) {
         var subjson = {}
-        subjson["operation"] = "deleteUser"
+        subjson["operation"] = operation
         subjson["username"] = column.parent().parent().find("td").get(0).innerHTML
-        subjson["route"]=route
+        subjson["route"] = route
+        refreshAjaxPostAlert("/manager", pageName, JSON.stringify(subjson), "returnContent")
+        refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(subjson), "userInfo")
+    }
+
+    function authDelete(column, operation) {
+        var subjson = {}
+        subjson["operation"] = operation
+        subjson["username"] = $("#username").val().toString();
+        //console.log($("#username").val())
+        subjson["auth"] = column.parent().parent().find("td").get(0).innerHTML
+        subjson["type"] = column.parent().parent().find("td").get(1).innerHTML
+        subjson["route"] = route
         refreshAjaxPostAlert("/manager", pageName, JSON.stringify(subjson), "returnContent")
         refreshAjaxPost("/main/userInfo", pageName, null, "userInfo")
     }

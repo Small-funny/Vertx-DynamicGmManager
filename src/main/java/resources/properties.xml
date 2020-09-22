@@ -9,41 +9,22 @@
     <pages>
         <pageType name="角色管理" authorization="playerManage" icon="anchor">
             <page name="添加用户"  authorization="addUser" type="userManage">
-                <form name="添加用户" operation="addUser" from="add">
+                <form name="添加用户" operation="addUser" >
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="password" id="password"/>
-                    <input type="button" name="button" id="userManage" value="添加用户"/>
+                    <input type="button" id="userManage" value="添加用户"/>
                 </form>
-            </page>
-<!--            <page name="删除用户"  authorization="deleteUser" type="userManage">-->
-<!--                <form name="删除用户" operation="deleteUser">-->
-<!--                    <input type="text" name="username" id="username"/>-->
-<!--                    <input type="button" name="button" id="userManage" value="删除"/>-->
-<!--                </form>-->
-<!--            </page>-->
-            <page name="删除权限"  authorization="deleteAuth" type="userAuthManage">
-                <form name="删除用户权限" operation="deleteAuth">
+                <form name="修改用户信息" operation="updateUserInfo">
                     <input type="text" name="username" id="username"/>
-                    <input type="text" name="auth" id="auth"/>
-                    <input type="text" name="type" id="type"/>
-                    <input type="button" name="删除" id="userManage" value="删除"/>
+                    <input type="text" name="password" id="password"/>
+                    <input type="button" id="userManage" value="修改"/>
                 </form>
             </page>
-            <page name="查询权限"  authorization="selectAuthList" type="userAuthManage">
+            <page name="查询权限"  authorization="selectAuthList" type="userAuthManage" >
                 <form name="查询用户权限" operation="selectAuthList">
                     <input type="text" name="username" id="username"/>
                     <input type="button" name="查询" id="userManage" value="查询"/>
                 </form>
-            </page>
-
-            <page name="修改用户信息"  authorization="updateUserInfo" type="userManage">
-                <form name="修改用户信息" operation="updateUserInfo">
-                    <input type="text" name="username" id="username"/>
-                    <input type="text" name="password" id="password"/>
-                    <input type="button" name="修改" id="userManage" value="修改"/>
-                </form>
-            </page>
-            <page name="添加权限"  authorization="添加权限" type="userAuthManage">
                 <form name="添加权限" operation="addAuth">
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="auth" id="auth"/>

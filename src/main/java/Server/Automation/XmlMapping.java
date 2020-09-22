@@ -9,6 +9,7 @@ import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
 
+import java.net.URI;
 import java.util.*;
 
 import static Server.Automation.PageUtil.*;
@@ -146,7 +147,7 @@ public class XmlMapping {
 
     private static String elementForm(Element element, String route) {
         StringBuilder stringBuilder = new StringBuilder();
-        String from = element.getAttributeValue("from");
+        String operation = element.getAttributeValue("operation");
         stringBuilder.append("<div class=\"card-header\"><strong>")
                 .append(element.getAttributeValue("name"))
                 .append("</strong></div>")
@@ -156,7 +157,7 @@ public class XmlMapping {
         for (Element child : element.getChildren()) {
             switch (child.getName()) {
                 case "input":
-                    stringBuilder.append(elementInput(child, from));
+                    stringBuilder.append(elementInput(child, operation));
                     break;
                 case "select":
                     stringBuilder.append(elementSelect(child));
@@ -169,21 +170,22 @@ public class XmlMapping {
             }
         }
 
-        stringBuilder.append("<input type=\"hidden\" value=\"").append(element.getAttributeValue("operation")).append("\" name=\"operation\" from=\"").append(from).append("\"/>")
-                .append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"").append(from).append("\"/>")
+        stringBuilder.append("<input type=\"hidden\" value=\"").append(element.getAttributeValue("operation")).append("\" name=\"operation\" from=\"").append(operation).append("\"/>")
+                .append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"").append(operation).append("\"/>")
                 .append("</form>")
                 .append("</div>");
         return stringBuilder.toString();
 
     }
 
-    private static String elementInput(Element element, String from) {
+    private static String elementInput(Element element, String operation) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
                 .append("<div class=\"col col-md-3\">")
-                .append("<label  class=\" form-control-label\">")
-                .append(element.getAttributeValue("name"))
-                .append("</label>")
+                .append("<label  class=\" form-control-label\">");
+        stringBuilder.append(element.getAttributeValue("name") == null ? " " : element.getAttributeValue("name"));
+
+        stringBuilder.append("</label>")
                 .append("</div>")
                 .append("<div class=\"col-12 col-md-9\">")
                 .append("<input class=\"form-control\" type=\"")
@@ -192,17 +194,17 @@ public class XmlMapping {
                 .append(element.getAttributeValue("name"))
                 .append("\" id=\"")
                 .append(element.getAttributeValue("id"))
-                .append("\" from=\"").append(from).append("\"");
-        if (element.getAttributeValue("type").equals("button")) {
+                .append("\" from=\"").append(operation).append("\"");
+        if ("button".equals(element.getAttributeValue("type"))) {
             stringBuilder.append("value=\"")
                     .append(element.getAttributeValue("value"))
                     .append("\" onclick=\"changeReturn('/");
-            if (element.getAttributeValue("id").equals("userManage")) {
+            if ("userManage".equals(element.getAttributeValue("id"))) {
                 stringBuilder.append("manager");
-            } else if (element.getAttributeValue("id").equals("configManage")) {
+            } else if ("configManage".equals(element.getAttributeValue("id"))) {
                 stringBuilder.append("forward");
             }
-            stringBuilder.append("','").append(from).append("')\"");
+            stringBuilder.append("','").append(operation).append("')\"");
         }
 
 
@@ -237,16 +239,19 @@ public class XmlMapping {
             if (!urlList.contains(entry.getValue().getAttributeValue("authorization"))) {
                 continue;
             }
+            if ("playerManage".equals(entry.getKey()) && !"root".equals(VerifyDatabaseHelper.tokenToUsername(token))) {
+                continue;
+            }
             stringBuilder.append("<li> <a href=\"");
             if (entry.getValue().getAttribute("authorization") != null) {
-                stringBuilder.append(entry.getValue().getAttributeValue("authorization")).append("\">");
+                stringBuilder.append(entry.getValue().getAttributeValue("name")).append("\">");
             } else {
                 stringBuilder.append("#\">");
             }
             stringBuilder.append("<i class=\"nav-link-icon\" data-feather=\"")
                     .append(entry.getValue().getAttributeValue("icon"))
                     .append("\"></i>")
-                    .append(entry.getKey())
+                    .append(entry.getValue().getAttributeValue("name"))
                     .append("</a><ul>");
             for (Element element : entry.getValue().getChildren()) {
                 stringBuilder.append("<li id =\" ")
@@ -261,6 +266,20 @@ public class XmlMapping {
             }
             stringBuilder.append("</ul>");
             stringBuilder.append("</li>");
+        }
+        if (VerifyDatabaseHelper.isSupLevel(VerifyDatabaseHelper.tokenToUsername(token))) {
+            stringBuilder.append("<li><a href=\"playerManage\"><i class=\"nav-link-icon\" data-feather=\"anchor\"></i>角色管理</a><ul>");
+            for (Element element :TYPE_ELEMENT.get("playerManage").getChildren()) {
+                stringBuilder.append("<li id =\" ")
+                        .append(element.getAttributeValue("name"))
+                        .append("\"><a href=\"#\" onclick=\"changeAside('")
+                        .append(server)
+                        .append("','")
+                        .append(element.getAttributeValue("authorization"))
+                        .append("')\" id=\"").append(element.getAttributeValue("authorization")).append("\">")
+                        .append(element.getAttributeValue("name"))
+                        .append("</a></li>");
+            }
         }
         stringBuilder.append("</ul>");
         return stringBuilder.toString();
@@ -309,6 +328,9 @@ public class XmlMapping {
         } else {
 
             if ("table".equals(type)) {
+                String page = argsName.get("route").split("/")[2];
+                System.out.println(argsName);
+                System.out.println(page);
                 HashMap<String, String> hashMap1 = JSON.parseObject(data, HashMap.class);
                 List<String> colName = JSON.parseObject(hashMap1.get("colName"), List.class);
                 List<List<String>> tableBody = JSON.parseObject(hashMap1.get("tableBody"), List.class);
@@ -319,15 +341,31 @@ public class XmlMapping {
                 stringBuilder.append("</tr></thead><tbody>");
                 for (List<String> subTableBody : tableBody) {
                     stringBuilder.append("<tr>");
-                    for (String s : subTableBody) {
-                        stringBuilder.append("<td>").append(s).append("</td>");
+                    for (int i = 0; i < subTableBody.size(); i++) {
+                        stringBuilder.append("<td>");
+                        if (i == 0 && USER_AUTH_MANAGE_PAGES.contains(page)) {
+                            if (TYPE_ELEMENT.containsKey(subTableBody.get(i))) {
+                                stringBuilder.append(TYPE_ELEMENT.get(subTableBody.get(i)).getAttributeValue("name"));
+                            } else if (PAGE_ELEMENT.containsKey(subTableBody.get(i))) {
+                                stringBuilder.append(PAGE_ELEMENT.get(subTableBody.get(i)).getAttributeValue("name"));
+                            }
+                        } else {
+                            stringBuilder.append(subTableBody.get(i));
+                        }
+                        stringBuilder.append("</td>");
                     }
-                    stringBuilder.append("<td><input type=\"button\" operation=\"delete \" onclick=\"tableDelete($(this))\" value=\"删除\"/></td>");
+                    if (USER_MANAGE_PAGES.contains(page)) {
+                        stringBuilder.append("<td><input type=\"button\" operation=\"delete\" onclick=\"userDelete($(this),'deleteUser");
+                    } else if (USER_AUTH_MANAGE_PAGES.contains(page)) {
+                        stringBuilder.append("<td><input type=\"button\" operation=\"delete\" onclick=\"authDelete($(this),'deleteAuth");
+                    }
+                    stringBuilder.append("')\" value=\"删除\"/></td>");
                     stringBuilder.append("</tr>");
                 }
                 stringBuilder.append("</tbody></table>").append("</div></div></div></form>");
 
             } else if ("str".equals(type)) {
+                String route = argsName.get("route");
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
                         .append("<form id=\"updateForm\" class=\"form-horizontal\" style=\"width: auto\">")
                         .append("<div class=\"row form-group\" style=\"width: auto\">")
@@ -338,17 +376,20 @@ public class XmlMapping {
                 if (auth) {
                     stringBuilder
                             .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")
-                            .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">");
+                            .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">")
+                            .append("<input type=\"hidden\" value=\"")
+                            .append(route)
+                            .append("\" name=\"route\" from=\"return\">");
                 }
-                if (argsName != null) {
-                    for (Map.Entry<String, String> entry : argsName.entrySet()) {
-                        stringBuilder.append("<input type=\"hidden\" name=\"")
-                                .append(entry.getKey())
-                                .append("\" value =\"")
-                                .append(entry.getValue())
-                                .append("\" class=\"form-control\" from=\"return\">");
-                    }
-                }
+//                if (argsName != null) {
+//                    for (Map.Entry<String, String> entry : argsName.entrySet()) {
+//                        stringBuilder.append("<input type=\"hidden\" name=\"")
+//                                .append(entry.getKey())
+//                                .append("\" value =\"")
+//                                .append(entry.getValue())
+//                                .append("\" class=\"form-control\" from=\"return\">");
+//                    }
+//                }
                 stringBuilder.append("</form></div>");
             } else if ("return".equals(type)) {
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
@@ -358,6 +399,7 @@ public class XmlMapping {
                         .append(data)
                         .append("</p></div></div>");
                 if (auth) {
+                    System.out.println(Cache.getArgs("route"));
                     stringBuilder
                             .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")
                             .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">");
