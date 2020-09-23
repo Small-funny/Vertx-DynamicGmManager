@@ -23,6 +23,7 @@ import static Server.DatabaseHelper.ManagerDatabaseHelper.allManagerInfo;
 /**
  * 系统主页路由
  */
+@SuppressWarnings("unchecked")
 public class MainResources extends AbstractVerticle {
 
     ThymeleafTemplateEngine thymeleafTemplateEngine;
@@ -66,7 +67,6 @@ public class MainResources extends AbstractVerticle {
         //侧边栏菜单
         asideString = XmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
         obj.put("sidePanal", asideString);
-        System.out.println(asideString);
         String serverRouter = ctx.request().getParam("serverRouter");
         serverString = XmlMapping.createServerString(serverRouter);
         obj.put("servers", serverString);

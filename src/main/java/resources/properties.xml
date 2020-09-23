@@ -8,7 +8,7 @@
     </servers>
     <pages>
         <pageType name="角色管理" authorization="playerManage" icon="anchor">
-            <page name="添加用户" authorization="addUser" type="userManage">
+            <page name="用户管理" authorization="addUser" type="userManage">
                 <form name="添加用户" operation="addUser">
                     <input type="text" name="username"/>
                     <input type="text" name="password"/>
@@ -20,7 +20,7 @@
                     <input type="button" id="userManage" value="修改"/>
                 </form>
             </page>
-            <page name="查询权限" authorization="selectAuthList" type="userAuthManage">
+            <page name="权限管理" authorization="selectAuthList" type="userAuthManage">
                 <form name="查询用户权限" operation="selectAuthList">
                     <input type="text" name="username" id="username"/>
                     <input type="button" name="查询" id="userManage" value="查询"/>

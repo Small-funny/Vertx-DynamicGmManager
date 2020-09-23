@@ -1,5 +1,6 @@
 package Server.DatabaseHelper;
 
+import Server.Automation.PageUtil;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
@@ -95,16 +96,16 @@ public class ManagerDatabaseHelper {
     public static String addAuth(String username, String server, String auth, String type) {
         Element newAuth = new Element("auth2");
         newAuth.setAttribute(DATA_TYPE, type);
-        newAuth.setAttribute(DATA_VALUE, auth);
+        newAuth.setAttribute(DATA_VALUE, PageUtil.zhAuth2en(auth));
         Element rootData = loadDatabase();
         List<String> authList = selectAuthList(username, type, server);
         List<String> rootAuthList = selectAuthList(USER_ROOT, type, server);
 
         if (!isExisted(username)) {
             return "用户不存在，添加失败";
-        } else if (authList.contains(auth)) {
+        } else if (authList.contains(PageUtil.zhAuth2en(auth))) {
             return "权限已存在，添加失败";
-        } else if (!rootAuthList.contains(auth)) {
+        } else if (!rootAuthList.contains(PageUtil.zhAuth2en(auth))) {
             return "权限输入错误，不可添加";
         } else {
             for (Element record : rootData.getChildren()) {
