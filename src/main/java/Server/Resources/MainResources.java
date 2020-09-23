@@ -12,8 +12,10 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import org.jdom2.Element;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static Server.Automation.PageUtil.*;
 import static Server.DatabaseHelper.ManagerDatabaseHelper.allManagerInfo;
@@ -122,8 +124,18 @@ public class MainResources extends AbstractVerticle {
                 ctx.response().end(
                         XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data")));
             });
-        } else {
-            ctx.response().end("");
+        } else if (USER_AUTH_MANAGE_PAGES.contains(page)){
+            List<String> list = new ArrayList<>();
+            for(Map.Entry<String,Element> entry:TYPE_ELEMENT.entrySet()){
+                list.add(entry.getValue().getAttributeValue("name"));
+            }
+            for(Map.Entry<String,Element> entry:PAGE_ELEMENT.entrySet()){
+                list.add(entry.getValue().getAttributeValue("name"));
+            }
+            ctx.response().end(XmlMapping.createConfigsList(JSON.toJSONString(list)));
+        }
+        else {
+            ctx.response().end(" ");
         }
     }
 }
