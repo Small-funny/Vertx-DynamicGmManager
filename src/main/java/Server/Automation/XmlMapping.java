@@ -400,7 +400,7 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(createElementString(PAGE_ELEMENT.get("queryAsset"), "route"));
-    }
+//    public static void main(String[] args) {
+//        System.out.println(createElementString(PAGE_ELEMENT.get("queryAsset"), "route"));
+//    }
 }
