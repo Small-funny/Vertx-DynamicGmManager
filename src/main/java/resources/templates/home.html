@@ -104,8 +104,8 @@
             <div class="row">
 
                 <div class="col-lg-6" style="flex: 0 0 auto;margin-left:150px">
-                    <div class="card" th:utext="${contentString}" id="pageContent">
-                    </div>
+                    <div class="card" th:utext="${contentString}" id="pageContent"></div>
+
                     <div th:utext="${returnString}" id="returnContent"></div>
                     <div th:utext="${userInfo}" id="userInfo"></div>
                 </div>
@@ -147,7 +147,6 @@
 <script type="text/javascript" src="/webroot/vendors/datepicker/daterangepicker.js"></script>
 
 <script src="/webroot/laydate/laydate.js"></script>
-
 
 
 <script type="text/javascript" th:inline="javascript">

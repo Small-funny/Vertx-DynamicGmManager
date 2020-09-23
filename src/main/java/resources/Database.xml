@@ -57,38 +57,18 @@
         </column>
     </record>
     <record>
-        <cloumn name="username" value="tim" />
-        <cloumn name="password" value="pass" />
-        <cloumn name="token" value="token" />
-        <cloumn name="auth" value="ord">
-            <auth1 name="server" value="sandbox" />
-            <auth1 name="server" value="test" />
-            <auth1 name="server" value="master" />
-        </cloumn>
-    </record>
-    <record>
-        <cloumn name="username" value="tim32" />
-        <cloumn name="password" value="pass" />
-        <cloumn name="token" value="token" />
-        <cloumn name="auth" value="ord">
-            <auth1 name="server" value="sandbox" />
-            <auth1 name="server" value="test" />
-            <auth1 name="server" value="master" />
-        </cloumn>
-    </record>
-    <record>
-        <cloumn name="username" value="usernam" />
-        <cloumn name="password" value="123" />
-        <cloumn name="token" value="token" />
-        <cloumn name="auth" value="ord">
-            <auth1 name="server" value="sandbox" />
-            <auth1 name="server" value="test" />
-            <auth1 name="server" value="master" />
-        </cloumn>
-    </record>
-    <record>
         <cloumn name="username" value="user1" />
-        <cloumn name="password" value="password" />
+        <cloumn name="password" value="122" />
+        <cloumn name="token" value="token" />
+        <cloumn name="auth" value="ord">
+            <auth1 name="server" value="sandbox" />
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
+    </record>
+    <record>
+        <cloumn name="username" value="username121" />
+        <cloumn name="password" value="123" />
         <cloumn name="token" value="token" />
         <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />

@@ -304,6 +304,10 @@ public class XmlMapping {
 
     public static String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) {
         StringBuilder stringBuilder = new StringBuilder();
+        String page="";
+        if (argsName != null) {
+            page = argsName.get("route").split("/")[2];
+        }
         if ("list".equals(type)) {
             List<String> list = JSON.parseObject(data, List.class);
             for (String s : list) {
@@ -313,7 +317,7 @@ public class XmlMapping {
         } else {
 
             if ("table".equals(type)) {
-                String page = argsName.get("route").split("/")[2];
+
                 System.out.println(argsName);
                 System.out.println(page);
                 HashMap<String, String> hashMap1 = JSON.parseObject(data, HashMap.class);
@@ -355,10 +359,17 @@ public class XmlMapping {
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
                         .append("<form id=\"updateForm\" class=\"form-horizontal\" style=\"width: auto\">")
                         .append("<div class=\"row form-group\" style=\"width: auto\">")
-                        .append("<div class=\"col-12 \">");
-                stringBuilder.append("<textarea id=\"text\" name=\"body\" rows=\"19\" placeholder=\"Cont.\" class=\"form-control\" style=\"height:700px\" from=\"return\">")
+                        .append("<div class=\"col-12 \">")
+                        .append("<textarea id=\"text\" name=\"body\" rows=\"19\" placeholder=\"Cont.\" class=\"form-control\" style=\"height:700px\" from=\"return\">")
                         .append(data)
                         .append("</textarea></div></div>");
+                if (CONFIG_MANAGE_PAGES.contains(page)) {
+                    stringBuilder.append("<div class=\"row form-group\">")
+                            .append("<div class=\"col col-md-3\"><label class=\" form-control-label\">subPassword</label></div>")
+                            .append("<div class=\"col-12 col-md-9\">")
+                            .append("<input type=\"text\" name=\"subPassword\" id=\"subPassword\" class=\"form-control\"/>")
+                            .append("</div></div>");
+                }
                 if (auth) {
                     stringBuilder
                             .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")
@@ -367,15 +378,7 @@ public class XmlMapping {
                             .append(route)
                             .append("\" name=\"route\" from=\"return\">");
                 }
-//                if (argsName != null) {
-//                    for (Map.Entry<String, String> entry : argsName.entrySet()) {
-//                        stringBuilder.append("<input type=\"hidden\" name=\"")
-//                                .append(entry.getKey())
-//                                .append("\" value =\"")
-//                                .append(entry.getValue())
-//                                .append("\" class=\"form-control\" from=\"return\">");
-//                    }
-//                }
+
                 stringBuilder.append("</form></div>");
             } else if ("return".equals(type)) {
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")

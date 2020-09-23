@@ -98,9 +98,7 @@ public class MainResources extends AbstractVerticle {
      */
     private void preloadingTable(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
-        System.out.println(ctx.getBodyAsJson());
         HashMap<String,String> hashMap =JSON.parseObject(ctx.getBodyAsJson().getString("arguments"),HashMap.class);
-        System.out.println(hashMap);
         if (USER_MANAGE_PAGES.contains(page)) {
             ctx.response().end(
                     XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, hashMap));
