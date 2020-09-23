@@ -51,8 +51,6 @@ public class DbConstants {
     public static final String TYPE_AUTH_CATALOG = "list";
     // 按钮级别权限类型
     public static final String TYPE_AUTH_CONTROL = "btn";
-    // 管理员权限
-    public static final String AUTH_ROOT = "角色管理";
     // 根管理员(拥有所有权限，可根据需要分配多个)
     public static final String USER_ROOT = "root";
     // 超级管理员

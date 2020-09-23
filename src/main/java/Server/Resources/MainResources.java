@@ -23,6 +23,7 @@ import static Server.DatabaseHelper.ManagerDatabaseHelper.allManagerInfo;
 /**
  * 系统主页路由
  */
+@SuppressWarnings("unchecked")
 public class MainResources extends AbstractVerticle {
 
     ThymeleafTemplateEngine thymeleafTemplateEngine;
@@ -66,7 +67,6 @@ public class MainResources extends AbstractVerticle {
         //侧边栏菜单
         asideString = XmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
         obj.put("sidePanal", asideString);
-        System.out.println(asideString);
         String serverRouter = ctx.request().getParam("serverRouter");
         serverString = XmlMapping.createServerString(serverRouter);
         obj.put("servers", serverString);
@@ -98,9 +98,7 @@ public class MainResources extends AbstractVerticle {
      */
     private void preloadingTable(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
-        System.out.println(ctx.getBodyAsJson());
         HashMap<String,String> hashMap =JSON.parseObject(ctx.getBodyAsJson().getString("arguments"),HashMap.class);
-        System.out.println(hashMap);
         if (USER_MANAGE_PAGES.contains(page)) {
             ctx.response().end(
                     XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, hashMap));

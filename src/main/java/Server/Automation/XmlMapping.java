@@ -314,8 +314,6 @@ public class XmlMapping {
 
             if ("table".equals(type)) {
                 String page = argsName.get("route").split("/")[2];
-                System.out.println(argsName);
-                System.out.println(page);
                 HashMap<String, String> hashMap1 = JSON.parseObject(data, HashMap.class);
                 List<String> colName = JSON.parseObject(hashMap1.get("colName"), List.class);
                 List<List<String>> tableBody = JSON.parseObject(hashMap1.get("tableBody"), List.class);
@@ -385,7 +383,6 @@ public class XmlMapping {
                         .append(data)
                         .append("</p></div></div>");
                 if (auth) {
-                    System.out.println(Cache.getArgs("route"));
                     stringBuilder
                             .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")
                             .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">");
@@ -397,7 +394,7 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public static void main(String[] args) {
-        System.out.println(createElementString(PAGE_ELEMENT.get("queryAsset"), "route"));
-    }
+    // public static void main(String[] args) {
+    //     System.out.println(createElementString(PAGE_ELEMENT.get("queryAsset"), "route"));
+    // }
 }
