@@ -28,7 +28,6 @@
                 <form name="添加权限" operation="addAuth">
                     <input type="text" name="username" id="username"/>
                     <input type="text" name="auth" id="auth"/>
-                    <input type="text" name="type" id="type"/>
                     <input type="button" name="添加" id="userManage" value="添加"/>
                 </form>
             </page>

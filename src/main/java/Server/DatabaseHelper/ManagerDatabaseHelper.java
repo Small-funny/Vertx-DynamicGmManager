@@ -90,22 +90,23 @@ public class ManagerDatabaseHelper {
      * @param username
      * @param server
      * @param auth
-     * @param type
      * @return
      */
-    public static String addAuth(String username, String server, String auth, String type) {
+    public static String addAuth(String username, String server, String auth) {
         Element newAuth = new Element("auth2");
+        String type = selectAuthType(ROOT_USER, server).get(auth);
+        System.out.println(type);
         newAuth.setAttribute(DATA_TYPE, type);
-        newAuth.setAttribute(DATA_VALUE, PageUtil.zhAuth2en(auth));
+        newAuth.setAttribute(DATA_VALUE, auth);
         Element rootData = loadDatabase();
         List<String> authList = selectAuthList(username, type, server);
         List<String> rootAuthList = selectAuthList(USER_ROOT, type, server);
 
         if (!isExisted(username)) {
             return "用户不存在，添加失败";
-        } else if (authList.contains(PageUtil.zhAuth2en(auth))) {
+        } else if (authList.contains(auth)) {
             return "权限已存在，添加失败";
-        } else if (!rootAuthList.contains(PageUtil.zhAuth2en(auth))) {
+        } else if (!rootAuthList.contains(auth)) {
             return "权限输入错误，不可添加";
         } else {
             for (Element record : rootData.getChildren()) {
@@ -249,7 +250,7 @@ public class ManagerDatabaseHelper {
         List<List<String>> body = new ArrayList<>();
         List<Element> data = loadDatabase().getChildren();
         if (ROOT_USER.equals(username)) {
-            List<String> row = Arrays.asList("无法查看", "无");
+            List<String> row = Arrays.asList("123", "无");
             body.add(row);
         } else if (!VerifyDatabaseHelper.isExisted(username)) {
             List<String> row = Arrays.asList("无此用户", "无");
@@ -272,6 +273,31 @@ public class ManagerDatabaseHelper {
         }
         result.put(COLUMN_KEY, JSON.toJSONString(colName));
         result.put(TABLE_BODY_KEY, JSON.toJSONString(body));
+        return result;
+    }
+
+    /**
+     * 获取权限类型
+     * 
+     * @param username
+     * @param server
+     * @return key为权限，value为权限type
+     */
+    public static HashMap<String, String> selectAuthType(String username, String server) {
+        HashMap<String, String> result = new HashMap<>();
+
+        List<Element> data = loadDatabase().getChildren();
+        for (Element record : data) {
+            Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
+            Element authElement = record.getChildren().get(INDEX_OF_AUTH);
+            Element serverElement = authElement.getChildren().get(DB_HEADER_SERVER.indexOf(server));
+            if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
+                for (Element auth : serverElement.getChildren()) {
+                    result.put(auth.getAttributeValue(DATA_VALUE), auth.getAttributeValue(DATA_TYPE));
+                }
+                break;
+            }
+        }
         return result;
     }
 }

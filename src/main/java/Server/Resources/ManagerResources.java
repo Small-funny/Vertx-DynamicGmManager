@@ -14,6 +14,7 @@ import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 
 import static Server.Automation.PageUtil.*;
+import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
 
 /**
  * 管理员相关操作接口
@@ -49,60 +50,36 @@ public class ManagerResources {
         String operation = data.get("operation");
         String username = data.get("username");
         String server = data.get("route").split("/")[1];
+        System.out.println("server:"+server);
         String page = data.get("route").split("/")[0];
         log.info("Manager receive args：" + data);
 
         switch (operation) {
             case OPERATION_DELETE_AUTH:
-                routingContext.vertx().executeBlocking(future -> {
-                    String auth = zhAuth2en(data.get("auth"));
-                    String type = data.get("type");
-                    future.complete(ManagerDatabaseHelper.deleteAuth(username, server, auth, type));
-                }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Delete failed!", "return", asyncResult.result().toString());
-                });
+                String deleteAuth = zhAuth2en(data.get("auth"));
+                String type = data.get("type");
+                returnResult(routingContext, "return", deleteAuth(username, server, deleteAuth, type));
                 break;
             case OPERATION_ADD_AUTH:
-                routingContext.vertx().executeBlocking(future -> {
-                    String auth = data.get("auth");
-                    String type = data.get("type");
-                    future.complete(ManagerDatabaseHelper.addAuth(username, server, auth, type));
-                }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Add failed!", "return", asyncResult.result().toString());
-                });
+                String addAuth = zhAuth2en(data.get("auth"));
+                returnResult(routingContext, "return", addAuth(username, server, addAuth));
                 break;
             case OPERATION_DELETE_USER:
-                routingContext.vertx().executeBlocking(future -> {
-                    future.complete(ManagerDatabaseHelper.deleteUser(username));
-                }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Delete failed!", "return", asyncResult.result().toString());
-                });
+                returnResult(routingContext, "return", deleteUser(username));
                 break;
             case OPERATION_ADD_USER:
-                routingContext.vertx().executeBlocking(future -> {
-                    String password = data.get("password");
-                    List<String> userInfo = Arrays.asList(username, password, "token");
-                    future.complete(ManagerDatabaseHelper.addUser(userInfo));
-                }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Add failed!", "return", asyncResult.result().toString());
-                });
+                String addUserPassword = data.get("password");
+                List<String> userInfo = Arrays.asList(username, addUserPassword, "token");
+                returnResult(routingContext, "return", addUser(userInfo));
                 break;
             case OPERATION_UPDATE_USERINFO:
-                routingContext.vertx().executeBlocking(future -> {
-                    String password = data.get("password");
-                    future.complete(ManagerDatabaseHelper.updateUserInfo(username, password));
-                }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Update failed!", "return", asyncResult.result().toString());
-                });
+                String updateUserPassword = data.get("password");
+                returnResult(routingContext, "return", updateUserInfo(username, updateUserPassword));
                 break;
             case OPERATION_SELECT_AUTHLIST:
-                routingContext.vertx().executeBlocking(future -> {
-                    HashMap<String, String> resultHashMap = ManagerDatabaseHelper.selectAuthTable(username, server);
-                    String hashStr = JSON.toJSONString(resultHashMap);
-                    future.complete(hashStr);
-                }, false, asyncResult -> {
-                    executeResult(routingContext, asyncResult, "Select failed!", "table", asyncResult.result().toString());
-                });
+                HashMap<String, String> resultHashMap = selectAuthTable(username, server);
+                String hashStr = JSON.toJSONString(resultHashMap);
+                returnResult(routingContext, "table", hashStr);
                 break;
             default:
                 break;
@@ -110,22 +87,14 @@ public class ManagerResources {
     }
 
     /**
-     * 阻塞结果处理
+     * 结果处理
      *
      * @param routingContext
-     * @param asyncResult
-     * @param info
      * @param type
      * @param resultData
      */
-    private void executeResult(RoutingContext routingContext, AsyncResult<Object> asyncResult, String info, String type, String resultData) {
-        if (asyncResult.failed()) {
-            routingContext.fail(asyncResult.cause());
-            log.info(info);
-            return;
-        }
+    private void returnResult(RoutingContext routingContext, String type, String resultData) {
         if ("table".equals(type)) {
-
             routingContext.response().end(XmlMapping.createReturnString("table", resultData, false, data));
         } else if ("str".equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("str", JSON.toJSONString(resultData), false, data));
