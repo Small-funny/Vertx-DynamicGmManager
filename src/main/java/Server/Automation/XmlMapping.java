@@ -56,7 +56,7 @@ public class XmlMapping {
                     stringBuilder.append(elementInput(child, operation));
                     break;
                 case "select":
-                    stringBuilder.append(elementSelect(child));
+                    stringBuilder.append(elementSelect(child,operation));
                     break;
                 case "formcheck":
                     stringBuilder.append(elementFormCheck(child));
@@ -102,7 +102,8 @@ public class XmlMapping {
                 .append(element.getAttributeValue("name"))
                 .append("\" id=\"")
                 .append(element.getAttributeValue("id"))
-                .append("\" from=\"").append(operation).append("\"");
+                .append("\" from=\"").append(operation)
+                .append("\"");
         if ("button".equals(element.getAttributeValue("type"))) {
             stringBuilder.append("value=\"")
                     .append(element.getAttributeValue("value"))
@@ -121,7 +122,7 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    private static String elementSelect(Element element) {
+    private static String elementSelect(Element element,String operation) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
                 .append("<div class=\"col col-md-3\">")
@@ -131,7 +132,12 @@ public class XmlMapping {
                 .append("</div>")
                 .append("<div class=\"col-12 col-md-9\">")
                 .append("<select class=\"form-control\" name=\"")
-                .append(element.getAttributeValue("name")).append("\">");
+                .append(element.getAttributeValue("name"))
+                .append("\" id=\"")
+                .append(element.getAttributeValue("id"))
+
+                .append("\"").append("\" from=\"").append(operation)
+                .append("\">");
         for (Element child : element.getChildren()) {
             stringBuilder.append("<option value=\"").append(child.getAttributeValue("value")).append("\">")
                     .append(child.getValue())
@@ -402,7 +408,8 @@ public class XmlMapping {
                 stringBuilder.append("</div>");
             } else if ("checkbox".equals(type)) {
                 assert argsName != null;
-                List<String> authList = ManagerDatabaseHelper.selectAuthList(argsName.get("username"), "list", argsName.get("route").split("/")[1]);
+                //List<String> authList = ManagerDatabaseHelper.selectAuthList(argsName.get("username"), "list", argsName.get("route").split("/")[1]);
+                List<String>authList = JSON.parseArray(data,String.class);
                 List<String> allAuthList = ManagerDatabaseHelper.selectAuthList("root", "list", argsName.get("route").split("/")[1]);
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">");
                 stringBuilder.append("<div class=\"row form-group\">")

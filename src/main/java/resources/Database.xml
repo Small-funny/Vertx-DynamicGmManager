@@ -2,27 +2,22 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA5MzQxNDAsImV4cCI6MTYwMDk3MDE0MH0.r8kzX1AvMRo0PHUlI9e2B6xF9SImqbAA4-tx0rJFQMg" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA5MzYyNTYsImV4cCI6MTYwMDk3MjI1Nn0.BjC0hAenrb1Fr26RbHhlUuMlE3W_GNGOcJZ5wCOZCy4" />
         <column name="auth" value="sup">
             <auth1 name="server" value="sandbox">
-                <auth2 type="list" value="checkUserInfo" />
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
-                <auth2 type="btn" value="selectConfig" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
-                <auth2 type="btn" value="selectConfig" />
             </auth1>
             <auth1 name="server" value="master">
-                <auth2 type="list" value="checkUserInfo" />
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
-                <auth2 type="list" value="selectConfig" />
             </auth1>
         </column>
     </record>
@@ -33,12 +28,16 @@
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
             </auth1>
             <auth1 name="server" value="test">
+                <auth2 type="list" value="gameManage" />
+                <auth2 type="list" value="configManage" />
+            </auth1>
+            <auth1 name="server" value="master">
                 <auth2 type="list" value="databaseManage" />
             </auth1>
-            <auth1 name="server" value="master" />
         </column>
     </record>
     <record>
@@ -48,9 +47,16 @@
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="gameManage" />
             </auth1>
-            <auth1 name="server" value="test" />
-            <auth1 name="server" value="master" />
+            <auth1 name="server" value="test">
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="gameManage" />
+            </auth1>
+            <auth1 name="server" value="master">
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="configManage" />
+            </auth1>
         </column>
     </record>
     <record>

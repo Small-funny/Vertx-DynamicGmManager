@@ -25,6 +25,12 @@
             <page name="权限管理" authorization="selectAuthList" type="userAuthManage">
                 <form name="查询用户权限" operation="selectAuthList">
                     <input type="text" name="username" id="username"/>
+
+                    <select name="serverAuth" id="serverAuth">
+                        <option value="sandbox">沙箱</option>
+                        <option value="test">测试服</option>
+                        <option value="master">主服</option>
+                    </select>
                     <input type="button" name="查询" id="userManage" value="查询"/>
                 </form>
 <!--                <form name="添加权限" operation="addAuth">-->

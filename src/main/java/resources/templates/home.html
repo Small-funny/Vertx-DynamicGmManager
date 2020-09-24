@@ -262,6 +262,9 @@
         $("input[from='" + fromValue + "']").each(function () {
             json[$(this).attr('name')] = $(this).val()
         })
+        $("select[from='" + fromValue + "']").each(function () {
+            json[$(this).attr('name')] = $(this).val()
+        })
         console.log(json)
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
         refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
@@ -279,6 +282,7 @@
         json["route"]=route
         json["operation"]=operation
         json["username"]=$("#username").val()
+        json["serverAuth"]=$("#serverAuth").val()
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
         refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
     }
