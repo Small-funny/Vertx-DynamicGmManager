@@ -267,6 +267,29 @@
         refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
     }
 
+    function updateAuth(urls) {
+        var list = [];
+        $("input[checked='checked']").each(function () {
+            list.push($(this).attr('value'))
+            console.log($(this))
+        })
+        console.log(list)
+        var json ={};
+        json["authList"]=list
+        refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+        refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
+    }
+
+    function updateCheckbox(chechbox) {
+        console.log(chechbox.attr("checked"))
+        if (chechbox.attr("checked")==="checked") {
+            chechbox.removeAttr("checked")
+        } else  {
+            chechbox.attr("checked",true)
+        }
+        console.log(chechbox.attr("checked"))
+    }
+
     function userDelete(column, operation) {
         var subjson = {}
         subjson["operation"] = operation
@@ -297,6 +320,7 @@
         console.log(JSON.stringify(json))
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
     }
+
 
 </script>
 <!---->

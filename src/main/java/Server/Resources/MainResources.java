@@ -98,7 +98,7 @@ public class MainResources extends AbstractVerticle {
      */
     private void preloadingTable(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
-        HashMap<String,String> hashMap =JSON.parseObject(ctx.getBodyAsJson().getString("arguments"),HashMap.class);
+        HashMap<String, String> hashMap = JSON.parseObject(ctx.getBodyAsJson().getString("arguments"), HashMap.class);
         if (USER_MANAGE_PAGES.contains(page)) {
             ctx.response().end(
                     XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, hashMap));
@@ -114,6 +114,7 @@ public class MainResources extends AbstractVerticle {
      */
     private void preloadingList(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
+        System.out.println(ctx);
         if (CONFIG_MANAGE_PAGES.contains(page)) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.put("operation", "selectConfigName");
@@ -122,17 +123,16 @@ public class MainResources extends AbstractVerticle {
                 ctx.response().end(
                         XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data")));
             });
-        } else if (USER_AUTH_MANAGE_PAGES.contains(page)){
-            List<String> list = new ArrayList<>();
-            for(Map.Entry<String,Element> entry:TYPE_ELEMENT.entrySet()){
-                list.add(entry.getValue().getAttributeValue("name"));
+        } else if (USER_AUTH_MANAGE_PAGES.contains(page)) {
+            HashMap<String, String> hashMap = JSON.parseObject(ctx.getBodyAsJson().getString("arguments"), HashMap.class);
+            if ("true".equals(hashMap.get("flag"))) {
+                List<String> list = new ArrayList<>();
+                for (Map.Entry<String, Element> entry : TYPE_ELEMENT.entrySet()) {
+                    list.add(entry.getValue().getAttributeValue("name"));
+                }
+                ctx.response().end(XmlMapping.createConfigsList(JSON.toJSONString(list)));
             }
-            for(Map.Entry<String,Element> entry:PAGE_ELEMENT.entrySet()){
-                list.add(entry.getValue().getAttributeValue("name"));
-            }
-            ctx.response().end(XmlMapping.createConfigsList(JSON.toJSONString(list)));
-        }
-        else {
+        } else {
             ctx.response().end(" ");
         }
     }

@@ -50,7 +50,7 @@ public class ManagerResources {
         String operation = data.get("operation");
         String username = data.get("username");
         String server = data.get("route").split("/")[1];
-        System.out.println("server:"+server);
+        System.out.println("server:" + server);
         String page = data.get("route").split("/")[0];
         log.info("Manager receive args：" + data);
 
@@ -79,7 +79,7 @@ public class ManagerResources {
             case OPERATION_SELECT_AUTHLIST:
                 HashMap<String, String> resultHashMap = selectAuthTable(username, server);
                 String hashStr = JSON.toJSONString(resultHashMap);
-                returnResult(routingContext, "table", hashStr);
+                returnResult(routingContext, "checkbox", hashStr);
                 break;
             default:
                 break;
@@ -100,6 +100,8 @@ public class ManagerResources {
             routingContext.response().end(XmlMapping.createReturnString("str", JSON.toJSONString(resultData), false, data));
         } else if ("return".equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("return", resultData, false, null));
+        } else if ("checkbox".equals(type)) {
+            routingContext.response().end(XmlMapping.createReturnString("checkbox", resultData, false, data));
         }
     }
 }

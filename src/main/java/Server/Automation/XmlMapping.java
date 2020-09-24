@@ -1,5 +1,6 @@
 package Server.Automation;
 
+import Server.DatabaseHelper.ManagerDatabaseHelper;
 import Server.DatabaseHelper.VerifyDatabaseHelper;
 import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
@@ -290,28 +291,35 @@ public class XmlMapping {
     public static String createConfigsList(String data) {
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">" +
-                "<div class=\"row form-group\"><div class=\"col col-md-12\">" +
-                "<select name=\"multiple-select\" id=\"multiple-select\" multiple=\"\" class=\"form-control\" style=\"height: 500px\" >");
+        stringBuilder.append("<div class=\"card\">").append("<div class=\"card-body card-block\" style=\"width: auto\">" +
+                "<div class=\"row form-group\"><div class=\"col col-md-12\">");
         List<String> list = JSON.parseObject(data, List.class);
         for (String s : list) {
-            stringBuilder.append("<option>").append(s).append("</option>");
+            stringBuilder.append("<div class=\"checkbox\">").append("<label class=\"form-check-label \">")
+                    .append("<input type=\"checkbox\" name=\"").append("auth").append("\" value=\"").append(s).append("\" class=\"form-check-input\">")
+                    .append(s)
+                    .append("</label>")
+                    .append("</div>");
         }
-        stringBuilder.append("</select></div></div></div></div>");
+        stringBuilder.append("</div></div></div></div>");
 
         return stringBuilder.toString();
     }
 
     public static String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) {
         StringBuilder stringBuilder = new StringBuilder();
-        String page="";
+        String page = "";
         if (argsName != null) {
             page = argsName.get("route").split("/")[2];
         }
         if ("list".equals(type)) {
             List<String> list = JSON.parseObject(data, List.class);
             for (String s : list) {
-                stringBuilder.append("<option/>").append(s);
+                stringBuilder.append("<div class=\"checkbox\">").append("<label class=\"form-check-label \">")
+                        .append("<input type=\"checkbox\" name=\"").append("auth").append("\" value=\"").append(s).append("\" class=\"form-check-input\">")
+                        .append(s)
+                        .append("</label>")
+                        .append("</div>");
             }
             return stringBuilder.toString();
         } else {
@@ -333,8 +341,8 @@ public class XmlMapping {
                         if (i == 0 && USER_AUTH_MANAGE_PAGES.contains(page)) {
                             if (TYPE_ELEMENT.containsKey(subTableBody.get(i))) {
                                 stringBuilder.append(TYPE_ELEMENT.get(subTableBody.get(i)).getAttributeValue("name"));
-                            } else if (PAGE_ELEMENT.containsKey(subTableBody.get(i))) {
-                                stringBuilder.append(PAGE_ELEMENT.get(subTableBody.get(i)).getAttributeValue("name"));
+                            } else {
+                                stringBuilder.append(subTableBody.get(i));
                             }
                         } else {
                             stringBuilder.append(subTableBody.get(i));
@@ -392,11 +400,46 @@ public class XmlMapping {
                 }
 
                 stringBuilder.append("</div>");
+            } else if ("checkbox".equals(type)) {
+                assert argsName != null;
+                List<String> authList = ManagerDatabaseHelper.selectAuthList(argsName.get("username"), "list", argsName.get("route").split("/")[1]);
+                List<String> allAuthList = ManagerDatabaseHelper.selectAuthList("root", "list", argsName.get("route").split("/")[1]);
+                stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">");
+                stringBuilder.append("<div class=\"row form-group\">")
+                        .append("<div class=\"col-12 \">")
+                        .append("<div class=\"form-check\">");
+                for (String s : allAuthList) {
+                    stringBuilder.append("<div class=\"checkbox\">")
+                            .append("<label class=\"form-check-label \">")
+                            .append("<input type=\"checkbox\" name=\"auth\" value=\"")
+                            .append(s)
+                            .append("\"");
+                    if (authList.contains(s)) {
+                        stringBuilder.append("checked=\"checked\" ");
+                    }
+                    stringBuilder.append("from=\"updateAuth\" onclick=\"updateCheckbox($(this))\" class=\"form-check-input\">")
+                            .append(enAuth2zh(s))
+                            .append("</label>")
+                            .append("</div>");
+                }
+                stringBuilder.append("<input type=\"button\" class=\"form-control\" value=\"修改\" onclick=\"updateAuth('/manager','updateAuth')\"/>");
+                stringBuilder.append("</div>")
+                        .append("</div>")
+                        .append("</div></div></div>");
             }
         }
         return stringBuilder.toString();
     }
 
+    public static String createAuthList(String data) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div class=\"card-header\"><strong>")
+                .append("权限列表")
+                .append("</strong></div>")
+                .append("<div class=\"card-body card-block\">")
+                .append("<form name=\"");
+        return stringBuilder.toString();
+    }
 //    public static void main(String[] args) {
 //        System.out.println(createElementString(PAGE_ELEMENT.get("queryAsset"), "route"));
 //    }
