@@ -95,7 +95,6 @@ public class ManagerDatabaseHelper {
     public static String addAuth(String username, String server, String auth) {
         Element newAuth = new Element("auth2");
         String type = selectAuthType(ROOT_USER, server).get(auth);
-        System.out.println(type);
         newAuth.setAttribute(DATA_TYPE, type);
         newAuth.setAttribute(DATA_VALUE, auth);
         Element rootData = loadDatabase();
@@ -250,7 +249,7 @@ public class ManagerDatabaseHelper {
         List<List<String>> body = new ArrayList<>();
         List<Element> data = loadDatabase().getChildren();
         if (ROOT_USER.equals(username)) {
-            List<String> row = Arrays.asList("123", "无");
+            List<String> row = Arrays.asList("无法查看", "无");
             body.add(row);
         } else if (!VerifyDatabaseHelper.isExisted(username)) {
             List<String> row = Arrays.asList("无此用户", "无");
@@ -299,5 +298,35 @@ public class ManagerDatabaseHelper {
             }
         }
         return result;
+    }
+
+    /**
+     * 整体更新权限列表
+     *
+     * @param authSettings
+     * @param server
+     * @param username
+     * @return
+     */
+    public static String updateAuth(List<String> authSettings, String server, String username) {
+        Element rootData = loadDatabase();
+        HashMap<String, String> authTypeMap = selectAuthType(ROOT_USER, server);
+
+        for (Element record : rootData.getChildren()) {
+            Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
+            Element authElement = record.getChildren().get(INDEX_OF_AUTH);
+            Element serverElement = authElement.getChildren().get(DB_HEADER_SERVER.indexOf(server));
+            if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
+                serverElement.removeContent();
+                for (String auth: authSettings) {
+                    Element newAuth = new Element("auth2");
+                    newAuth.setAttribute(DATA_TYPE, authTypeMap.get(auth));
+                    newAuth.setAttribute(DATA_VALUE, auth);
+                    serverElement.addContent(newAuth);
+                }
+            }
+        }
+        saveXml(rootData);
+        return "修改成功";
     }
 }
