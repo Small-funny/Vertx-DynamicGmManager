@@ -1,5 +1,6 @@
 package Server.Resources;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -8,10 +9,13 @@ import Server.Automation.XmlMapping;
 import Server.DatabaseHelper.ManagerDatabaseHelper;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import io.vertx.core.AsyncResult;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
+
+import javax.sql.rowset.spi.SyncResolver;
 
 import static Server.Automation.PageUtil.*;
 import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
@@ -33,6 +37,8 @@ public class ManagerResources {
     private static final String OPERATION_UPDATE_USERINFO = "updateUserInfo";
     // 查询权限列表
     private static final String OPERATION_SELECT_AUTHLIST = "selectAuthList";
+    // 更新用户服务器权限
+    private static final String OPERATION_UPDATE_AUTH = "updateAuth";
     private HashMap<String, String> data;
 
     public void registerResources(Router router) {
@@ -47,11 +53,11 @@ public class ManagerResources {
     @SuppressWarnings("unchecked")
     private void GmSystemServer(RoutingContext routingContext) {
         data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
+        System.out.println(data);
         String operation = data.get("operation");
         String username = data.get("username");
         String server = data.get("route").split("/")[1];
         System.out.println("server:" + server);
-        String page = data.get("route").split("/")[0];
         log.info("Manager receive args：" + data);
 
         switch (operation) {
@@ -81,6 +87,11 @@ public class ManagerResources {
                 String hashStr = JSON.toJSONString(resultHashMap);
                 returnResult(routingContext, "checkbox", hashStr);
                 break;
+            case OPERATION_UPDATE_AUTH:
+                String s = data.get("authList");
+                System.out.println(s);
+                List<String> authSettings = JSON.parseArray(data.get("authList"), String.class);
+                returnResult(routingContext, "return ", updateAuth(authSettings, server, username));
             default:
                 break;
         }

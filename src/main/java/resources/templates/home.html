@@ -267,7 +267,7 @@
         refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
     }
 
-    function updateAuth(urls) {
+    function updateAuth(urls,operation) {
         var list = [];
         $("input[checked='checked']").each(function () {
             list.push($(this).attr('value'))
@@ -276,6 +276,9 @@
         console.log(list)
         var json ={};
         json["authList"]=list
+        json["route"]=route
+        json["operation"]=operation
+        json["username"]=$("#username").val()
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
         refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
     }

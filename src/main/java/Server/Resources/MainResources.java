@@ -123,16 +123,7 @@ public class MainResources extends AbstractVerticle {
                 ctx.response().end(
                         XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data")));
             });
-        } else if (USER_AUTH_MANAGE_PAGES.contains(page)) {
-            HashMap<String, String> hashMap = JSON.parseObject(ctx.getBodyAsJson().getString("arguments"), HashMap.class);
-            if ("true".equals(hashMap.get("flag"))) {
-                List<String> list = new ArrayList<>();
-                for (Map.Entry<String, Element> entry : TYPE_ELEMENT.entrySet()) {
-                    list.add(entry.getValue().getAttributeValue("name"));
-                }
-                ctx.response().end(XmlMapping.createConfigsList(JSON.toJSONString(list)));
-            }
-        } else {
+        }  else {
             ctx.response().end(" ");
         }
     }
