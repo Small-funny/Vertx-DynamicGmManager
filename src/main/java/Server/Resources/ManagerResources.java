@@ -51,9 +51,11 @@ public class ManagerResources {
     private void GmSystemServer(RoutingContext routingContext) {
         data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
         System.out.println(data);
+        String server;
+        String password;
         String operation = data.get("operation");
         String username = data.get("username");
-        String server;
+
         log.info("Manager receive args：" + data);
 
         switch (operation) {
@@ -61,17 +63,18 @@ public class ManagerResources {
                 returnResult(routingContext, "return", deleteUser(username));
                 break;
             case OPERATION_ADD_USER:
-                String addUserPassword = data.get("password");
-                List<String> userInfo = Arrays.asList(username, addUserPassword, "token");
+                password = data.get("password");
+                List<String> userInfo = Arrays.asList(username, password, "token");
                 returnResult(routingContext, "return", addUser(userInfo));
                 break;
             case OPERATION_UPDATE_USERINFO:
-                String updateUserPassword = data.get("password");
-                returnResult(routingContext, "return", updateUserInfo(username, updateUserPassword));
+                password = data.get("password");
+                returnResult(routingContext, "return", updateUserInfo(username, password));
                 break;
             case OPERATION_SELECT_AUTHLIST:
                 server = data.get("serverAuth");
-                List<String>resultList = selectAuthList(username, "list", server);
+                String authType = data.get("authType");
+                List<String>resultList = selectAuthList(username, authType, server);
                 String hashStr = JSON.toJSONString(resultList);
                 returnResult(routingContext, "checkbox", hashStr);
                 break;

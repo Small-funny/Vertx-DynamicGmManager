@@ -72,8 +72,8 @@ public class XmlMapping {
             }
         }
 
-        stringBuilder.append("<input type=\"hidden\" value=\"").append(element.getAttributeValue("operation")).append("\" name=\"operation\" from=\"").append(operation).append("\"/>")
-                .append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" from=\"").append(operation).append("\"/>")
+        stringBuilder.append("<input type=\"hidden\" value=\"").append(element.getAttributeValue("operation")).append("\" name=\"operation\" id=\"operation\" from=\"").append(operation).append("\"/>")
+                .append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" id=\"route\" from=\"").append(operation).append("\"/>")
                 .append("</form>")
                 .append("</div>");
         return stringBuilder.toString();
@@ -409,8 +409,8 @@ public class XmlMapping {
             } else if ("checkbox".equals(type)) {
                 assert argsName != null;
                 //List<String> authList = ManagerDatabaseHelper.selectAuthList(argsName.get("username"), "list", argsName.get("route").split("/")[1]);
-                List<String>authList = JSON.parseArray(data,String.class);
-                List<String> allAuthList = ManagerDatabaseHelper.selectAuthList("root", "list", argsName.get("route").split("/")[1]);
+                List<String> authList = JSON.parseArray(data,String.class);
+                List<String> allAuthList = ManagerDatabaseHelper.selectAuthList("root", argsName.get("authType"), argsName.get("route").split("/")[1]);
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">");
                 stringBuilder.append("<div class=\"row form-group\">")
                         .append("<div class=\"col-12 \">")

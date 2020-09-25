@@ -2,17 +2,19 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA5MzYyNTYsImV4cCI6MTYwMDk3MjI1Nn0.BjC0hAenrb1Fr26RbHhlUuMlE3W_GNGOcJZ5wCOZCy4" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDEwMDA1ODgsImV4cCI6MTYwMTAzNjU4OH0.lxV1bhzB9BNfmXBWmKDUAsGoCyufCvScE6O6LWFSbBw" />
         <column name="auth" value="sup">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
+                <auth2 type="btn" value="aaaaa" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
+                <auth2 type="btn" value="bbbbb" />
             </auth1>
             <auth1 name="server" value="master">
                 <auth2 type="list" value="databaseManage" />
@@ -102,6 +104,16 @@
     <record>
         <cloumn name="username" value="dwadwa" />
         <cloumn name="password" value="dwadwa" />
+        <cloumn name="token" value="token" />
+        <cloumn name="auth" value="ord">
+            <auth1 name="server" value="sandbox" />
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
+    </record>
+    <record>
+        <cloumn name="username" value="QWER" />
+        <cloumn name="password" value="1111" />
         <cloumn name="token" value="token" />
         <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />

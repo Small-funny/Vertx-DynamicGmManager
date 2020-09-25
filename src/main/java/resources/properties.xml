@@ -12,24 +12,27 @@
         <pageType name="角色管理" authorization="playerManage" icon="anchor">
             <page name="用户管理" authorization="addUser" type="userManage">
                 <form name="添加用户" operation="addUser">
-                    <input type="text" name="username"/>
-                    <input type="text" name="password"/>
+                    <input type="text" name="用户名" id="username"/>
+                    <input type="text" name="密码" id="password"/>
                     <input type="button" id="userManage" value="添加用户"/>
                 </form>
                 <form name="修改用户信息" operation="updateUserInfo">
-                    <input type="text" name="username" id="username"/>
-                    <input type="text" name="password" id="password"/>
+                    <input type="text" name="用户名" id="username"/>
+                    <input type="text" name="密码" id="password"/>
                     <input type="button" id="userManage" value="修改"/>
                 </form>
             </page>
             <page name="权限管理" authorization="selectAuthList" type="userAuthManage">
                 <form name="查询用户权限" operation="selectAuthList">
-                    <input type="text" name="username" id="username"/>
-
-                    <select name="serverAuth" id="serverAuth">
+                    <input type="text" name="用户名" id="username"/>
+                    <select name="服务器" id="serverAuth">
                         <option value="sandbox">沙箱</option>
                         <option value="test">测试服</option>
                         <option value="master">主服</option>
+                    </select>
+                    <select name="类型" id="authType">
+                        <option value="list">页面权限</option>
+                        <option value="btn">按钮权限</option>
                     </select>
                     <input type="button" name="查询" id="userManage" value="查询"/>
                 </form>

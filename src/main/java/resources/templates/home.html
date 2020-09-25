@@ -260,10 +260,10 @@
     function changeReturn(urls, fromValue) {
         var json = {};
         $("input[from='" + fromValue + "']").each(function () {
-            json[$(this).attr('name')] = $(this).val()
+            json[$(this).attr('id')] = $(this).val()
         })
         $("select[from='" + fromValue + "']").each(function () {
-            json[$(this).attr('name')] = $(this).val()
+            json[$(this).attr('id')] = $(this).val()
         })
         console.log(json)
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
