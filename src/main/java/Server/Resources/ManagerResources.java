@@ -59,6 +59,13 @@ public class ManagerResources {
         log.info("Manager receive args：" + data);
 
         switch (operation) {
+            case "deleteUsers":
+                List<String> userList = JSONArray.parseArray(JSON.toJSONString(data.get("authList")), String.class);
+                for (String s : userList) {
+                    deleteUser(s);
+                }
+                returnResult(routingContext, "return", "删除成功");
+                break;
             case OPERATION_DELETE_USER:
                 returnResult(routingContext, "return", deleteUser(username));
                 break;
@@ -95,13 +102,13 @@ public class ManagerResources {
      * @param resultData
      */
     private void returnResult(RoutingContext routingContext, String type, String resultData) {
-        if ("table".equals(type)) {
+        if ("table" .equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("table", resultData, false, data));
-        } else if ("str".equals(type)) {
+        } else if ("str" .equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("str", JSON.toJSONString(resultData), false, data));
-        } else if ("return".equals(type)) {
+        } else if ("return" .equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("return", resultData, false, null));
-        } else if ("checkbox".equals(type)) {
+        } else if ("checkbox" .equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("checkbox", resultData, false, data));
         }
     }

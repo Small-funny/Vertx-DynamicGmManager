@@ -56,7 +56,7 @@ public class XmlMapping {
                     stringBuilder.append(elementInput(child, operation));
                     break;
                 case "select":
-                    stringBuilder.append(elementSelect(child,operation));
+                    stringBuilder.append(elementSelect(child, operation));
                     break;
                 case "formcheck":
                     stringBuilder.append(elementFormCheck(child));
@@ -91,7 +91,7 @@ public class XmlMapping {
                 .append("</div>")
                 .append("<div class=\"col-12 col-md-9\">")
                 .append("<input class=\"");
-        if ("file".equals(element.getAttributeValue("type"))) {
+        if ("file" .equals(element.getAttributeValue("type"))) {
             stringBuilder.append("form-control-file");
         } else {
             stringBuilder.append("form-control");
@@ -104,13 +104,13 @@ public class XmlMapping {
                 .append(element.getAttributeValue("id"))
                 .append("\" from=\"").append(operation)
                 .append("\"");
-        if ("button".equals(element.getAttributeValue("type"))) {
+        if ("button" .equals(element.getAttributeValue("type"))) {
             stringBuilder.append("value=\"")
                     .append(element.getAttributeValue("value"))
                     .append("\" onclick=\"changeReturn('/");
-            if ("userManage".equals(element.getAttributeValue("id"))) {
+            if ("userManage" .equals(element.getAttributeValue("id"))) {
                 stringBuilder.append("manager");
-            } else if ("configManage".equals(element.getAttributeValue("id"))) {
+            } else if ("configManage" .equals(element.getAttributeValue("id"))) {
                 stringBuilder.append("forward");
             }
             stringBuilder.append("','").append(operation).append("')\"");
@@ -122,7 +122,7 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    private static String elementSelect(Element element,String operation) {
+    private static String elementSelect(Element element, String operation) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
                 .append("<div class=\"col col-md-3\">")
@@ -231,7 +231,7 @@ public class XmlMapping {
             if (!urlList.contains(entry.getValue().getAttributeValue("authorization"))) {
                 continue;
             }
-            if ("playerManage".equals(entry.getKey()) && !"root".equals(VerifyDatabaseHelper.tokenToUsername(token))) {
+            if ("playerManage" .equals(entry.getKey()) && !"root" .equals(VerifyDatabaseHelper.tokenToUsername(token))) {
                 continue;
             }
             stringBuilder.append("<li> <a href=\"");
@@ -318,7 +318,7 @@ public class XmlMapping {
         if (argsName != null) {
             page = argsName.get("route").split("/")[2];
         }
-        if ("list".equals(type)) {
+        if ("list" .equals(type)) {
             List<String> list = JSON.parseObject(data, List.class);
             for (String s : list) {
                 stringBuilder.append("<div class=\"checkbox\">").append("<label class=\"form-check-label \">")
@@ -330,7 +330,7 @@ public class XmlMapping {
             return stringBuilder.toString();
         } else {
 
-            if ("table".equals(type)) {
+            if ("table" .equals(type)) {
 
                 HashMap<String, String> hashMap1 = JSON.parseObject(data, HashMap.class);
                 List<String> colName = JSON.parseObject(hashMap1.get("colName"), List.class);
@@ -356,17 +356,20 @@ public class XmlMapping {
                         stringBuilder.append("</td>");
                     }
                     if (USER_MANAGE_PAGES.contains(page)) {
-                        stringBuilder.append("<td><input type=\"button\" operation=\"delete\" onclick=\"userDelete($(this),'deleteUser");
-                        stringBuilder.append("')\" value=\"删除\"/></td>");
-                    } else if (USER_AUTH_MANAGE_PAGES.contains(page)) {
-                        stringBuilder.append("<td><input type=\"button\" operation=\"delete\" onclick=\"authDelete($(this),'deleteAuth");
-                        stringBuilder.append("')\" value=\"删除\"/></td>");
+                        stringBuilder.append("<td><input type=\"checkbox\" name\"deleteCheckbox from=\"deleteCheckbox\" value=\"")
+                                .append(subTableBody.get(0))
+                                .append("\" onclick=\"updateCheckbox($(this))\" class=\"form-check-input\"/></td>");
+
                     }
                     stringBuilder.append("</tr>");
                 }
-                stringBuilder.append("</tbody></table>").append("</div></div></div></form>");
+                stringBuilder.append("</tbody></table>");
+                if (USER_MANAGE_PAGES.contains(page)) {
+                    stringBuilder.append("<input type=\"button\" class=\"form-control\" value=\"删除\" onclick=\"updateAuth('/manager','deleteUsers')\"");
+                }
+                stringBuilder.append("</div></div></div></form>");
 
-            } else if ("str".equals(type)) {
+            } else if ("str" .equals(type)) {
                 String route = argsName.get("route");
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
                         .append("<form id=\"updateForm\" class=\"form-horizontal\" style=\"width: auto\">")
@@ -392,7 +395,7 @@ public class XmlMapping {
                 }
 
                 stringBuilder.append("</form></div>");
-            } else if ("return".equals(type)) {
+            } else if ("return" .equals(type)) {
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
                         .append("<div class=\"row form-group\" style=\"width: auto\">")
                         .append("<div class=\"col-12 \">");
@@ -406,10 +409,10 @@ public class XmlMapping {
                 }
 
                 stringBuilder.append("</div>");
-            } else if ("checkbox".equals(type)) {
+            } else if ("checkbox" .equals(type)) {
                 assert argsName != null;
                 //List<String> authList = ManagerDatabaseHelper.selectAuthList(argsName.get("username"), "list", argsName.get("route").split("/")[1]);
-                List<String> authList = JSON.parseArray(data,String.class);
+                List<String> authList = JSON.parseArray(data, String.class);
                 List<String> allAuthList = ManagerDatabaseHelper.selectAuthList("root", argsName.get("authType"), argsName.get("route").split("/")[1]);
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">");
                 stringBuilder.append("<div class=\"row form-group\">")
