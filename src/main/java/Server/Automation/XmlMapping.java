@@ -385,7 +385,7 @@ public class XmlMapping {
                             .append("<input type=\"text\" name=\"subPassword\" id=\"subPassword\" class=\"form-control\"/>")
                             .append("</div></div>");
                 }
-                if (auth) {
+                if (auth &&CONFIG_MANAGE_PAGES.contains(page)) {
                     stringBuilder
                             .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")
                             .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">")

@@ -8,16 +8,19 @@
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
+                <auth2 type="btn" value="selectConfig" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
+                <auth2 type="btn" value="selectConfig" />
             </auth1>
             <auth1 name="server" value="master">
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
+                <auth2 type="btn" value="selectConfig" />
             </auth1>
         </column>
     </record>
@@ -30,13 +33,16 @@
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
+                <auth2 type="btn" value="selectConfig" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
+                <auth2 type="btn" value="selectConfig" />
             </auth1>
             <auth1 name="server" value="master">
                 <auth2 type="list" value="databaseManage" />
+                <auth2 type="btn" value="selectConfig" />
             </auth1>
         </column>
     </record>
@@ -46,8 +52,8 @@
         <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA2NzU2MzQsImV4cCI6MTYwMDcxMTYzNH0.mxswkEQ8zB9ubv-ZuRAdpKigLk44_QHOvKO9W0IdCVo" />
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
-                <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
+                <auth2 type="list" value="configManage" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 type="list" value="databaseManage" />
