@@ -79,7 +79,7 @@
                 </form>
             </page>
         </pageType>
-        <pageType name="配置管理" authorization="configManage" icon="clock">
+        <pageType name="配置管理" authorization="configManage" icon="clock" >
             <page name="配置查询" authorization="selectConfig" type="configManage">
                 <form name="配置查询" operation="selectConfigBody">
                     <input type="text" name="args" id="args"/>

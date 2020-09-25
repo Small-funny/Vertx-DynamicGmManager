@@ -114,7 +114,6 @@ public class MainResources extends AbstractVerticle {
      */
     private void preloadingList(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
-        System.out.println(ctx);
         if (CONFIG_MANAGE_PAGES.contains(page)) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.put("operation", "selectConfigName");

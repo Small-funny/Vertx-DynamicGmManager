@@ -1,6 +1,5 @@
 package Server.DatabaseHelper;
 
-import Server.Automation.PageUtil;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
@@ -51,20 +50,28 @@ public class ManagerDatabaseHelper {
      * @param username
      * @return
      */
-    public static String deleteUser(String username) {
+    public static void deleteUser(String username) {
         Element rootData = loadDatabase();
-        if (!isExisted(username)) {
-            return "用户不存在，删除失败";
-        } else {
-            for (Element record : rootData.getChildren()) {
-                Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
-                if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
-                    rootData.removeContent(record);
-                }
+        for (Element record : rootData.getChildren()) {
+            Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
+            if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
+                rootData.removeContent(record);
             }
-            saveXml(rootData);
-            return "删除成功";
         }
+        saveXml(rootData);
+    }
+
+    /**
+     * 批量删除用户记录
+     *
+     * @param users
+     * @return
+     */
+    public static String deleteUsers(List<String> users) {
+        for (String username : users) {
+            deleteUser(username);
+        }
+        return "删除成功";
     }
 
     /**

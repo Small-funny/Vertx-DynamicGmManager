@@ -194,7 +194,7 @@
             }), success: function (data) {
                 $("#" + section).html(data)
             }, error: function () {
-                toastr.error("操作失败")
+                toastr.warning("操作失败")
             }
         })
     }
@@ -210,7 +210,7 @@
             }), success: function (data) {
                 $("#" + section).html(data)
             }, error: function () {
-                toastr.error("操作失败")
+                toastr.warning("操作失败")
             }
         })
     }
@@ -227,7 +227,7 @@
                 toastr.success("操作成功")
                 $("#" + section).html(data)
             }, error: function () {
-                toastr.success("操作失败")
+                toastr.warning("操作失败")
             }
         })
     }
@@ -253,8 +253,6 @@
             $(this).attr({from: "return"})
         })
         $("#returnContent").html(" ")
-
-
     }
 
     function changeReturn(urls, fromValue) {
