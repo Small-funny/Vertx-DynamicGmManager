@@ -369,14 +369,12 @@ public class XmlMapping {
                         .append("<textarea id=\"text\" name=\"body\" rows=\"19\" placeholder=\"Cont.\" class=\"form-control\" style=\"height:700px\" from=\"return\">")
                         .append(data)
                         .append("</textarea></div></div>");
-                if (CONFIG_MANAGE_PAGES.contains(page)) {
+                if (auth &&CONFIG_MANAGE_PAGES.contains(page)) {
                     stringBuilder.append("<div class=\"row form-group\">")
                             .append("<div class=\"col col-md-3\"><label class=\" form-control-label\">subPassword</label></div>")
                             .append("<div class=\"col-12 col-md-9\">")
                             .append("<input type=\"text\" name=\"subPassword\" id=\"subPassword\" class=\"form-control\"/>")
                             .append("</div></div>");
-                }
-                if (auth &&CONFIG_MANAGE_PAGES.contains(page)) {
                     stringBuilder
                             .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")
                             .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">")

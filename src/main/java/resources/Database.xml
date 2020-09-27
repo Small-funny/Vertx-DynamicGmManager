@@ -49,7 +49,7 @@
     <record>
         <column name="username" value="username" />
         <column name="password" value="password" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDA2NzU2MzQsImV4cCI6MTYwMDcxMTYzNH0.mxswkEQ8zB9ubv-ZuRAdpKigLk44_QHOvKO9W0IdCVo" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDExOTM4NTAsImV4cCI6MTYwMTIyOTg1MH0.Ix6_UhL0mCxPs-fUqi4L-xsE7FHXceh3ZoZwp1g2910" />
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="gameManage" />
