@@ -2,7 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDExNzM1NTgsImV4cCI6MTYwMTIwOTU1OH0.vvks6WLu2dkdHiIHSCvoabjUCFmb8IKXS0UoJaj09lk" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDExOTQxMTksImV4cCI6MTYwMTIzMDExOX0.cYlC-Abp4pkwIp9t50ulkrLh7sU1gj9wM_7u8OBKmLI" />
         <column name="auth" value="sup">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
@@ -49,25 +49,24 @@
     <record>
         <column name="username" value="username" />
         <column name="password" value="password" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDExOTM4NTAsImV4cCI6MTYwMTIyOTg1MH0.Ix6_UhL0mCxPs-fUqi4L-xsE7FHXceh3ZoZwp1g2910" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDExOTU3OTcsImV4cCI6MTYwMTIzMTc5N30.1qVI-PLe5fRd64vCBEqG5NnUkxMgonPqTQHKmU_mLdw" />
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="gameManage" />
-                <auth2 type="list" value="configManage" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="gameManage" />
             </auth1>
             <auth1 name="server" value="master">
-                <auth2 type="list" value="databaseManage" />
                 <auth2 type="list" value="configManage" />
+
             </auth1>
         </column>
     </record>
     <record>
-        <cloumn name="username" value="user1" />
-        <cloumn name="password" value="122" />
+        <cloumn name="username" value="123123334" />
+        <cloumn name="password" value="1231232132131" />
         <cloumn name="token" value="token" />
         <cloumn name="auth" value="ord">
             <auth1 name="server" value="sandbox" />

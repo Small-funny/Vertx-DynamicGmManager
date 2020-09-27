@@ -321,6 +321,7 @@
         $("input[from='return']").each(function () {
             json[$(this).attr('name')] = $(this).val()
         })
+
         json['body'] = $("#text").val()
         console.log(JSON.stringify(json))
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
