@@ -2,19 +2,13 @@ package Server.Automation;
 
 import Server.DatabaseHelper.ManagerDatabaseHelper;
 import Server.DatabaseHelper.VerifyDatabaseHelper;
-import Server.Verify.Cache;
-import Server.Verify.JwtUtils;
 import com.alibaba.fastjson.JSON;
-import io.vertx.core.Vertx;
-import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
 
-import java.net.URI;
 import java.util.*;
 
 import static Server.Automation.PageUtil.*;
-import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
 
 /**
  * @author Wen

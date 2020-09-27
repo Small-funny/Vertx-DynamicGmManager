@@ -12,10 +12,8 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import org.jdom2.Element;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static Server.Automation.PageUtil.*;
 import static Server.DatabaseHelper.ManagerDatabaseHelper.allManagerInfo;
