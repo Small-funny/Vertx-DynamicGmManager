@@ -300,12 +300,9 @@ public class XmlMapping {
         stringBuilder.append("<div class=\"card\">").append("<div class=\"card-body card-block\" style=\"width: auto\">" +
                 "<div class=\"row form-group\"><div class=\"col col-md-12\">");
         List<String> list = JSON.parseObject(data, List.class);
+        stringBuilder.append("<select style=\"height:700px\" name=\"multiple-select\" id=\"multiple-select\" multiple=\"\" class=\"form-control\">");
         for (String s : list) {
-            stringBuilder.append("<div class=\"checkbox\">").append("<label class=\"form-check-label \">")
-                    .append("<input type=\"checkbox\" name=\"").append("auth").append("\" value=\"").append(s).append("\" class=\"form-check-input\">")
-                    .append(s)
-                    .append("</label>")
-                    .append("</div>");
+           stringBuilder.append("<option ondblclick=\"document.getElementById('args').value='").append(s).append("'\" value=\"").append(s).append("\">").append(s).append("</option>");
         }
         stringBuilder.append("</div></div></div></div>");
 
@@ -410,7 +407,7 @@ public class XmlMapping {
 
                 stringBuilder.append("</div>");
             } else if ("checkbox" .equals(type)) {
-                assert argsName != null;
+
                 //List<String> authList = ManagerDatabaseHelper.selectAuthList(argsName.get("username"), "list", argsName.get("route").split("/")[1]);
                 List<String> authList = JSON.parseArray(data, String.class);
                 List<String> allAuthList = ManagerDatabaseHelper.selectAuthList("root", argsName.get("authType"), argsName.get("route").split("/")[1]);
