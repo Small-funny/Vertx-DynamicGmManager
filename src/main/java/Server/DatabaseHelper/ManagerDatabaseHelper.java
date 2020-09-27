@@ -45,6 +45,23 @@ public class ManagerDatabaseHelper {
     }
 
     /**
+     * 返回当前所有用户名
+     *
+     * @return
+     */
+    public static List<String> allUser() {
+        List<String> result = new ArrayList<>();
+        List<Element> data = loadDatabase().getChildren();
+
+        for (Element record : data) {
+            List<String> rowData = new ArrayList<>();
+            String username = record.getChildren().get(INDEX_OF_USERNAME).getAttributeValue(DATA_VALUE);
+            result.add(username);
+        }
+        return result;
+    }
+
+    /**
      * 删除用户所有相关记录
      * 
      * @param username
