@@ -50,8 +50,7 @@
         <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDExOTYyNTgsImV4cCI6MTYwMTIzMjI1OH0.ZS9o-Uv_v6xdi9o9Qpam6y1xFXLkcjJo9Ba7a91eddc" />
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
-                <auth2 type="list" value="gameManage" />
-                <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="databaseManage" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 type="list" value="databaseManage" />
@@ -61,15 +60,5 @@
                 <auth2 type="list" value="configManage" />
             </auth1>
         </column>
-    </record>
-    <record>
-        <cloumn name="username" value="123123334" />
-        <cloumn name="password" value="1231232132131" />
-        <cloumn name="token" value="token" />
-        <cloumn name="auth" value="ord">
-            <auth1 name="server" value="sandbox" />
-            <auth1 name="server" value="test" />
-            <auth1 name="server" value="master" />
-        </cloumn>
     </record>
 </database>

@@ -3,6 +3,7 @@ package Server.Resources;
 import Server.Automation.XmlMapping;
 import Server.Verify.JwtUtils;
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -16,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import static Server.Automation.PageUtil.*;
-import static Server.DatabaseHelper.ManagerDatabaseHelper.allManagerInfo;
+import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
 
 /**
  * 系统主页路由
@@ -100,7 +101,17 @@ public class MainResources extends AbstractVerticle {
         if (USER_MANAGE_PAGES.contains(page)) {
             ctx.response().end(
                     XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, hashMap));
-        } else {
+        }
+//        else if (USER_AUTH_MANAGE_PAGES.contains(page) && "selectAuthList".equals(hashMap.get("operation"))) {
+//            String username = hashMap.get("username");
+//            String server = hashMap.get("serverAuth");
+//            String authType = hashMap.get("authType");
+//            List<String> resultList = selectAuthList(username, authType, server);
+//            String hashStr = JSON.toJSONString(resultList);
+//            ctx.response().end(XmlMapping.createReturnString("checkbox", hashStr, false, hashMap));
+//
+//        }
+        else {
             ctx.response().end("");
         }
     }
@@ -120,7 +131,7 @@ public class MainResources extends AbstractVerticle {
                 ctx.response().end(
                         XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data")));
             });
-        }  else {
+        } else {
             ctx.response().end(" ");
         }
     }

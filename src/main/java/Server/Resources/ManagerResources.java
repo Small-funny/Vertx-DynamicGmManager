@@ -80,7 +80,7 @@ public class ManagerResources {
                 username = data.get("username");
                 server = data.get("serverAuth");
                 List<String> authSettings = JSONArray.parseArray(JSON.toJSONString(data.get("authList")), String.class);
-                returnResult(routingContext, "return ", updateAuth(authSettings, server, username));
+                returnResult(routingContext, "return", updateAuth(authSettings, server, username));
             default:
                 break;
         }

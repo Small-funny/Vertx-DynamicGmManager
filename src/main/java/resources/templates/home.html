@@ -281,8 +281,12 @@
         json["operation"] = operation
         json["username"] = $("#username").val()
         json["serverAuth"] = $("#serverAuth").val()
-        // refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
-        refreshAjaxPostAlert("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
+        if (operation === "updateAuth") {
+            refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "userInfo")
+        }else if (operation==="deleteUsers"){
+            refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+            refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
+        }
     }
 
     function updateCheckbox(chechbox) {
