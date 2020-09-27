@@ -3,18 +3,14 @@ package Server.Resources;
 import java.util.*;
 
 import Server.Automation.XmlMapping;
-import Server.DatabaseHelper.ManagerDatabaseHelper;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
-import io.vertx.core.AsyncResult;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.sql.rowset.spi.SyncResolver;
 
-import static Server.Automation.PageUtil.*;
 import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
 
 /**
@@ -22,10 +18,7 @@ import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
  */
 @Slf4j
 public class ManagerResources {
-    // 删除权限
-    private static final String OPERATION_DELETE_AUTH = "deleteAuth";
-    // 增加权限
-    private static final String OPERATION_ADD_AUTH = "addAuth";
+
     // 删除用户
     private static final String OPERATION_DELETE_USERS = "deleteUsers";
     // 增加用户
