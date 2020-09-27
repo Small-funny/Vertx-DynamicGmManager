@@ -268,29 +268,29 @@
         refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
     }
 
-    function updateAuth(urls,operation) {
+    function updateAuth(urls, operation) {
         var list = [];
         $("input[checked='checked']").each(function () {
             list.push($(this).attr('value'))
             console.log($(this))
         })
         console.log(list)
-        var json ={};
-        json["authList"]=list
-        json["route"]=route
-        json["operation"]=operation
-        json["username"]=$("#username").val()
-        json["serverAuth"]=$("#serverAuth").val()
-        refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
-        refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
+        var json = {};
+        json["authList"] = list
+        json["route"] = route
+        json["operation"] = operation
+        json["username"] = $("#username").val()
+        json["serverAuth"] = $("#serverAuth").val()
+        // refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+        refreshAjaxPostAlert("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
     }
 
     function updateCheckbox(chechbox) {
         console.log(chechbox.attr("checked"))
-        if (chechbox.attr("checked")==="checked") {
+        if (chechbox.attr("checked") === "checked") {
             chechbox.removeAttr("checked")
-        } else  {
-            chechbox.attr("checked",true)
+        } else {
+            chechbox.attr("checked", true)
         }
         console.log(chechbox.attr("checked"))
     }
@@ -323,8 +323,13 @@
         })
 
         json['body'] = $("#text").val()
+        json['args'] = $("#args").val()
         console.log(JSON.stringify(json))
-        refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+        if ($("#subPassword").val() === 'laopannizhenshuai') {
+            refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+        } else {
+            toastr.error("二级密码错误")
+        }
     }
 
 

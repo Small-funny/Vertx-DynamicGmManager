@@ -2,7 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDExOTQxMTksImV4cCI6MTYwMTIzMDExOX0.cYlC-Abp4pkwIp9t50ulkrLh7sU1gj9wM_7u8OBKmLI" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDExOTkxMDMsImV4cCI6MTYwMTIzNTEwM30.goDCiotUsAp2lSJs-sWG9j9UZEOmT0u8CPiX_vjTXhY" />
         <column name="auth" value="sup">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
@@ -31,9 +31,7 @@
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
-                <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
-                <auth2 type="btn" value="selectConfig" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 type="list" value="gameManage" />
@@ -48,11 +46,12 @@
     </record>
     <record>
         <column name="username" value="username" />
-        <column name="password" value="password" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDExOTU3OTcsImV4cCI6MTYwMTIzMTc5N30.1qVI-PLe5fRd64vCBEqG5NnUkxMgonPqTQHKmU_mLdw" />
+        <column name="password" value="32131" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDExOTYyNTgsImV4cCI6MTYwMTIzMjI1OH0.ZS9o-Uv_v6xdi9o9Qpam6y1xFXLkcjJo9Ba7a91eddc" />
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="gameManage" />
+                <auth2 type="list" value="configManage" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 type="list" value="databaseManage" />
@@ -60,7 +59,6 @@
             </auth1>
             <auth1 name="server" value="master">
                 <auth2 type="list" value="configManage" />
-
             </auth1>
         </column>
     </record>

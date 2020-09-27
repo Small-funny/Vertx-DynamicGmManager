@@ -45,7 +45,7 @@
         <pageType name="数据库管理" authorization="databaseManage" icon="archive">
             <page name="表结构查询" authorization="selectTableData" icon="calendar">
                 <form name="表查询" operation="selectTableData">
-                    <input type="text" name="tableName" id="tableName"/>
+                    <input type="text" name="args" id="args"/>
                     <input type="button" name="查询" id="configManage" value="查询"/>
                 </form>
             </page>
