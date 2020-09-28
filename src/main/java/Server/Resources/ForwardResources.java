@@ -17,6 +17,8 @@ import Server.Verify.JwtUtils;
 
 import java.util.HashMap;
 
+import static Server.Automation.PageUtil.*;
+
 /**
  * 数据转发接口
  */
@@ -50,7 +52,11 @@ public class ForwardResources {
         server = url.split("/")[1];
         page = url.split("/")[2];
 
-        webClient.post(8000, "localhost", "/GmServer").sendJsonObject(jsonObject, ar -> {
+        String host = SERVER_ELEMENT.get(server).getAttributeValue("host");
+        String suffix = SERVER_ELEMENT.get(server).getAttributeValue("url");
+        int port = Integer.parseInt(SERVER_ELEMENT.get(server).getAttributeValue("port"));
+
+        webClient.post(port, host, suffix).sendJsonObject(jsonObject, ar -> {
             if (ar.succeeded()) {
                 JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
                 String type = jsonResult.getString("type");

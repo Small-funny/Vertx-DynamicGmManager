@@ -246,7 +246,7 @@
         json["route"] = route
         console.log("route" + route)
         console.log(json)
-        refreshAjaxPost("/main/configsName", page, null, "configsName")
+        refreshAjaxPost("/main/configsName", page, JSON.stringify(json), "configsName")
         refreshAjaxPost("/main/userInfo", page, JSON.stringify(json), "userInfo")
 
         $("input[type='hidden']").each(function () {

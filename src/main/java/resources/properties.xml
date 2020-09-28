@@ -2,11 +2,10 @@
 <system>
 
     <servers>
-        <server name="沙箱" value="sandbox" url="localhost" port="8000"/>
-        <server name="测试服" value="test" url="localhost" port="8000"/>
-        <server name="主服" value="master" url="localhost" port="8000"/>
+        <server name="沙箱" value="sandbox" host="localhost" port="8000" url="/GmServer"/>
+        <server name="测试服" value="test" host="localhost" port="8000" url="/GmServer"/>
+        <server name="主服" value="master" host="localhost" port="8000" url="/GmServer"/>
     </servers>
-
 
     <pages>
         <pageType name="角色管理" authorization="playerManage" icon="anchor">

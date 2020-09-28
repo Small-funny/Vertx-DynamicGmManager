@@ -13,6 +13,7 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import org.jdom2.Element;
 
+import javax.sound.sampled.Port;
 import java.util.HashMap;
 import java.util.List;
 
@@ -123,11 +124,19 @@ public class MainResources extends AbstractVerticle {
      */
     private void preloadingList(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
+        HashMap data = JSON.parseObject(ctx.getBodyAsJson().getString("arguments"), HashMap.class);
+        String server = data.get("route").toString().split("/")[1];
+
+        String host = SERVER_ELEMENT.get(server).getAttributeValue("host");
+        String suffix = SERVER_ELEMENT.get(server).getAttributeValue("url");
+        int port = Integer.parseInt(SERVER_ELEMENT.get(server).getAttributeValue("port"));
+
         if (CONFIG_MANAGE_PAGES.contains(page)) {
             JsonObject jsonObject = new JsonObject();
             jsonObject.put("operation", "selectConfigName");
             WebClient webClient = WebClient.create(ctx.vertx());
-            webClient.post(8000, "localhost", "/GmServer").sendJsonObject(jsonObject, res -> {
+
+            webClient.post(port, host, suffix).sendJsonObject(jsonObject, res -> {
                 ctx.response().end(
                         XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data")));
             });
