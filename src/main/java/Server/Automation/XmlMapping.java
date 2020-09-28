@@ -35,6 +35,12 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    /**
+     * 根据xml生成表格控件
+     *
+     * @param element 页面元素
+     * @param route   当前页面服务器和路径
+     */
     private static String elementForm(Element element, String route) {
         StringBuilder stringBuilder = new StringBuilder();
         String operation = element.getAttributeValue("operation");
@@ -74,6 +80,12 @@ public class XmlMapping {
 
     }
 
+    /**
+     * 根据xml生成input控件
+     *
+     * @param element   页面元素
+     * @param operation 当前表单的操作
+     */
     private static String elementInput(Element element, String operation) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
@@ -85,7 +97,7 @@ public class XmlMapping {
                 .append("</div>")
                 .append("<div class=\"col-12 col-md-9\">")
                 .append("<input class=\"");
-        if ("file" .equals(element.getAttributeValue("type"))) {
+        if ("file".equals(element.getAttributeValue("type"))) {
             stringBuilder.append("form-control-file");
         } else {
             stringBuilder.append("form-control");
@@ -98,13 +110,13 @@ public class XmlMapping {
                 .append(element.getAttributeValue("id"))
                 .append("\" from=\"").append(operation)
                 .append("\"");
-        if ("button" .equals(element.getAttributeValue("type"))) {
+        if ("button".equals(element.getAttributeValue("type"))) {
             stringBuilder.append("value=\"")
                     .append(element.getAttributeValue("value"))
                     .append("\" onclick=\"changeReturn('/");
-            if ("userManage" .equals(element.getAttributeValue("id"))) {
+            if ("userManage".equals(element.getAttributeValue("id"))) {
                 stringBuilder.append("manager");
-            } else if ("configManage" .equals(element.getAttributeValue("id"))) {
+            } else if ("configManage".equals(element.getAttributeValue("id"))) {
                 stringBuilder.append("forward");
             }
             stringBuilder.append("','").append(operation).append("')\"");
@@ -116,6 +128,12 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    /**
+     * 根据xml生成下拉框控件
+     *
+     * @param element   页面元素
+     * @param operation 当前表单的操作
+     */
     private static String elementSelect(Element element, String operation) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
@@ -144,6 +162,11 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    /**
+     * 根据xml生成单选框或复选框控件
+     *
+     * @param element 页面元素
+     */
     private static String elementFormCheck(Element element) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
@@ -169,6 +192,11 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    /**
+     * 根据xml选择文件控件
+     *
+     * @param element 页面元素
+     */
     private static String elementFile(Element element) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
@@ -184,6 +212,11 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    /**
+     * 根据xml选择时间控件
+     *
+     * @param element 页面元素
+     */
     private static String elementTime(Element element) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
@@ -209,10 +242,22 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    /**
+     * 根据页面名获取页面的元素
+     *
+     * @param str 页面名
+     * @return 页面元素
+     */
     public static Element getElement(String str) {
         return PAGE_ELEMENT.get(str);
     }
 
+    /**
+     * 根据xml生成侧边栏菜单
+     *
+     * @param token  用户的token
+     * @param server 当前服务器
+     */
     public static String createAsideString(String token, String server) {
         List<String> urlList = VerifyDatabaseHelper.selectAuthority(token, server);
         StringBuilder stringBuilder = new StringBuilder();
@@ -225,7 +270,7 @@ public class XmlMapping {
             if (!urlList.contains(entry.getValue().getAttributeValue("authorization"))) {
                 continue;
             }
-            if ("playerManage" .equals(entry.getKey()) && !"root" .equals(VerifyDatabaseHelper.tokenToUsername(token))) {
+            if ("playerManage".equals(entry.getKey()) && !"root".equals(VerifyDatabaseHelper.tokenToUsername(token))) {
                 continue;
             }
             stringBuilder.append("<li> <a href=\"");
@@ -271,6 +316,10 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    /**
+     * 生成选择服务器下拉框
+     * @param selected 当前选择的服务器
+     */
     public static String createServerString(String selected) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<option value=\"0\"> 选择服务器 </option>");
@@ -288,6 +337,10 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    /**
+     * 生成右侧列表
+     * @param data 列表数据
+     */
     public static String createConfigsList(String data) {
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -296,20 +349,27 @@ public class XmlMapping {
         List<String> list = JSON.parseObject(data, List.class);
         stringBuilder.append("<select style=\"height:700px\" name=\"multiple-select\" id=\"multiple-select\" multiple=\"\" class=\"form-control\">");
         for (String s : list) {
-           stringBuilder.append("<option ondblclick=\"document.getElementById('args').value='").append(s).append("'\" value=\"").append(s).append("\">").append(s).append("</option>");
+            stringBuilder.append("<option ondblclick=\"document.getElementById('args').value='").append(s).append("'\" value=\"").append(s).append("\">").append(s).append("</option>");
         }
         stringBuilder.append("</div></div></div></div>");
 
         return stringBuilder.toString();
     }
 
+    /**
+     * 生成返回的内容
+     * @param type 返回内容的类型
+     * @param data 返回内容的数据
+     * @param auth 在str类型下是否有修改的权限
+     * @param argsName 构造返回内容所需要的数据
+     */
     public static String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) {
         StringBuilder stringBuilder = new StringBuilder();
         String page = "";
         if (argsName != null) {
             page = argsName.get("route").split("/")[2];
         }
-        if ("list" .equals(type)) {
+        if ("list".equals(type)) {
             List<String> list = JSON.parseObject(data, List.class);
             for (String s : list) {
                 stringBuilder.append("<div class=\"checkbox\">").append("<label class=\"form-check-label \">")
@@ -321,7 +381,7 @@ public class XmlMapping {
             return stringBuilder.toString();
         } else {
 
-            if ("table" .equals(type)) {
+            if ("table".equals(type)) {
 
                 HashMap<String, String> hashMap1 = JSON.parseObject(data, HashMap.class);
                 List<String> colName = JSON.parseObject(hashMap1.get("colName"), List.class);
@@ -360,7 +420,7 @@ public class XmlMapping {
                 }
                 stringBuilder.append("</div></div></div></form>");
 
-            } else if ("str" .equals(type)) {
+            } else if ("str".equals(type)) {
                 String route = argsName.get("route");
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
                         .append("<form id=\"updateForm\" class=\"form-horizontal\" style=\"width: auto\">")
@@ -369,7 +429,7 @@ public class XmlMapping {
                         .append("<textarea id=\"text\" name=\"body\" rows=\"19\" placeholder=\"Cont.\" class=\"form-control\" style=\"height:700px\" from=\"return\">")
                         .append(data)
                         .append("</textarea></div></div>");
-                if (auth &&CONFIG_MANAGE_PAGES.contains(page)) {
+                if (auth && CONFIG_MANAGE_PAGES.contains(page)) {
                     stringBuilder.append("<div class=\"row form-group\">")
                             .append("<div class=\"col col-md-3\"><label class=\" form-control-label\">subPassword</label></div>")
                             .append("<div class=\"col-12 col-md-9\">")
@@ -384,7 +444,7 @@ public class XmlMapping {
                 }
 
                 stringBuilder.append("</form></div>");
-            } else if ("return" .equals(type)) {
+            } else if ("return".equals(type)) {
                 stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
                         .append("<div class=\"row form-group\" style=\"width: auto\">")
                         .append("<div class=\"col-12 \">");
@@ -398,7 +458,7 @@ public class XmlMapping {
                 }
 
                 stringBuilder.append("</div>");
-            } else if ("checkbox" .equals(type)) {
+            } else if ("checkbox".equals(type)) {
 
                 //List<String> authList = ManagerDatabaseHelper.selectAuthList(argsName.get("username"), "list", argsName.get("route").split("/")[1]);
                 List<String> authList = JSON.parseArray(data, String.class);
@@ -430,16 +490,4 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    public static String createAuthList(String data) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<div class=\"card-header\"><strong>")
-                .append("权限列表")
-                .append("</strong></div>")
-                .append("<div class=\"card-body card-block\">")
-                .append("<form name=\"");
-        return stringBuilder.toString();
-    }
-//    public static void main(String[] args) {
-//        System.out.println(createElementString(PAGE_ELEMENT.get("queryAsset"), "route"));
-//    }
 }

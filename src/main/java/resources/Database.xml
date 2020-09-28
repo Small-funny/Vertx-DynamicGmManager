@@ -2,7 +2,7 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDExOTkxMDMsImV4cCI6MTYwMTIzNTEwM30.goDCiotUsAp2lSJs-sWG9j9UZEOmT0u8CPiX_vjTXhY" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDEyNTk5ODUsImV4cCI6MTYwMTI5NTk4NX0.-zt1bWcuJ0O7VWjntQTVLz8bxZU0SzzrFRHsFewpRSk" />
         <column name="auth" value="sup">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
