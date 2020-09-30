@@ -13,6 +13,7 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import org.jdom2.Element;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -117,22 +118,35 @@ public class MainResources extends AbstractVerticle {
      */
     private void preloadingList(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
-        HashMap<String,String> data = JSON.parseObject(ctx.getBodyAsJson().getString("arguments"), HashMap.class);
+        HashMap<String, String> data = JSON.parseObject(ctx.getBodyAsJson().getString("arguments"), HashMap.class);
         String server = data.get("route").toString().split("/")[1];
         String host = SERVER_ELEMENT.get(server).getAttributeValue("host");
         String suffix = SERVER_ELEMENT.get(server).getAttributeValue("url");
         String operation = data.get("list");
         int port = Integer.parseInt(SERVER_ELEMENT.get(server).getAttributeValue("port"));
-        if("null".equals(operation)){
+        if ("null".equals(operation)) {
             ctx.response().end(" ");
-        }else{
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.put("operation", operation);
-            WebClient webClient = WebClient.create(ctx.vertx());
-            String argName = PAGE_ELEMENT.get(page).getChild("form").getChild("input").getAttributeValue("id");
-            webClient.post(port, host, suffix).sendJsonObject(jsonObject, res -> {
-                ctx.response().end(XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data"), argName));
-            });
+        } else {
+
+            if ("selectUserList".equals(operation)) {
+                HashMap<String, String> hashMap1 = JSON.parseObject(JSON.toJSONString(allManagerInfo()), HashMap.class);
+                List<List<String>> tableBody = JSON.parseObject(hashMap1.get("tableBody"), List.class);
+                List<String> users = new ArrayList<>();
+                for (List<String> list : tableBody) {
+                    users.add(list.get(0));
+                }
+                String argName = PAGE_ELEMENT.get(page).getChild("form").getChild("input").getAttributeValue("id");
+                ctx.response().end(XmlMapping.createConfigsList(JSON.toJSONString(users), argName));
+
+            } else {
+                JsonObject jsonObject = new JsonObject();
+                jsonObject.put("operation", operation);
+                WebClient webClient = WebClient.create(ctx.vertx());
+                String argName = PAGE_ELEMENT.get(page).getChild("form").getChild("input").getAttributeValue("id");
+                webClient.post(port, host, suffix).sendJsonObject(jsonObject, res -> {
+                    ctx.response().end(XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data"), argName));
+                });
+            }
         }
     }
 }

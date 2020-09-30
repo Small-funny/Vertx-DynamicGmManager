@@ -330,6 +330,8 @@ public class XmlMapping {
                         .append(server)
                         .append("','")
                         .append(element.getAttributeValue("authorization"))
+                        .append("','").append(element.getAttributeValue("list"))
+                        .append("','").append(element.getAttributeValue("table"))
                         .append("')\" id=\"").append(element.getAttributeValue("authorization")).append("\">")
                         .append(element.getAttributeValue("name"))
                         .append("</a></li>");
