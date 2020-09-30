@@ -61,6 +61,9 @@ public class XmlMapping {
                 case "formcheck":
                     stringBuilder.append(elementFormCheck(child));
                     break;
+                case "textarea":
+                    stringBuilder.append(elementTextarea(child,operation));
+                    break;
                 case "file":
                     stringBuilder.append(elementFile(child));
                     break;
@@ -128,6 +131,24 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    private static String elementTextarea(Element element,String operation){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div class=\"row form-group\">")
+                .append("<div class=\"col col-md-3\">")
+                .append("<label  class=\" form-control-label\">");
+        stringBuilder.append(element.getAttributeValue("name") == null ? " " : element.getAttributeValue("name"));
+        stringBuilder.append("</label>")
+                .append("</div>")
+                .append("<div class=\"col-12 col-md-9\">")
+                .append("<textarea name=\"")
+                .append(element.getAttributeValue("name"))
+                .append("\" id=\"")
+                .append(element.getAttributeValue("id"))
+                .append("\" from=\"").append(operation)
+                .append("\"").append("rows=\"19\"  class=\"form-control\" style=\"height:700px\"/>");
+        stringBuilder.append("</div>").append("</div>");
+        return stringBuilder.toString();
+    }
     /**
      * 根据xml生成下拉框控件
      *
@@ -291,6 +312,8 @@ public class XmlMapping {
                         .append(server)
                         .append("','")
                         .append(element.getAttributeValue("authorization"))
+                        .append("','").append(element.getAttributeValue("list"))
+                        .append("','").append(element.getAttributeValue("table"))
                         .append("')\" id=\"").append(element.getAttributeValue("authorization")).append("\">")
                         .append(element.getAttributeValue("name"))
                         .append("</a></li>");
@@ -341,7 +364,7 @@ public class XmlMapping {
      * 生成右侧列表
      * @param data 列表数据
      */
-    public static String createConfigsList(String data) {
+    public static String createConfigsList(String data,String argName) {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"card\">").append("<div class=\"card-body card-block\" style=\"width: auto\">" +
@@ -349,7 +372,7 @@ public class XmlMapping {
         List<String> list = JSON.parseObject(data, List.class);
         stringBuilder.append("<select style=\"height:700px\" name=\"multiple-select\" id=\"multiple-select\" multiple=\"\" class=\"form-control\">");
         for (String s : list) {
-            stringBuilder.append("<option ondblclick=\"document.getElementById('args').value='").append(s).append("'\" value=\"").append(s).append("\">").append(s).append("</option>");
+            stringBuilder.append("<option ondblclick=\"document.getElementById('").append(argName).append("').value='").append(s).append("'\" value=\"").append(s).append("\">").append(s).append("</option>");
         }
         stringBuilder.append("</div></div></div></div>");
 

@@ -3,7 +3,6 @@ package Server.Resources;
 import Server.Automation.XmlMapping;
 import Server.Verify.JwtUtils;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
@@ -13,7 +12,6 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import org.jdom2.Element;
 
-import javax.sound.sampled.Port;
 import java.util.HashMap;
 import java.util.List;
 
@@ -102,17 +100,7 @@ public class MainResources extends AbstractVerticle {
         if (USER_MANAGE_PAGES.contains(page)) {
             ctx.response().end(
                     XmlMapping.createReturnString(TYPE_TABLE, JSON.toJSONString(allManagerInfo()), false, hashMap));
-        }
-//        else if (USER_AUTH_MANAGE_PAGES.contains(page) && "selectAuthList".equals(hashMap.get("operation"))) {
-//            String username = hashMap.get("username");
-//            String server = hashMap.get("serverAuth");
-//            String authType = hashMap.get("authType");
-//            List<String> resultList = selectAuthList(username, authType, server);
-//            String hashStr = JSON.toJSONString(resultList);
-//            ctx.response().end(XmlMapping.createReturnString("checkbox", hashStr, false, hashMap));
-//
-//        }
-        else {
+        } else {
             ctx.response().end("");
         }
     }
@@ -124,24 +112,22 @@ public class MainResources extends AbstractVerticle {
      */
     private void preloadingList(RoutingContext ctx) {
         String page = ctx.getBodyAsJson().getString("page");
-        HashMap data = JSON.parseObject(ctx.getBodyAsJson().getString("arguments"), HashMap.class);
+        HashMap<String,String> data = JSON.parseObject(ctx.getBodyAsJson().getString("arguments"), HashMap.class);
         String server = data.get("route").toString().split("/")[1];
-
         String host = SERVER_ELEMENT.get(server).getAttributeValue("host");
         String suffix = SERVER_ELEMENT.get(server).getAttributeValue("url");
+        String operation = data.get("list");
         int port = Integer.parseInt(SERVER_ELEMENT.get(server).getAttributeValue("port"));
-
-        if (CONFIG_MANAGE_PAGES.contains(page)) {
-            JsonObject jsonObject = new JsonObject();
-            jsonObject.put("operation", "selectConfigName");
-            WebClient webClient = WebClient.create(ctx.vertx());
-
-            webClient.post(port, host, suffix).sendJsonObject(jsonObject, res -> {
-                ctx.response().end(
-                        XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data")));
-            });
-        } else {
+        if("null".equals(operation)){
             ctx.response().end(" ");
+        }else{
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.put("operation", operation);
+            WebClient webClient = WebClient.create(ctx.vertx());
+            String argName = PAGE_ELEMENT.get(page).getChild("form").getChild("input").getAttributeValue("id");
+            webClient.post(port, host, suffix).sendJsonObject(jsonObject, res -> {
+                ctx.response().end(XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data"), argName));
+            });
         }
     }
 }

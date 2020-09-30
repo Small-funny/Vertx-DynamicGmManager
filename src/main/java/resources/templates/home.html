@@ -232,7 +232,7 @@
         })
     }
 
-    function changeAside(server, page) {
+    function changeAside(server, page,list,table) {
         pageName = page
         //侧边栏添加选中状态和展开状态
         $("#" + prepage).removeClass("active")
@@ -240,12 +240,11 @@
         prepage = page;
         refreshAjaxGet(server, page, "pageContent")
         var json = {}
-        console.log(server + page)
         history.pushState(null, null, "/main" + "/" + server + "/" + page);
         route = "/" + server + "/" + page
         json["route"] = route
-        console.log("route" + route)
-        console.log(json)
+        json["list"]=list
+        json["table"]=table
         refreshAjaxPost("/main/configsName", page, JSON.stringify(json), "configsName")
         refreshAjaxPost("/main/userInfo", page, JSON.stringify(json), "userInfo")
 
@@ -261,6 +260,9 @@
             json[$(this).attr('id')] = $(this).val()
         })
         $("select[from='" + fromValue + "']").each(function () {
+            json[$(this).attr('id')] = $(this).val()
+        })
+        $("textarea[from='" + fromValue + "']").each(function () {
             json[$(this).attr('id')] = $(this).val()
         })
         console.log(json)
