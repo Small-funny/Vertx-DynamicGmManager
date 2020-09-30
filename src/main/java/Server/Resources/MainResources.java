@@ -1,6 +1,7 @@
 package Server.Resources;
 
 import Server.Automation.XmlMapping;
+import Server.DatabaseHelper.VerifyDatabaseHelper;
 import Server.Verify.JwtUtils;
 import com.alibaba.fastjson.JSON;
 import io.vertx.core.AbstractVerticle;
@@ -45,10 +46,12 @@ public class MainResources extends AbstractVerticle {
      */
     private void home(RoutingContext ctx) {
         serverString = XmlMapping.createServerString("0");
+        String username = VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(ctx));
         var obj = new JsonObject();
         obj.put("sidePanal", "");
         obj.put("content", "");
         obj.put("servers", serverString);
+        obj.put("username", username);
         thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
             ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
         });
@@ -64,10 +67,12 @@ public class MainResources extends AbstractVerticle {
 
         //侧边栏菜单
         asideString = XmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
+        String username = VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(ctx));
         obj.put("sidePanal", asideString);
         String serverRouter = ctx.request().getParam("serverRouter");
         serverString = XmlMapping.createServerString(serverRouter);
         obj.put("servers", serverString);
+        obj.put("username", username);
         thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
             ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
         });
