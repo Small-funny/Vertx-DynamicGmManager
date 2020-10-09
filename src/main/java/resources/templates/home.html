@@ -25,8 +25,6 @@
     <!-- App styles -->
     <link rel="stylesheet" href="/webroot/assets/css/app.min.css" type="text/css">
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
-    <link rel="stylesheet" href="/endors/clockpicker/bootstrap-clockpicker.min.css" type="text/css">
-    <link rel="stylesheet" href="/webroot/vendors/datepicker/daterangepicker.css" type="text/css">
 
 </head>
 <body class="form-membership" style="padding: 0">
@@ -47,10 +45,10 @@
 </div>
 <!-- end::preloader -->
 <!-- Left Panel -->
-<aside class="navigation left-panel" style="height: 100%;top: 0">
-    <div class="row form-group" style="height:50px">
-        <form id="serverSelect" class="form-horizontal" method="get">
-            <div class="col-12 col-md-9" style="width: 300px;margin: auto;top: 50%;">
+<aside class="navigation left-panel" style="height: 100%;top: 0;width: 16%">
+    <div class="row form-group" style="height:5%; width:100%">
+        <form id="serverSelect" class="form-horizontal" method="get" style="width:100%">
+            <div class="col-12 col-md-9" style="margin-left:20% ;top: 50%;">
                 <select id="selServer" class="form-control" th:utext="${servers}" onchange="submitForm();">
 
                 </select>
@@ -97,19 +95,19 @@
 <!-- Right Panel -->
 
 
-<div id="right-panel" class="right-panel" style="width: 1500px;margin: 35px auto">
+<div id="right-panel" class="right-panel" style="width: 70%;margin: 3% auto">
 
     <div class="content" style="margin: auto">
         <div class="animated fadeIn">
             <div class="row">
 
-                <div class="col-lg-6" style="flex: 0 0 auto;margin-left:150px">
+                <div class="col-lg-6" style="flex: 0 0 auto;margin-left:15%">
                     <div class="card" th:utext="${contentString}" id="pageContent"></div>
 
                     <div th:utext="${returnString}" id="returnContent"></div>
                     <div th:utext="${userInfo}" id="userInfo"></div>
                 </div>
-                <div class="col-lg-3" style="flex: 0 0 auto;margin-left:50px" th:utext="${configsName}"
+                <div class="col-lg-3" style="flex: 0 0 auto;margin-left:4%" th:utext="${configsName}"
                      id="configsName">
                 </div>
             </div>
