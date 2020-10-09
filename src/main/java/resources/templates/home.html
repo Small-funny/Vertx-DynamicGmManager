@@ -73,7 +73,7 @@
 
         <div>
             <h5>Fotoable</h5>
-            <p class="text-muted">Administrator</p>
+            <p class="text-muted" th:text="${username}"></p>
             <ul class="nav">
                 <li class="nav-item">
                     <a onclick="logout()" class="btn nav-link bg-danger-bright" title="Logout" data-toggle="tooltip">
@@ -159,15 +159,8 @@
         //再提交后把输入框的内容变成刚刚查找的配置名
 
         toastr.success("登陆成功")
+        
 
-        lay('#version').html('-v' + laydate.v);
-
-        //执行一个laydate实例
-        laydate.render({
-            elem: '#timestamp' //指定元素
-            , type: 'datetime'
-
-        });
     })
 
     function logout() {

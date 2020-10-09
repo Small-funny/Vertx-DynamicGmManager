@@ -21,7 +21,7 @@
                     <input type="button" id="userManage" value="修改"/>
                 </form>
             </page>
-            <page name="权限管理" authorization="selectAuthList" type="userAuthManage">
+            <page name="权限管理" authorization="selectAuthList" type="userAuthManage" list="selectUserList">
                 <form name="查询用户权限" operation="selectAuthList">
                     <input type="text" name="用户名" id="username"/>
                     <select name="服务器" id="serverAuth">
@@ -35,18 +35,30 @@
                     </select>
                     <input type="button" name="查询" id="userManage" value="查询"/>
                 </form>
-<!--                <form name="添加权限" operation="addAuth">-->
-<!--                    <input type="text" name="type" id="type"/>-->
-<!--                    <input type="button" name="添加" id="userManage" value="添加"/>-->
-<!--                </form>-->
+                <!--                <form name="添加权限" operation="addAuth">-->
+                <!--                    <input type="text" name="type" id="type"/>-->
+                <!--                    <input type="button" name="添加" id="userManage" value="添加"/>-->
+                <!--                </form>-->
             </page>
         </pageType>
         <pageType name="数据库管理" authorization="databaseManage" icon="archive">
-            <page name="表结构查询" authorization="selectTableData" icon="calendar">
+            <page name="表结构查询" authorization="selectTableData" operation="">
                 <form name="表查询" operation="selectTableData">
                     <input type="text" name="args" id="args"/>
                     <input type="button" name="查询" id="configManage" value="查询"/>
                 </form>
+            </page>
+            <page name="修改金币/钻石" authorization="updatePlayerValue" list="selectPlayerName">
+                <form name="修改金币/钻石" operation="updatePlayerValue">
+                    <input type="text" name="name" id="name"/>
+                    <select name="key" id="key">
+                        <option value="coin">金币</option>
+                        <option value="diamond">钻石</option>
+                    </select>
+                    <input type="text" name="value" id="value"/>
+                    <input type="button" name="修改" id="configManage" value="修改"/>
+                </form>
+
             </page>
         </pageType>
         <pageType name="游戏服务管理" authorization="gameManage" icon="calendar">
@@ -79,7 +91,7 @@
             </page>
         </pageType>
         <pageType name="配置管理" authorization="configManage" icon="clock" >
-            <page name="配置查询" authorization="selectConfig" type="configManage">
+            <page name="配置查询" authorization="selectConfig" type="configManage" list="selectConfigName">
                 <form name="配置查询" operation="selectConfigBody">
                     <input type="text" name="args" id="args"/>
                     <input type="button" name="button" value="查询" id="configManage">提交</input>
@@ -88,8 +100,7 @@
             <page name="添加配置" authorization="addConfigs" type="configManage">
                 <form name="添加配置" operation="addConfigs">
                     <input type="text" name="name" id="name" from=""/>
-                    <input type="text" name="body" id="body"/>
-                    <input type="text" name="type" id="type"/>
+                    <textarea name="body" id="body"/>
                     <input type="button" name="添加" id="configManage" value="添加"/>
                 </form>
             </page>

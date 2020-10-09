@@ -129,12 +129,7 @@ public class MainResources extends AbstractVerticle {
         } else {
 
             if ("selectUserList".equals(operation)) {
-                HashMap<String, String> hashMap1 = JSON.parseObject(JSON.toJSONString(allManagerInfo()), HashMap.class);
-                List<List<String>> tableBody = JSON.parseObject(hashMap1.get("tableBody"), List.class);
-                List<String> users = new ArrayList<>();
-                for (List<String> list : tableBody) {
-                    users.add(list.get(0));
-                }
+                List<String> users = allUser();
                 String argName = PAGE_ELEMENT.get(page).getChild("form").getChild("input").getAttributeValue("id");
                 ctx.response().end(XmlMapping.createConfigsList(JSON.toJSONString(users), argName));
 

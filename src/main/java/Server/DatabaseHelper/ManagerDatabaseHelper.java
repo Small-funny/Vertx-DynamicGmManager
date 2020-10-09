@@ -54,9 +54,10 @@ public class ManagerDatabaseHelper {
         List<Element> data = loadDatabase().getChildren();
 
         for (Element record : data) {
-            List<String> rowData = new ArrayList<>();
             String username = record.getChildren().get(INDEX_OF_USERNAME).getAttributeValue(DATA_VALUE);
-            result.add(username);
+            if (!isSupLevel(username)) {
+                result.add(username);
+            }
         }
         return result;
     }
