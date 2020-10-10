@@ -29,9 +29,12 @@ public class JwtUtils {
 
         long starttime = System.currentTimeMillis();
         log.info("Auth object create timer start");
-
-        JWTAuth jwtAuth = JWTAuth.create(routingContext.vertx(), jwtAuthOptions);
-
+        JWTAuth jwtAuth = null;
+        try {
+            jwtAuth = JWTAuth.create(routingContext.vertx(), jwtAuthOptions);
+        } catch (Exception e) {
+            log.error(e.getMessage());
+        }
         long endtime = System.currentTimeMillis();
         log.info("Time：" + (endtime - starttime) + "ms");
 
@@ -46,14 +49,19 @@ public class JwtUtils {
      */
     public static String findToken(RoutingContext routingContext) {
         String token = "token";
-        String Cookies = routingContext.request().getHeader("Cookie");
-        List<String> CookieList = Arrays.asList(Cookies.split("; "));
-        for (String str : CookieList) {
-            str = str.replaceAll(" ","");
-            String cookie = str.split("=")[0];
-            if (cookie.equals("Token")) {
-                token = str.split("=")[1];
+        try {
+            String Cookies = routingContext.request().getHeader("Cookie");
+            List<String> CookieList = Arrays.asList(Cookies.split("; "));
+
+            for (String str : CookieList) {
+                str = str.replaceAll(" ","");
+                String cookie = str.split("=")[0];
+                if (cookie.equals("Token")) {
+                    token = str.split("=")[1];
+                }
             }
+        } catch (Exception e) {
+            log.error(e.getMessage());
         }
         return token;
     }
