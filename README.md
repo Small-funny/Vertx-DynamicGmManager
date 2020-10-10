@@ -17,8 +17,7 @@
     + Node.js
     + Ajax
     + jsencrypt
-    
-##properties.xml编写规范
+## properties.xml编写规范
 * 必须编写根元素system
 * 根元素下分为两个元素：servers和pages
 ### servers编写规范  
