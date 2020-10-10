@@ -130,7 +130,8 @@ public class MainResources extends AbstractVerticle {
 
             if ("selectUserList".equals(operation)) {
                 List<String> users = allUser();
-                String argName = PAGE_ELEMENT.get(page).getChild("form").getChild("input").getAttributeValue("id");
+                System.out.println(PAGE_ELEMENT.get(page).getAttributeValue("listId"));
+                String argName = PAGE_ELEMENT.get(page).getAttributeValue("listId") == null ? PAGE_ELEMENT.get(page).getChild("form").getChild("input").getAttributeValue("id") : PAGE_ELEMENT.get(page).getAttributeValue("listId");
                 ctx.response().end(XmlMapping.createConfigsList(JSON.toJSONString(users), argName));
 
             } else {

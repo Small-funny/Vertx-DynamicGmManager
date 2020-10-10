@@ -21,7 +21,7 @@
                     <input type="button" id="userManage" value="修改"/>
                 </form>
             </page>
-            <page name="权限管理" authorization="selectAuthList" type="userAuthManage" list="selectUserList">
+            <page name="权限管理" authorization="selectAuthList" type="userAuthManage" list="selectUserList" listId="username">
                 <form name="查询用户权限" operation="selectAuthList">
                     <input type="text" name="用户名" id="username"/>
                     <select name="服务器" id="serverAuth">
@@ -35,10 +35,6 @@
                     </select>
                     <input type="button" name="查询" id="userManage" value="查询"/>
                 </form>
-                <!--                <form name="添加权限" operation="addAuth">-->
-                <!--                    <input type="text" name="type" id="type"/>-->
-                <!--                    <input type="button" name="添加" id="userManage" value="添加"/>-->
-                <!--                </form>-->
             </page>
         </pageType>
         <pageType name="数据库管理" authorization="databaseManage" icon="archive">
