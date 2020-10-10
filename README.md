@@ -1,17 +1,22 @@
 # Vertx-DynamicGmManager
-基于vertx设计的可自由设计功能模块的动态游戏后台管理系统
+* 基于vertx设计的可自由设计功能模块的动态游戏后台管理系统
+    - 通过编辑properties.xml文件改变系统功能
+    - 收发json来管理远端游戏的后台数据
 ## 技术选型
 + 后端
     + Vertx
     + RSA
     + JWT
     + Thymeleaf
+    + Jdom
     + Mysql(Database branch)
     + Redis(Database branch)
     + DBPool(Database branch)
+    + Durid(Database branch)
 + 前端
     + Node.js
     + Ajax
+    + jsencrypt
 ##properties.xml编写规范
 * 必须编写根元素system
 * 根元素下分为两个元素：servers和pages
@@ -152,3 +157,48 @@ page内可以添加许多html中的控件，但是必须在form内添加这些�
         > time元素代表着时间选择框，name为时间框的名字
         
         ![](src/main/java/resources/pic/time.jpg)  
+## Database.xml文件数据库
+* 系统为轻便起见采用文件数据库对用户数据进行管理
+* Database分支中为采用数据库管理用户的方案
+### 文件数据库规则
+- 数据库最外层标签
+    ```
+    <database>
+        <!--  管理员数据  -->
+    </database>
+    ```
+- 用户记录
+    - 分为四个column
+    - name为column名，value为column值
+    ```
+    <record>
+        <column name="username" value="root" />
+        <column name="password" value="root" />
+        <column name="token" value="token" />
+        <column name="auth" value="sup">
+            <!--  权限数据  -->
+        </column>
+    </record>
+    ```
+- 权限数据
+    - 权限按照不同服务器进行划分
+    - 权限种类为list与btn两种，list为目录权限，btn为按钮权限
+    - 权限名需与properties.xml中的权限对应，拥有该权限即代表可以打开或使用该页面或按钮
+    - 权限column中的value有"sup"与"ord"两种，前者可以打开最高管理员权限页面
+    ```
+    <column name="auth" value="sup">
+        <auth1 name="server" value="sandbox">
+            <auth2 type="list" value="databaseManage" />
+            <auth2 type="btn" value="selectConfig" />
+        </auth1>
+        <auth1 name="server" value="test">
+            <auth2 type="list" value="databaseManage" />
+            <auth2 type="btn" value="selectConfig" />
+        </auth1>
+        <auth1 name="server" value="master">
+            <auth2 type="list" value="databaseManage" />
+            <auth2 type="list" value="gameManage" />
+            <auth2 type="btn" value="selectConfig" />
+        </auth1>
+    </column>
+    ```
