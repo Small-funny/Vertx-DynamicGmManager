@@ -73,7 +73,7 @@ function refreshAjaxPostAlert(url, page, arguments, section) {
     })
 }
 
-function changeAside(server, page,list,table) {
+function changeAside(server, page, list, table) {
     pageName = page
     //侧边栏添加选中状态和展开状态
     $("#" + prepage).removeClass("active")
@@ -84,8 +84,8 @@ function changeAside(server, page,list,table) {
     history.pushState(null, null, "/main" + "/" + server + "/" + page);
     route = "/" + server + "/" + page
     json["route"] = route
-    json["list"]=list
-    json["table"]=table
+    json["list"] = list
+    json["table"] = table
     refreshAjaxPost("/main/configsName", page, JSON.stringify(json), "configsName")
     refreshAjaxPost("/main/userInfo", page, JSON.stringify(json), "userInfo")
 
@@ -126,7 +126,7 @@ function updateAuth(urls, operation) {
     json["serverAuth"] = $("#serverAuth").val()
     if (operation === "updateAuth") {
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "userInfo")
-    }else if (operation==="deleteUsers"){
+    } else if (operation === "deleteUsers") {
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
         refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
     }
@@ -172,10 +172,7 @@ function updateReturn(urls) {
     json['body'] = $("#text").val()
     json['args'] = $("#args").val()
     console.log(JSON.stringify(json))
-    if ($("#subPassword").val() === 'laopannizhenshuai') {
-        refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
-    } else {
-        toastr.error("二级密码错误")
-    }
+    refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+
 }
 
