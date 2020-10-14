@@ -13,7 +13,6 @@ import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import org.jdom2.Element;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -38,6 +37,10 @@ public class MainResources extends AbstractVerticle {
         router.route("/main/configsName").handler(this::preloadingList);
         router.route("/main/userInfo").handler(this::preloadingTable);
         router.route("/subMain/:serverRouter/:pageRouter").handler(this::subMain);
+    }
+
+    private void failureNotFound(RoutingContext routingContext) {
+        routingContext.response().sendFile("src/main/java/resources/templates/404.html");
     }
 
     /**

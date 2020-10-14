@@ -458,7 +458,7 @@ public class XmlMapping {
                     stringBuilder.append("<div class=\"row form-group\">")
                             .append("<div class=\"col col-md-3\"><label class=\" form-control-label\">subPassword</label></div>")
                             .append("<div class=\"col-12 col-md-9\">")
-                            .append("<input type=\"text\" name=\"subPassword\" id=\"subPassword\" class=\"form-control\" from=\"return\"/>")
+                            .append("<input type=\"password\" name=\"subPassword\" id=\"subPassword\" class=\"form-control\" from=\"return\"/>")
                             .append("</div></div>");
                     stringBuilder
                             .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")

@@ -13,7 +13,7 @@ public class FailureResources {
 
     public void registerResources(Router router) {
         router.route("/404").handler(this::failureNotFound);
-        router.route().failureHandler(this::failure);
+        router.route().failureHandler(this::failureNotFound);
     }
 
     private void failure(RoutingContext routingContext) {

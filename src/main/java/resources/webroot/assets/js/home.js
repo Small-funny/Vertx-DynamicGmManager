@@ -3,13 +3,13 @@ var prepage = null;
 var pageName = null
 var userName = null
 var route
-$(function () {
+window.onload =  function () {
     //再提交后把输入框的内容变成刚刚查找的配置名
 
     toastr.success("登陆成功")
 
 
-})
+}
 
 function logout() {
     document.cookie = "Token=token;Path=/"
@@ -65,7 +65,6 @@ function refreshAjaxPostAlert(url, page, arguments, section) {
             'page': page,
             'arguments': arguments
         }), success: function (data) {
-            toastr.success("操作成功")
             console.log(section)
             $("#" + section).html(data)
         }, error: function () {

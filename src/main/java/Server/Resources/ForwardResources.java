@@ -58,6 +58,7 @@ public class ForwardResources {
 
         webClient.post(port, host, suffix).sendJsonObject(jsonObject, ar -> {
             if (ar.succeeded()) {
+
                 JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
                 String type = jsonResult.getString("type");
                 String resultData = jsonResult.getString("data");
@@ -79,5 +80,4 @@ public class ForwardResources {
             }
         });
     }
-
 }

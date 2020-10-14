@@ -40,6 +40,6 @@ public class ServerVerticle extends AbstractVerticle {
         new MainResources().registerResources(router, vertx);
         new ManagerResources().registerResources(router);
         new ForwardResources().registerResources(router, vertx);
-//        new FailureResources().registerResources(router);
+        new FailureResources().registerResources(router);
     }
 }
