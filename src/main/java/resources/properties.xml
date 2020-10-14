@@ -56,6 +56,16 @@
                 </form>
 
             </page>
+            <page name="修改玩家属性" authorization="updatePlayerAttr">
+                <form name="修改玩家属性" operation="updatePlayerAttr">
+                    <input type="text" name="id" id="id"/>
+                    <input type="text" name="power" id="power"/>
+                    <input type="text" name="accuracy" id="accuracy"/>
+                    <input type="text" name="spin" id="spin"/>
+                    <input type="text" name="line" id="line"/>
+                    <input type="button" id="configManage" value="修改"/>
+                </form>
+            </page>
         </pageType>
         <pageType name="游戏服务管理" authorization="gameManage" icon="calendar">
             <page name="开关游戏服" authorization="queryAsset">
