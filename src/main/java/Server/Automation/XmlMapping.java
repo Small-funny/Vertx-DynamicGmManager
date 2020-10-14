@@ -476,12 +476,6 @@ public class XmlMapping {
                 stringBuilder.append("<p id=\"text\" name=\"body\" class=\"form-control\"  from=\"return\">")
                         .append(data)
                         .append("</p></div></div>");
-                if (auth) {
-                    stringBuilder
-                            .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")
-                            .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">");
-                }
-
                 stringBuilder.append("</div>");
             } else if ("checkbox".equals(type)) {
 

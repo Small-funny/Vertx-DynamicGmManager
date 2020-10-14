@@ -66,6 +66,7 @@ function refreshAjaxPostAlert(url, page, arguments, section) {
             'arguments': arguments
         }), success: function (data) {
             toastr.success("操作成功")
+            console.log(section)
             $("#" + section).html(data)
         }, error: function () {
             toastr.warning("操作失败")
@@ -172,7 +173,7 @@ function updateReturn(urls) {
     json['body'] = $("#text").val()
     json['args'] = $("#args").val()
     console.log(JSON.stringify(json))
-    refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+    refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "userInfo")
 
 }
 
