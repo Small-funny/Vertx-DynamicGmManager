@@ -41,7 +41,6 @@ public class ForwardResources {
         HashMap<String, String> data;
         data = JSON.parseObject(routingContext.getBodyAsJson().getString("arguments"), HashMap.class);
         JsonObject jsonObject = new JsonObject();
-
         for (String key : data.keySet()) {
             String value = data.get(key);
             jsonObject.put(key, value);

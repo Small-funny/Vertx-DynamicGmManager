@@ -477,7 +477,7 @@ public class XmlMapping {
             } else if ("return".equals(type)) {
                 Calendar calendar = Calendar.getInstance(Locale.CHINA);
                 Date date = calendar.getTime();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd (HH:mm:ss)");
                 String format = dateFormat.format(date);
 
                 stringBuilder.append(" <div class=\"card\">")
