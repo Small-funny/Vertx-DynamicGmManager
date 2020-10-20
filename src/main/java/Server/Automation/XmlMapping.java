@@ -103,6 +103,8 @@ public class XmlMapping {
                 .append("<input class=\"");
         if ("file".equals(element.getAttributeValue("type"))) {
             stringBuilder.append("form-control-file");
+        } else if ("button".equals(element.getAttributeValue("type"))) {
+            stringBuilder.append("btn btn-outline-light btn-block");
         } else {
             stringBuilder.append("form-control");
         }
