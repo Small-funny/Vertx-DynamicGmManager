@@ -1,11 +1,12 @@
 var flag
 var prepage = null;
 var pageName = null
-var userName = null
+var operatorName
 var route
-window.onload =  function () {
+window.onload = function () {
     //再提交后把输入框的内容变成刚刚查找的配置名
 
+    operatorName = $("#operatorName")
     toastr.success("登陆成功")
 
 
@@ -96,7 +97,7 @@ function changeAside(server, page, list, table) {
 }
 
 function changeReturn(urls, fromValue) {
-    var json = {};
+    let json = {};
     $("input[from='" + fromValue + "']").each(function () {
         json[$(this).attr('id')] = $(this).val()
     })
@@ -106,6 +107,8 @@ function changeReturn(urls, fromValue) {
     $("textarea[from='" + fromValue + "']").each(function () {
         json[$(this).attr('id')] = $(this).val()
     })
+    json["operatorName"] = operatorName.text()
+
     console.log(json)
     refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
     refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
@@ -168,7 +171,8 @@ function updateReturn(urls) {
     $("input[from='return']").each(function () {
         json[$(this).attr('name')] = $(this).val()
     })
-
+    json["username"] = userName
+    json["operatorName"] = operatorName
     json['body'] = $("#text").val()
     json['args'] = $("#args").val()
     console.log(JSON.stringify(json))

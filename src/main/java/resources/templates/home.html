@@ -71,7 +71,7 @@
 
         <div>
             <h5>Fotoable</h5>
-            <p class="text-muted" th:text="${username}"></p>
+            <div class="text-muted" id="operatorName" th:text="${username}"></div>
             <ul class="nav">
                 <li class="nav-item">
                     <a onclick="logout()" class="btn nav-link bg-danger-bright" title="Logout" data-toggle="tooltip">
@@ -139,8 +139,7 @@
 <script src="/webroot/assets/js/app.min.js"></script>
 <!-- Prism -->
 
-<script src="/webroot/assets/js/main.js"></script>
-<script src="/webroot/assets/js/home.js"></script>
+
 <script src="/webroot/vendors/bundle.js"></script>
 
 <script type="text/javascript" src="/webroot/vendors/datepicker/daterangepicker.js"></script>
@@ -152,6 +151,8 @@
 
 </script>
 <!---->
+<script src="/webroot/assets/js/main.js"></script>
+<script src="/webroot/assets/js/home.js"></script>
 
 </body>
 </html>

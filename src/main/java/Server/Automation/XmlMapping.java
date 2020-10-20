@@ -6,6 +6,7 @@ import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.*;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static Server.Automation.PageUtil.*;
@@ -62,7 +63,7 @@ public class XmlMapping {
                     stringBuilder.append(elementFormCheck(child));
                     break;
                 case "textarea":
-                    stringBuilder.append(elementTextarea(child,operation));
+                    stringBuilder.append(elementTextarea(child, operation));
                     break;
                 case "file":
                     stringBuilder.append(elementFile(child));
@@ -131,7 +132,7 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
-    private static String elementTextarea(Element element,String operation){
+    private static String elementTextarea(Element element, String operation) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
                 .append("<div class=\"col col-md-3\">")
@@ -149,6 +150,7 @@ public class XmlMapping {
         stringBuilder.append("</div>").append("</div>");
         return stringBuilder.toString();
     }
+
     /**
      * 根据xml生成下拉框控件
      *
@@ -343,6 +345,7 @@ public class XmlMapping {
 
     /**
      * 生成选择服务器下拉框
+     *
      * @param selected 当前选择的服务器
      */
     public static String createServerString(String selected) {
@@ -364,9 +367,10 @@ public class XmlMapping {
 
     /**
      * 生成右侧列表
+     *
      * @param data 列表数据
      */
-    public static String createConfigsList(String data,String argName) {
+    public static String createConfigsList(String data, String argName) {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"card\">").append("<div class=\"card-body card-block\" style=\"width: auto\">" +
@@ -383,9 +387,10 @@ public class XmlMapping {
 
     /**
      * 生成返回的内容
-     * @param type 返回内容的类型
-     * @param data 返回内容的数据
-     * @param auth 在str类型下是否有修改的权限
+     *
+     * @param type     返回内容的类型
+     * @param data     返回内容的数据
+     * @param auth     在str类型下是否有修改的权限
      * @param argsName 构造返回内容所需要的数据
      */
     public static String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) {
@@ -470,7 +475,16 @@ public class XmlMapping {
 
                 stringBuilder.append("</form></div>");
             } else if ("return".equals(type)) {
-                stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
+                Calendar calendar = Calendar.getInstance(Locale.CHINA);
+                Date date = calendar.getTime();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                String format = dateFormat.format(date);
+
+                stringBuilder.append(" <div class=\"card\">")
+                        .append("<div class=\"card-header\" id=\"nowTime\"><strong>" + "操作时间：")
+                        .append(format)
+                        .append("</strong></div>")
+                        .append("<div class=\"card-body card-block\" style=\"width: auto\">")
                         .append("<div class=\"row form-group\" style=\"width: auto\">")
                         .append("<div class=\"col-12 \">");
                 stringBuilder.append("<p id=\"text\" name=\"body\" class=\"form-control\"  from=\"return\">")
