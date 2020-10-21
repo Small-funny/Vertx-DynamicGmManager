@@ -171,8 +171,8 @@ function updateReturn(urls) {
     $("input[from='return']").each(function () {
         json[$(this).attr('name')] = $(this).val()
     })
-    json["username"] = userName
-    json["operatorName"] = operatorName
+
+    json["operatorName"] = operatorName.text()
     json['body'] = $("#text").val()
     json['args'] = $("#args").val()
     console.log(JSON.stringify(json))

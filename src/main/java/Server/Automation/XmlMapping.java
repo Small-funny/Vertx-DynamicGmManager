@@ -372,11 +372,14 @@ public class XmlMapping {
      *
      * @param data 列表数据
      */
-    public static String createConfigsList(String data, String argName) {
+    public static String createConfigsList(String data, String argName, String argNameName) {
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<div class=\"card\">").append("<div class=\"card-body card-block\" style=\"width: auto\">" +
-                "<div class=\"row form-group\"><div class=\"col col-md-12\">");
+        stringBuilder.append("<div class=\"card\">")
+                .append("<div class=\"card-header\"><strong>双击选项输入")
+                .append(argNameName)
+                .append("</strong></div>")
+                .append("<div class=\"card-body card-block\" style=\"width: auto\"><div class=\"row form-group\"><div class=\"col col-md-12\">");
         List<String> list = JSON.parseObject(data, List.class);
         stringBuilder.append("<select style=\"height:700px\" name=\"multiple-select\" id=\"multiple-select\" multiple=\"\" class=\"form-control\">");
         for (String s : list) {
@@ -453,22 +456,31 @@ public class XmlMapping {
                 stringBuilder.append("</div></div></div></form>");
 
             } else if ("str".equals(type)) {
+                Calendar calendar = Calendar.getInstance(Locale.CHINA);
+                Date date = calendar.getTime();
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd (HH:mm:ss)");
+                String format = dateFormat.format(date);
                 String route = argsName.get("route");
-                stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">")
+                stringBuilder.append(" <div class=\"card\">")
+                        .append("<div class=\"card-header\" id=\"nowTime\"><strong>" + "操作时间：")
+                        .append(format)
+                        .append("</strong></div>")
+                        .append("<div class=\"card-body card-block\" style=\"width: auto\">")
                         .append("<form id=\"updateForm\" class=\"form-horizontal\" style=\"width: auto\">")
                         .append("<div class=\"row form-group\" style=\"width: auto\">")
                         .append("<div class=\"col-12 \">")
-                        .append("<textarea id=\"text\" name=\"body\" rows=\"19\" placeholder=\"Cont.\" class=\"form-control\" style=\"height:700px\" from=\"return\">")
+                        .append("<textarea id=\"text\" name=\"body\" rows=\"15\"  class=\"form-control\" style=\"height:700px\" from=\"return\">")
                         .append(data)
                         .append("</textarea></div></div>");
                 if (auth && CONFIG_MANAGE_PAGES.contains(page)) {
                     stringBuilder.append("<div class=\"row form-group\">")
-                            .append("<div class=\"col col-md-3\"><label class=\" form-control-label\">subPassword</label></div>")
+
+                            .append("<div class=\"col col-md-3\"><label class=\" form-control-label\">二级密码</label></div>")
                             .append("<div class=\"col-12 col-md-9\">")
                             .append("<input type=\"password\" name=\"subPassword\" id=\"subPassword\" class=\"form-control\" from=\"return\"/>")
                             .append("</div></div>");
                     stringBuilder
-                            .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"form-control\" value=\"修改\"></div></div>")
+                            .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"btn btn-outline-light btn-block\" value=\"修改\"></div></div>")
                             .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">")
                             .append("<input type=\"hidden\" value=\"")
                             .append(route)

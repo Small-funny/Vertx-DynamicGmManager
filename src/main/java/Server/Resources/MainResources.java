@@ -135,15 +135,34 @@ public class MainResources extends AbstractVerticle {
                 List<String> users = allUser();
                 System.out.println(PAGE_ELEMENT.get(page).getAttributeValue("listId"));
                 String argName = PAGE_ELEMENT.get(page).getAttributeValue("listId") == null ? PAGE_ELEMENT.get(page).getChild("form").getChild("input").getAttributeValue("id") : PAGE_ELEMENT.get(page).getAttributeValue("listId");
-                ctx.response().end(XmlMapping.createConfigsList(JSON.toJSONString(users), argName));
+                String argNameName = null;
+                for (Element formE : PAGE_ELEMENT.get(page).getChildren()) {
+                    for (Element inputE : formE.getChildren()) {
+                        if(argName.equals(inputE.getAttributeValue("id"))){
+                            argNameName = inputE.getAttributeValue("name");
+                            break;
+                        }
+                    }
+                }
+                ctx.response().end(XmlMapping.createConfigsList(JSON.toJSONString(users), argName,argNameName));
 
             } else {
                 JsonObject jsonObject = new JsonObject();
                 jsonObject.put("operation", operation);
                 WebClient webClient = WebClient.create(ctx.vertx());
                 String argName = PAGE_ELEMENT.get(page).getChild("form").getChild("input").getAttributeValue("id");
+                String argNameName = null;
+                for (Element formE : PAGE_ELEMENT.get(page).getChildren()) {
+                    for (Element inputE : formE.getChildren()) {
+                        if(argName.equals(inputE.getAttributeValue("id"))){
+                            argNameName = inputE.getAttributeValue("name");
+                            break;
+                        }
+                    }
+                }
+                String finalArgNameName = argNameName;
                 webClient.post(port, host, suffix).sendJsonObject(jsonObject, res -> {
-                    ctx.response().end(XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data"), argName));
+                    ctx.response().end(XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data"), argName, finalArgNameName));
                 });
             }
         }
