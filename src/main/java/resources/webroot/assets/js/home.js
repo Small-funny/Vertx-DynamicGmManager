@@ -127,6 +127,7 @@ function updateAuth(urls, operation) {
     json["operation"] = operation
     json["username"] = $("#username").val()
     json["serverAuth"] = $("#serverAuth").val()
+    json["authType"]=$("#authType").val()
     if (operation === "updateAuth") {
         refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "userInfo")
     } else if (operation === "deleteUsers") {

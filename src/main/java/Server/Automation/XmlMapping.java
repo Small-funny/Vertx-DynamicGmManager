@@ -173,7 +173,7 @@ public class XmlMapping {
                 .append("\" id=\"")
                 .append(element.getAttributeValue("id"))
 
-                .append("\"").append("\" from=\"").append(operation)
+               .append("\" from=\"").append(operation)
                 .append("\">");
         for (Element child : element.getChildren()) {
             stringBuilder.append("<option value=\"").append(child.getAttributeValue("value")).append("\">")
@@ -451,7 +451,7 @@ public class XmlMapping {
                 }
                 stringBuilder.append("</tbody></table>");
                 if (USER_MANAGE_PAGES.contains(page)) {
-                    stringBuilder.append("<input type=\"button\" class=\"form-control\" value=\"删除\" onclick=\"updateAuth('/manager','deleteUsers')\"");
+                    stringBuilder.append("<input type=\"button\" class=\"btn btn-outline-light btn-block\" value=\"删除\" onclick=\"updateAuth('/manager','deleteUsers')\"");
                 }
                 stringBuilder.append("</div></div></div></form>");
 
@@ -528,7 +528,7 @@ public class XmlMapping {
                             .append("</label>")
                             .append("</div>");
                 }
-                stringBuilder.append("<input type=\"button\" class=\"form-control\" value=\"修改\" onclick=\"updateAuth('/manager','updateAuth')\"/>");
+                stringBuilder.append("<input type=\"button\" class=\"btn btn-outline-light btn-block\" value=\"修改\" onclick=\"updateAuth('/manager','updateAuth')\"/>");
                 stringBuilder.append("</div>")
                         .append("</div>")
                         .append("</div></div></div>");
