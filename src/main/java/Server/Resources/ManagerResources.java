@@ -48,6 +48,7 @@ public class ManagerResources {
         String server;
         String password;
         String username;
+        String authType;
         String operation = data.get("operation");
 
         log.info("Manager receive args：" + data);
@@ -71,7 +72,7 @@ public class ManagerResources {
             case OPERATION_SELECT_AUTHLIST:
                 username = data.get("username");
                 server = data.get("serverAuth");
-                String authType = data.get("authType");
+                authType = data.get("authType");
                 List<String>resultList = selectAuthList(username, authType, server);
                 String hashStr = JSON.toJSONString(resultList);
                 returnResult(routingContext, "checkbox", hashStr);
@@ -79,8 +80,9 @@ public class ManagerResources {
             case OPERATION_UPDATE_AUTH:
                 username = data.get("username");
                 server = data.get("serverAuth");
+                authType = data.get("authType");
                 List<String> authSettings = JSONArray.parseArray(JSON.toJSONString(data.get("authList")), String.class);
-                returnResult(routingContext, "return", updateAuth(authSettings, server, username));
+                returnResult(routingContext, "return", updateAuth(authSettings, server, username, authType));
             default:
                 break;
         }
