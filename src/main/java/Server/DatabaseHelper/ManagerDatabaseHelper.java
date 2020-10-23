@@ -253,19 +253,32 @@ public class ManagerDatabaseHelper {
      * @param username
      * @return
      */
-    public static String updateAuth(List<String> authSettings, String server, String username) {
+    public static String updateAuth(List<String> authSettings, String server, String username, String authType) {
         Element rootData = loadDatabase();
-        HashMap<String, String> authTypeMap = selectAuthType(ROOT_USER, server);
+        List<String> authSettingsOld = new ArrayList<>();
 
         for (Element record : rootData.getChildren()) {
             Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
             Element authElement = record.getChildren().get(INDEX_OF_AUTH);
             Element serverElement = authElement.getChildren().get(DB_HEADER_SERVER.indexOf(server));
             if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
+                String type = authType.equals(TYPE_AUTH_CATALOG) ? TYPE_AUTH_CONTROL:TYPE_AUTH_CATALOG;
+                System.out.println(type);
+                for (Element auth: serverElement.getChildren()) {
+                    if (auth.getAttributeValue(DATA_TYPE).equals(type)) {
+                        authSettingsOld.add(auth.getAttributeValue(DATA_VALUE));
+                    }
+                }
                 serverElement.removeContent();
                 for (String auth: authSettings) {
                     Element newAuth = new Element("auth2");
-                    newAuth.setAttribute(DATA_TYPE, authTypeMap.get(auth));
+                    newAuth.setAttribute(DATA_TYPE, authType);
+                    newAuth.setAttribute(DATA_VALUE, auth);
+                    serverElement.addContent(newAuth);
+                }
+                for (String auth: authSettingsOld) {
+                    Element newAuth = new Element("auth2");
+                    newAuth.setAttribute(DATA_TYPE, type);
                     newAuth.setAttribute(DATA_VALUE, auth);
                     serverElement.addContent(newAuth);
                 }
