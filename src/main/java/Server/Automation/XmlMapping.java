@@ -173,7 +173,7 @@ public class XmlMapping {
                 .append("\" id=\"")
                 .append(element.getAttributeValue("id"))
 
-               .append("\" from=\"").append(operation)
+                .append("\" from=\"").append(operation)
                 .append("\">");
         for (Element child : element.getChildren()) {
             stringBuilder.append("<option value=\"").append(child.getAttributeValue("value")).append("\">")
@@ -399,6 +399,10 @@ public class XmlMapping {
      * @param argsName 构造返回内容所需要的数据
      */
     public static String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) {
+        Calendar calendar = Calendar.getInstance(Locale.CHINA);
+        Date date = calendar.getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd (HH:mm:ss)");
+        String format = dateFormat.format(date);
         StringBuilder stringBuilder = new StringBuilder();
         String page = "";
         if (argsName != null) {
@@ -417,10 +421,10 @@ public class XmlMapping {
         } else {
 
             if ("table".equals(type)) {
-
                 HashMap<String, String> hashMap1 = JSON.parseObject(data, HashMap.class);
                 List<String> colName = JSON.parseObject(hashMap1.get("colName"), List.class);
                 List<List<String>> tableBody = JSON.parseObject(hashMap1.get("tableBody"), List.class);
+                stringBuilder.append("<div><strong>").append(format).append("</strong></div>");
                 stringBuilder.append("<table class=\"table table-bordered\">").append("<thead><tr>");
                 for (String s : colName) {
                     stringBuilder.append("<th scope=\"col\">").append(s).append("</th>");
@@ -456,10 +460,6 @@ public class XmlMapping {
                 stringBuilder.append("</div></div></div></form>");
 
             } else if ("str".equals(type)) {
-                Calendar calendar = Calendar.getInstance(Locale.CHINA);
-                Date date = calendar.getTime();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd (HH:mm:ss)");
-                String format = dateFormat.format(date);
                 String route = argsName.get("route");
                 stringBuilder.append(" <div class=\"card\">")
                         .append("<div class=\"card-header\" id=\"nowTime\"><strong>" + "操作时间：")
@@ -489,11 +489,6 @@ public class XmlMapping {
 
                 stringBuilder.append("</form></div>");
             } else if ("return".equals(type)) {
-                Calendar calendar = Calendar.getInstance(Locale.CHINA);
-                Date date = calendar.getTime();
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd (HH:mm:ss)");
-                String format = dateFormat.format(date);
-
                 stringBuilder.append(" <div class=\"card\">")
                         .append("<div class=\"card-header\" id=\"nowTime\"><strong>" + "操作时间：")
                         .append(format)
@@ -506,11 +501,14 @@ public class XmlMapping {
                         .append("</p></div></div>");
                 stringBuilder.append("</div>");
             } else if ("checkbox".equals(type)) {
-
                 //List<String> authList = ManagerDatabaseHelper.selectAuthList(argsName.get("username"), "list", argsName.get("route").split("/")[1]);
                 List<String> authList = JSON.parseArray(data, String.class);
                 List<String> allAuthList = ManagerDatabaseHelper.selectAuthList("root", argsName.get("authType"), argsName.get("route").split("/")[1]);
-                stringBuilder.append(" <div class=\"card\"><div class=\"card-body card-block\" style=\"width: auto\">");
+                stringBuilder.append(" <div class=\"card\">")
+                        .append("<div class=\"card-header\" id=\"nowTime\"><strong>" + "操作时间：")
+                        .append(format)
+                        .append("</strong></div>")
+                        .append("<div class=\"card-body card-block\" style=\"width: auto\">");
                 stringBuilder.append("<div class=\"row form-group\">")
                         .append("<div class=\"col-12 \">")
                         .append("<div class=\"form-check\">");
