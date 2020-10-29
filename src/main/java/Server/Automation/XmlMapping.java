@@ -119,12 +119,13 @@ public class XmlMapping {
         if ("button".equals(element.getAttributeValue("type"))) {
             stringBuilder.append("value=\"")
                     .append(element.getAttributeValue("value"))
-                    .append("\" onclick=\"changeReturn('/");
-            if ("userManage".equals(element.getAttributeValue("id"))) {
-                stringBuilder.append("manager");
-            } else if ("configManage".equals(element.getAttributeValue("id"))) {
-                stringBuilder.append("forward");
-            }
+                    .append("\" onclick=\"changeReturn('/").append(element.getAttributeValue("id"));
+//            if ("userManage".equals(element.getAttributeValue("id"))) {
+//                stringBuilder.append("manager");
+//            } else if ("configManage".equals(element.getAttributeValue("id"))) {
+//                stringBuilder.append("forward");
+//            }
+
             stringBuilder.append("','").append(operation).append("')\"");
         }
 
