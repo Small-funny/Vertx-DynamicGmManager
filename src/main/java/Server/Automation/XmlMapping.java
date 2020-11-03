@@ -497,7 +497,7 @@ public class XmlMapping {
                         .append("<div class=\"card-body card-block\" style=\"width: auto\">")
                         .append("<div class=\"row form-group\" style=\"width: auto\">")
                         .append("<div class=\"col-12 \">");
-                stringBuilder.append("<p id=\"text\" name=\"body\" class=\"form-control\"  from=\"return\">")
+                stringBuilder.append("<p id=\"text\" name=\"body\"  from=\"return\">")
                         .append(data)
                         .append("</p></div></div>");
                 stringBuilder.append("</div>");
