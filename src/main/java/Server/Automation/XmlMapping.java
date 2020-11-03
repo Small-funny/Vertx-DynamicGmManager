@@ -149,7 +149,7 @@ public class XmlMapping {
                 .append("\" id=\"")
                 .append(element.getAttributeValue("id"))
                 .append("\" from=\"").append(operation)
-                .append("\"").append("rows=\"19\"  class=\"form-control\" style=\"height:700px\"/>");
+                .append("\"").append("rows=\"19\"  class=\"form-control\" style=\"height:700px;font-family:consolas\"/>");
         stringBuilder.append("</div>").append("</div>");
         return stringBuilder.toString();
     }
@@ -470,7 +470,7 @@ public class XmlMapping {
                         .append("<form id=\"updateForm\" class=\"form-horizontal\" style=\"width: auto\">")
                         .append("<div class=\"row form-group\" style=\"width: auto\">")
                         .append("<div class=\"col-12 \">")
-                        .append("<textarea id=\"text\" name=\"body\" rows=\"15\"  class=\"form-control\" style=\"height:700px\" from=\"return\">")
+                        .append("<textarea id=\"text\" name=\"body\" rows=\"15\"  class=\"form-control\" style=\"height:700px;font-family:consolas\" from=\"return\">")
                         .append(data)
                         .append("</textarea></div></div>");
                 if (auth && CONFIG_MANAGE_PAGES.contains(page)) {
