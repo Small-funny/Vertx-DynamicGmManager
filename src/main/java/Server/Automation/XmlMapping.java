@@ -542,9 +542,9 @@ public class XmlMapping {
                 for (Map.Entry<String, String> entry : hashMap.entrySet()) {
                     stringBuilder.append("<p id=\"text\" name=\"body\"  from=\"return\">")
                             .append(entry.getKey()).append(" : ").append(entry.getValue())
-                            .append("</p></div></div>");
+                            .append("</p>");
                 }
-                stringBuilder.append("</div>");
+                stringBuilder.append("</div></div></div>");
             }
         }
         return stringBuilder.toString();
