@@ -530,6 +530,21 @@ public class XmlMapping {
                 stringBuilder.append("</div>")
                         .append("</div>")
                         .append("</div></div></div>");
+            } else if ("keyValue".equals(type)) {
+                HashMap<String, String> hashMap = JSON.parseObject(data, HashMap.class);
+                stringBuilder.append(" <div class=\"card\">")
+                        .append("<div class=\"card-header\" id=\"nowTime\"><strong>" + "操作时间：")
+                        .append(format)
+                        .append("</strong></div>")
+                        .append("<div class=\"card-body card-block\" style=\"width: auto\">")
+                        .append("<div class=\"row form-group\" style=\"width: auto\">")
+                        .append("<div class=\"col-12 \">");
+                for (Map.Entry<String, String> entry : hashMap.entrySet()) {
+                    stringBuilder.append("<p id=\"text\" name=\"body\"  from=\"return\">")
+                            .append(entry.getKey()).append(" : ").append(entry.getValue())
+                            .append("</p></div></div>");
+                }
+                stringBuilder.append("</div>");
             }
         }
         return stringBuilder.toString();
