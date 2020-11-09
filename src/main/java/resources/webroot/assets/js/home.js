@@ -3,13 +3,13 @@ var prepage = null;
 var pageName = null
 var operatorName
 var route
+var ip=null
 window.onload = function () {
     //再提交后把输入框的内容变成刚刚查找的配置名
 
     operatorName = $("#operatorName")
     toastr.success("登陆成功")
-
-
+    ip=returnCitySN["cip"]
 }
 
 function logout() {
@@ -108,7 +108,8 @@ function changeReturn(urls, fromValue) {
         json[$(this).attr('id')] = $(this).val()
     })
     json["operatorName"] = operatorName.text()
-
+    console.log(ip)
+    json["ip"]=ip
     console.log(json)
     refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
     refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
@@ -176,8 +177,8 @@ function updateReturn(urls) {
     json["operatorName"] = operatorName.text()
     json['body'] = $("#text").val()
     json['args'] = $("#args").val()
+    json["ip"]=ip
     $("#subPassword").val(" ")
     refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "userInfo")
 
 }
-
