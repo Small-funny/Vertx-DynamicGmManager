@@ -75,7 +75,8 @@ public class ForwardResources {
                 routingContext.response().end(returnString);
             } else {
                 log.info("Wrong :" + ar.cause().getMessage());
-                routingContext.response().end("Operation failed !");
+                String returnString = XmlMapping.createReturnString("return","请求失败",false,null);
+                routingContext.response().end(returnString);
             }
         });
     }
