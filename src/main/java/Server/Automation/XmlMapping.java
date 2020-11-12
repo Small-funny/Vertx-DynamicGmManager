@@ -475,12 +475,12 @@ public class XmlMapping {
                         .append(data)
                         .append("</textarea></div></div>");
                 if (auth && CONFIG_MANAGE_PAGES.contains(page)) {
-                    stringBuilder.append("<div class=\"row form-group\">")
-                            .append("<div class=\"col col-md-3\"><label class=\" form-control-label\">二级密码</label></div>")
-                            .append("<div class=\"col-12 col-md-9\">")
-                            .append("<input type=\"text\" name=\"subPassword\" id=\"subPassword\" " +
-                                    "class=\"form-control\" from=\"return\"/>")
-                            .append("</div></div>");
+                    stringBuilder.append("<div class=\"row form-group\">");
+//                            .append("<div class=\"col col-md-3\"><label class=\" form-control-label\">二级密码</label></div>")
+//                            .append("<div class=\"col-12 col-md-9\">")
+//                            .append("<input type=\"text\" name=\"subPassword\" id=\"subPassword\" " +
+//                                    "class=\"form-control\" from=\"return\"/>")
+//                            .append("</div></div>");
                     stringBuilder.append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"btn btn-outline-light btn-block\" value=\"修改\"></div></div>")
                             .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">")
                             .append("<input type=\"hidden\" value=\"")
