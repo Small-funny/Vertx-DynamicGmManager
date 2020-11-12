@@ -260,7 +260,7 @@ public class XmlMapping {
                 .append("<script>\n" +
                         "    lay('#version').html('-v' + laydate.v);\n" +
                         "    laydate.render({\n" +
-                        "        elem: '#timestamp'\n" +
+                        "        elem: '#"+element.getAttributeValue("id")+"'\n" +
                         "        , type: 'datetime'\n" +
                         "\n" +
                         "    });\n" +
