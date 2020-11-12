@@ -17,7 +17,8 @@ import java.util.HashMap;
 import java.util.List;
 
 import static Server.Automation.PageUtil.*;
-import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
+import static Server.DatabaseHelper.ManagerDatabaseHelper.allManagerInfo;
+import static Server.DatabaseHelper.ManagerDatabaseHelper.allUser;
 
 /**
  * 系统主页路由
@@ -37,6 +38,7 @@ public class MainResources extends AbstractVerticle {
         router.route("/main/configsName").handler(this::preloadingList);
         router.route("/main/userInfo").handler(this::preloadingTable);
         router.route("/subMain/:serverRouter/:pageRouter").handler(this::subMain);
+        router.route("/main/subList").handler(this::preloadingSubList);
     }
 
     private void failureNotFound(RoutingContext routingContext) {
@@ -114,6 +116,27 @@ public class MainResources extends AbstractVerticle {
         }
     }
 
+    private void preloadingSubList(RoutingContext ctx) {
+        String page = ctx.getBodyAsJson().getString("page");
+        HashMap<String, String> data = JSON.parseObject(ctx.getBodyAsJson().getString("arguments"), HashMap.class);
+        String operation = data.get("subList");
+        String server = data.get("route").split("/")[1];
+        String host = SERVER_ELEMENT.get(server).getAttributeValue("host");
+        String suffix = SERVER_ELEMENT.get(server).getAttributeValue("url");
+        int port = Integer.parseInt(SERVER_ELEMENT.get(server).getAttributeValue("port"));
+        if ("null".equals(operation)||operation==null) {
+            ctx.response().end(" ");
+        } else {
+            JsonObject jsonObject = new JsonObject();
+            jsonObject.put("operation", operation);
+            WebClient webClient = WebClient.create(ctx.vertx());
+            webClient.post(port, host, suffix).sendJsonObject(jsonObject, res -> {
+                ctx.response().end(XmlMapping.createReturnString("subList",
+                        JSON.parseObject(res.result().bodyAsString()).getString("data"), false, null));
+            });
+        }
+    }
+
     /**
      * 预加载页面列表
      *
@@ -138,13 +161,13 @@ public class MainResources extends AbstractVerticle {
                 String argNameName = null;
                 for (Element formE : PAGE_ELEMENT.get(page).getChildren()) {
                     for (Element inputE : formE.getChildren()) {
-                        if(argName.equals(inputE.getAttributeValue("id"))){
+                        if (argName.equals(inputE.getAttributeValue("id"))) {
                             argNameName = inputE.getAttributeValue("name");
                             break;
                         }
                     }
                 }
-                ctx.response().end(XmlMapping.createConfigsList(JSON.toJSONString(users), argName,argNameName));
+                ctx.response().end(XmlMapping.createConfigsList(JSON.toJSONString(users), argName, argNameName));
 
             } else {
                 JsonObject jsonObject = new JsonObject();
@@ -154,7 +177,7 @@ public class MainResources extends AbstractVerticle {
                 String argNameName = null;
                 for (Element formE : PAGE_ELEMENT.get(page).getChildren()) {
                     for (Element inputE : formE.getChildren()) {
-                        if(argName.equals(inputE.getAttributeValue("id"))){
+                        if (argName.equals(inputE.getAttributeValue("id"))) {
                             argNameName = inputE.getAttributeValue("name");
                             break;
                         }

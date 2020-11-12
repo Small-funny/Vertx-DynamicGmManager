@@ -4,7 +4,7 @@ import Server.DatabaseHelper.ManagerDatabaseHelper;
 import Server.DatabaseHelper.VerifyDatabaseHelper;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
-import org.jdom2.*;
+import org.jdom2.Element;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -254,7 +254,9 @@ public class XmlMapping {
                 .append("<div class=\"col-12 col-md-9\">")
                 .append("<input type=\"text\" name=\"")
                 .append(element.getAttributeValue("name"))
-                .append("\" id=\"timestamp\" class=\"form-control\" autocomplete=\"off\">")
+                .append("\" id=\"")
+                .append(element.getAttributeValue("id"))
+                .append("\" class=\"form-control\" autocomplete=\"off\">")
                 .append("<script>\n" +
                         "    lay('#version').html('-v' + laydate.v);\n" +
                         "    laydate.render({\n" +
@@ -409,15 +411,14 @@ public class XmlMapping {
         if (argsName != null) {
             page = argsName.get("route").split("/")[2];
         }
-        if ("list".equals(type)) {
-            List<String> list = JSON.parseObject(data, List.class);
-            for (String s : list) {
-                stringBuilder.append("<div class=\"checkbox\">").append("<label class=\"form-check-label \">")
-                        .append("<input type=\"checkbox\" name=\"").append("auth").append("\" value=\"").append(s).append("\" class=\"form-check-input\">")
-                        .append(s)
-                        .append("</label>")
-                        .append("</div>");
-            }
+        if ("subList".equals(type)) {
+            stringBuilder.append("<div class=\"card\">")
+                    .append("<div class=\"card-header\">")
+                    .append("</div>")
+                    .append("<div class=\"card-body card-block\" style=\"width: auto\">")
+                    .append("<div class=\"row form-group\"><div class=\"col col-md-12\">")
+                    .append(data)
+                    .append("</div></div></div></div>");
             return stringBuilder.toString();
         } else {
 

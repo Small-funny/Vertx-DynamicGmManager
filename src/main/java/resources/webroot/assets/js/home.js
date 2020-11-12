@@ -89,7 +89,7 @@ function changeAside(server, page, list, table) {
     json["table"] = table
     refreshAjaxPost("/main/configsName", page, JSON.stringify(json), "configsName")
     refreshAjaxPost("/main/userInfo", page, JSON.stringify(json), "userInfo")
-
+    refreshAjaxPost("/main/subList",page,JSON.stringify(json),)
     $("input[type='hidden']").each(function () {
         $(this).attr({from: "return"})
     })
