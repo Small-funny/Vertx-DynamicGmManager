@@ -410,6 +410,7 @@ public class XmlMapping {
         if ("subList".equals(type)) {
             stringBuilder.append("<div class=\"card\">")
                     .append("<div class=\"card-header\">")
+                    .append("开服时间")
                     .append("</div>")
                     .append("<div class=\"card-body card-block\" style=\"width: auto\">")
                     .append("<div class=\"row form-group\"><div class=\"col col-md-12\">")
