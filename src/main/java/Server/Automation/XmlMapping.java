@@ -69,7 +69,7 @@ public class XmlMapping {
                     stringBuilder.append(elementFile(child));
                     break;
                 case "time":
-                    stringBuilder.append(elementTime(child));
+                    stringBuilder.append(elementTime(child,operation));
                     break;
                 default:
                     break;
@@ -243,7 +243,7 @@ public class XmlMapping {
      *
      * @param element 页面元素
      */
-    private static String elementTime(Element element) {
+    private static String elementTime(Element element,String operation) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
                 .append("<div class=\"col col-md-3\">")
@@ -256,15 +256,10 @@ public class XmlMapping {
                 .append(element.getAttributeValue("name"))
                 .append("\" id=\"")
                 .append(element.getAttributeValue("id"))
-                .append("\" class=\"form-control\" autocomplete=\"off\">")
-                .append("<script>\n" +
-                        "    lay('#version').html('-v' + laydate.v);\n" +
-                        "    laydate.render({\n" +
-                        "        elem: '#"+element.getAttributeValue("id")+"'\n" +
-                        "        , type: 'datetime'\n" +
-                        "\n" +
-                        "    });\n" +
-                        "</script>")
+                .append("\" from = \"").append(operation).append("\" class=\"form-control\" autocomplete=\"off\">")
+                .append("<script>\n" + "    lay('#version').html('-v' + laydate.v);\n" + "    laydate.render({\n" + "        elem: '#")
+                .append(element.getAttributeValue("id"))
+                .append("'\n").append("        , type: 'datetime'\n").append("\n").append("    });\n").append("</script>")
                 .append("</div>")
                 .append("</div>");
         return stringBuilder.toString();
