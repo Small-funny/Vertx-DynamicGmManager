@@ -74,7 +74,7 @@ function refreshAjaxPostAlert(url, page, arguments, section) {
     })
 }
 
-function changeAside(server, page, list, table) {
+function changeAside(server, page, list, table,subList) {
     pageName = page
     //侧边栏添加选中状态和展开状态
     $("#" + prepage).removeClass("active")
@@ -87,9 +87,10 @@ function changeAside(server, page, list, table) {
     json["route"] = route
     json["list"] = list
     json["table"] = table
+    json["subList"]=subList
     refreshAjaxPost("/main/configsName", page, JSON.stringify(json), "configsName")
     refreshAjaxPost("/main/userInfo", page, JSON.stringify(json), "userInfo")
-    refreshAjaxPost("/main/subList",page,JSON.stringify(json),)
+    refreshAjaxPost("/main/subList",page,JSON.stringify(json),"subList")
     $("input[type='hidden']").each(function () {
         $(this).attr({from: "return"})
     })

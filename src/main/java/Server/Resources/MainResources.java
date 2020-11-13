@@ -131,6 +131,7 @@ public class MainResources extends AbstractVerticle {
             jsonObject.put("operation", operation);
             WebClient webClient = WebClient.create(ctx.vertx());
             webClient.post(port, host, suffix).sendJsonObject(jsonObject, res -> {
+                System.out.println(JSON.parseObject(res.result().bodyAsString()).getString("data"));
                 ctx.response().end(XmlMapping.createReturnString("subList",
                         JSON.parseObject(res.result().bodyAsString()).getString("data"), false, null));
             });
