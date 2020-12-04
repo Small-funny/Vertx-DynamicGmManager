@@ -183,8 +183,8 @@ function updateReturn(urls) {
     refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "userInfo")
 }
 
-function dlbclick(argsName) {
-    document.getElementById('args').value = argsName
+function dlbclick(argDivName,argsName) {
+    document.getElementById(argDivName).value = argsName
     document.getElementById('returnContent').innerHTML = ' '
 
 }
