@@ -3,13 +3,13 @@ var prepage = null;
 var pageName = null
 var operatorName
 var route
-var ip=null
+var ip = null
 window.onload = function () {
     //再提交后把输入框的内容变成刚刚查找的配置名
 
     operatorName = $("#operatorName")
     toastr.success("登陆成功")
-    ip=returnCitySN["cip"]
+    ip = returnCitySN["cip"]
 }
 
 function logout() {
@@ -74,7 +74,7 @@ function refreshAjaxPostAlert(url, page, arguments, section) {
     })
 }
 
-function changeAside(server, page, list, table,subList) {
+function changeAside(server, page, list, table, subList) {
     pageName = page
     //侧边栏添加选中状态和展开状态
     $("#" + prepage).removeClass("active")
@@ -87,10 +87,10 @@ function changeAside(server, page, list, table,subList) {
     json["route"] = route
     json["list"] = list
     json["table"] = table
-    json["subList"]=subList
+    json["subList"] = subList
     refreshAjaxPost("/main/configsName", page, JSON.stringify(json), "configsName")
     refreshAjaxPost("/main/userInfo", page, JSON.stringify(json), "userInfo")
-    refreshAjaxPost("/main/subList",page,JSON.stringify(json),"subList")
+    refreshAjaxPost("/main/subList", page, JSON.stringify(json), "subList")
     $("input[type='hidden']").each(function () {
         $(this).attr({from: "return"})
     })
@@ -110,7 +110,7 @@ function changeReturn(urls, fromValue) {
     })
     json["operatorName"] = operatorName.text()
     console.log(ip)
-    json["ip"]=ip
+    json["ip"] = ip
     console.log(json)
     refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
     refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
@@ -178,8 +178,13 @@ function updateReturn(urls) {
     json["operatorName"] = operatorName.text()
     json['body'] = $("#text").val()
     json['args'] = $("#args").val()
-    json["ip"]=ip
+    json["ip"] = ip
     $("#subPassword").val(" ")
     refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "userInfo")
+}
+
+function dlbclick(argsName) {
+    document.getElementById('args').value = argsName
+    document.getElementById('returnContent').innerHTML = ' '
 
 }

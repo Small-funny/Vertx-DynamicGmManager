@@ -382,7 +382,9 @@ public class XmlMapping {
         List<String> list = JSON.parseObject(data, List.class);
         stringBuilder.append("<select style=\"height:700px\" name=\"multiple-select\" id=\"multiple-select\" multiple=\"\" class=\"form-control\">");
         for (String s : list) {
-            stringBuilder.append("<option ondblclick=\"document.getElementById('").append(argName).append("').value='").append(s).append("'\" value=\"").append(s).append("\">").append(s).append("</option>");
+            stringBuilder.append("<option ondblclick=\" dlbclick('").append(s).append("')\" value=\"").append(s).append(
+                            "\">").append(s).append(
+                            "</option>");
         }
         stringBuilder.append("</div></div></div></div>");
 
