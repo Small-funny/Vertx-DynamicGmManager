@@ -65,11 +65,14 @@ public class XmlMapping {
                 case "textarea":
                     stringBuilder.append(elementTextarea(child, operation));
                     break;
+                case "specialTextarea":
+                    stringBuilder.append(elementSpecialTextarea(child, operation));
+                    break;
                 case "file":
                     stringBuilder.append(elementFile(child));
                     break;
                 case "time":
-                    stringBuilder.append(elementTime(child,operation));
+                    stringBuilder.append(elementTime(child, operation));
                     break;
                 default:
                     break;
@@ -151,6 +154,41 @@ public class XmlMapping {
                 .append("\" from=\"").append(operation)
                 .append("\"").append("rows=\"19\"  class=\"form-control\" style=\"height:700px;font-family:consolas\"/>");
         stringBuilder.append("</div>").append("</div>");
+        return stringBuilder.toString();
+    }
+
+    private static String elementSpecialTextarea(Element element, String operation) {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div class=\"row form-group\">")
+                .append("<div class=\"col col-md-3\">")
+                .append("<label  class=\" form-control-label\">");
+        stringBuilder.append(element.getAttributeValue("name") == null ? " " : element.getAttributeValue("name"));
+        stringBuilder.append("</label>")
+                .append("</div>")
+                .append("<div class=\"col-12 col-md-9\">")
+                .append("<textarea name=\"")
+                .append(element.getAttributeValue("name"))
+                .append("\" id=\"")
+                .append(element.getAttributeValue("id"))
+                .append("\" from=\"").append(operation)
+                .append("\"").append("rows=\"19\"  class=\"form-control\" style=\"height:700px;font-family:consolas\">")
+                .append("{\n" +
+                        "   \"body\" : {\n" +
+                        "      \"isFull\" : \"\",\n" +
+                        "      \"userList\" : \"\",\n" +
+                        "      \"mail\" : {\n" +
+                        "         \"title\" : \"\",\n" +
+                        "         \"content\" : \"\"\n" +
+                        "      }\n" +
+                        "   }\n" +
+                        "}").append("</textarea>");
+        stringBuilder.append("</div>").append("</div>");
+        stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" " +
+                "form-control-label\"> </label></div><div class=\"col-12 col-md-9\"><input class=\"btn " +
+                "btn-outline-light btn-block\" type=\"button\" name=\"null\" id=\"forward\" value=\"检查\" " +
+                "onclick=\"isJson('").append(element.getAttributeValue("name")).append("')\"></div></div>");
+        //stringBuilder.append("<input class=\"btn btn-outline-light btn-block\" type=\"button\" value=\"检查格式\" " +
+        //"onclick=\"isJson('").append(element.getAttributeValue("name")).append("')\">");
         return stringBuilder.toString();
     }
 
@@ -243,7 +281,7 @@ public class XmlMapping {
      *
      * @param element 页面元素
      */
-    private static String elementTime(Element element,String operation) {
+    private static String elementTime(Element element, String operation) {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
                 .append("<div class=\"col col-md-3\">")
@@ -264,6 +302,7 @@ public class XmlMapping {
                 .append("</div>");
         return stringBuilder.toString();
     }
+
 
     /**
      * 根据页面名获取页面的元素

@@ -188,3 +188,26 @@ function dlbclick(argDivName,argsName) {
     document.getElementById('returnContent').innerHTML = ' '
 
 }
+
+function isJson(divName) {
+
+    str = document.getElementById(divName).value
+    if (typeof str == 'string') {
+        try {
+            var obj = JSON.parse(str);
+            if (typeof obj == 'object' && obj) {
+                alert("true")
+                return true;
+            } else {
+                alert("false")
+                return false;
+            }
+
+        } catch (e) {
+            console.log('error：' + str + '!!!' + e);
+            alert("false")
+            return false;
+        }
+    }
+    console.log('It is not a string!')
+}
