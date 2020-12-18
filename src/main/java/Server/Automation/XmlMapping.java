@@ -65,9 +65,6 @@ public class XmlMapping {
                 case "textarea":
                     stringBuilder.append(elementTextarea(child, operation));
                     break;
-                case "specialTextarea":
-                    stringBuilder.append(elementSpecialTextarea(child, operation));
-                    break;
                 case "file":
                     stringBuilder.append(elementFile(child));
                     break;
@@ -152,30 +149,12 @@ public class XmlMapping {
                 .append("\" id=\"")
                 .append(element.getAttributeValue("id"))
                 .append("\" from=\"").append(operation)
-                .append("\"").append("rows=\"19\"  class=\"form-control\" style=\"height:700px;font-family:consolas\"/>");
-        stringBuilder.append("</div>").append("</div>");
-        return stringBuilder.toString();
-    }
-
-    private static String elementSpecialTextarea(Element element, String operation) {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<div class=\"row form-group\">")
-                .append("<div class=\"col col-md-3\">")
-                .append("<label  class=\" form-control-label\">");
-        stringBuilder.append(element.getAttributeValue("name") == null ? " " : element.getAttributeValue("name"));
-        stringBuilder.append("</label>")
-                .append("</div>")
-                .append("<div class=\"col-12 col-md-9\">")
-                .append("<textarea name=\"")
-                .append(element.getAttributeValue("name"))
-                .append("\" id=\"")
-                .append(element.getAttributeValue("id"))
-                .append("\" from=\"").append(operation)
                 .append("\"").append("rows=\"19\"  class=\"form-control\" style=\"height:700px;font-family:consolas\">")
                 .append(element.getValue()).append("</textarea>");
         stringBuilder.append("</div>").append("</div>");
         return stringBuilder.toString();
     }
+
 
     /**
      * 根据xml生成下拉框控件
