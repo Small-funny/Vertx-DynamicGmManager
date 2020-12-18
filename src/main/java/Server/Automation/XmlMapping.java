@@ -172,23 +172,8 @@ public class XmlMapping {
                 .append(element.getAttributeValue("id"))
                 .append("\" from=\"").append(operation)
                 .append("\"").append("rows=\"19\"  class=\"form-control\" style=\"height:700px;font-family:consolas\">")
-                .append("{\n" +
-                        "   \"body\" : {\n" +
-                        "      \"isFull\" : \"\",\n" +
-                        "      \"userList\" : \"\",\n" +
-                        "      \"mail\" : {\n" +
-                        "         \"title\" : \"\",\n" +
-                        "         \"content\" : \"\"\n" +
-                        "      }\n" +
-                        "   }\n" +
-                        "}").append("</textarea>");
+                .append(element.getValue()).append("</textarea>");
         stringBuilder.append("</div>").append("</div>");
-        stringBuilder.append("<div class=\"row form-group\"><div class=\"col col-md-3\"><label class=\" " +
-                "form-control-label\"> </label></div><div class=\"col-12 col-md-9\"><input class=\"btn " +
-                "btn-outline-light btn-block\" type=\"button\" name=\"null\" id=\"forward\" value=\"检查\" " +
-                "onclick=\"isJson('").append(element.getAttributeValue("name")).append("')\"></div></div>");
-        //stringBuilder.append("<input class=\"btn btn-outline-light btn-block\" type=\"button\" value=\"检查格式\" " +
-        //"onclick=\"isJson('").append(element.getAttributeValue("name")).append("')\">");
         return stringBuilder.toString();
     }
 
