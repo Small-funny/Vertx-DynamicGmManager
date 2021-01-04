@@ -97,16 +97,59 @@ function changeAside(server, page, list, table, subList) {
     $("#returnContent").html(" ")
 }
 
-function changeReturn(urls, fromValue) {
+function changeReturn(urls, fromValue, object) {
+
+    var obj = $(object)
+    console.log(obj.parent().parent().parent())
     let json = {};
-    $("input[from='" + fromValue + "']").each(function () {
-        json[$(this).attr('id')] = $(this).val()
-    })
-    $("select[from='" + fromValue + "']").each(function () {
-        json[$(this).attr('id')] = $(this).val()
-    })
-    $("textarea[from='" + fromValue + "']").each(function () {
-        json[$(this).attr('id')] = $(this).val()
+    let subJson = [];
+    // $("input[from='" + fromValue + "']").each(function () {
+    //     json[$(this).attr('id')] = $(this).val()
+    // })
+    // $("select[from='" + fromValue + "']").each(function () {
+    //     json[$(this).attr('id')] = $(this).val()
+    // })
+    // $("textarea[from='" + fromValue + "']").each(function () {
+    //     json[$(this).attr('id')] = $(this).val()
+    // })
+    obj.parent().parent().parent().children().each(function (index) {
+        if ($(this).attr("class") === "row form-group") {
+            $(this).children().each(function (index) {
+                if (index === 1) {
+                    $(this).children().each(function (index) {
+                        json[$(this).attr('id')] = $(this).val();
+                    })
+                }
+            })
+        } else if ($(this).attr("type") === "hidden") {
+            json[$(this).attr("id")] = $(this).attr("value")
+        } else {
+            $(this).children().each(function (index) {//div style 的 children
+                let subsubjson = {}
+                let key
+                let value
+                $(this).children().each(function (index) {
+                    if (index === 0) {
+                        $(this).children().each(function (index) {
+                            if (index === 1) {
+                                console.log($(this))
+                                key = $(this).find("select").val()
+                            }
+                        })
+                    } else if (index === 1) {
+                        $(this).children().each(function (index) {
+                            if (index === 1) {
+                                console.log($(this))
+                                value = $(this).find("input").val()
+                            }
+                        })
+                    }
+                })
+                subsubjson[key] = value
+                subJson.push(subsubjson)
+            })
+            json["accessory"] = JSON.stringify(subJson)
+        }
     })
     json["operatorName"] = operatorName.text()
     console.log(ip)
@@ -183,7 +226,7 @@ function updateReturn(urls) {
     refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "userInfo")
 }
 
-function dlbclick(argDivName,argsName) {
+function dlbclick(argDivName, argsName) {
     document.getElementById(argDivName).value = argsName
     document.getElementById('returnContent').innerHTML = ' '
 
@@ -210,4 +253,13 @@ function isJson(divName) {
         }
     }
     console.log('It is not a string!')
+}
+
+function copyDiv() {
+    $('#accessory').clone().appendTo($('#accessory').parent());
+}
+
+function deleteDiv(object) {
+    var obj = $(object)
+    obj.parent().parent().parent().remove();
 }

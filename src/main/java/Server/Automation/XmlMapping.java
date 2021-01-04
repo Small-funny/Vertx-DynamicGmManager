@@ -71,6 +71,8 @@ public class XmlMapping {
                 case "time":
                     stringBuilder.append(elementTime(child, operation));
                     break;
+                case "div":
+                    stringBuilder.append(elementDiv(child, operation));
                 default:
                     break;
             }
@@ -126,7 +128,7 @@ public class XmlMapping {
 //                stringBuilder.append("forward");
 //            }
 
-            stringBuilder.append("','").append(operation).append("')\"");
+            stringBuilder.append("','").append(operation).append("',this)\"");
         }
 
 
@@ -268,6 +270,56 @@ public class XmlMapping {
     }
 
 
+    private static String elementDiv(Element element, String operation) {
+
+
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div>")
+                .append("<div style=\"border-bottom-color: black;border-bottom-width: 1px;border-top-color: " +
+                "black;border-top-width:1px\" id=\"")
+                .append(element.getAttributeValue("id")).append("\">");
+        for (Element child : element.getChildren()) {
+            switch (child.getName()) {
+                case "input":
+                    stringBuilder.append(elementInput(child, operation));
+                    break;
+                case "select":
+                    stringBuilder.append(elementSelect(child, operation));
+                    break;
+                case "button":
+                    stringBuilder.append(elementButton(child, operation));
+                    break;
+                default:
+                    break;
+            }
+        }
+        stringBuilder.append("</div></div>");
+        return stringBuilder.toString();
+    }
+
+    public static String elementButton(Element element, String operation) {
+        if(element.getAttributeValue("type").equals("addAndRemove")){
+            return elementAddAndRemoveButton();
+        }
+        return null;
+
+    }
+
+
+    public static String elementAddAndRemoveButton(){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("<div class=\"row form-group\">")
+                .append("<div class=\"col col-md-3\"></div>")
+                .append("<div class=\"col-12 col-md-6 \">")
+                .append("<button type=\"button\" class=\"btn btn-primary \"  onclick=\"copyDiv()\">添加</button>")
+                .append("</div>")
+                .append("<div class=\"col-12 col-md-3 \">")
+                .append("<button type=\"button\" class=\"btn btn-primary \" id=\"delete\" onclick=\"deleteDiv(this)" +
+                        "\">移除</button>")
+                .append("</div>")
+                .append("</div>");
+        return stringBuilder.toString();
+    }
     /**
      * 根据页面名获取页面的元素
      *
