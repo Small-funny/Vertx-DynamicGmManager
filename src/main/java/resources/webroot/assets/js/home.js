@@ -124,28 +124,22 @@ function changeReturn(urls, fromValue, object) {
         } else if ($(this).attr("type") === "hidden") {
             json[$(this).attr("id")] = $(this).attr("value")
         } else {
-            $(this).children().each(function (index) {//div style 的 children
-                let subsubjson = {}
-                let key
-                let value
+            $(this).children().each(function (index) {
+                let subsubjson = []
                 $(this).children().each(function (index) {
-                    if (index === 0) {
-                        $(this).children().each(function (index) {
-                            if (index === 1) {
-                                console.log($(this))
-                                key = $(this).find("select").val()
-                            }
-                        })
-                    } else if (index === 1) {
-                        $(this).children().each(function (index) {
-                            if (index === 1) {
-                                console.log($(this))
-                                value = $(this).find("input").val()
-                            }
-                        })
+                    if(index===$(this).parent().children().length-1){
+                        return true
                     }
+                    $(this).children().each(function (index) {
+                        if (index === 1) {
+                            $(this).children().each(function (index){
+                                console.log(index)
+
+                                subsubjson.push($(this).val())
+                            })
+                        }
+                    })
                 })
-                subsubjson[key] = value
                 subJson.push(subsubjson)
             })
             json["accessory"] = JSON.stringify(subJson)
