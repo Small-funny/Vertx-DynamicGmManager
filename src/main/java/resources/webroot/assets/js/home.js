@@ -97,60 +97,56 @@ function changeAside(server, page, list, table, subList) {
     $("#returnContent").html(" ")
 }
 
-function changeReturn(urls, fromValue, object) {
+function changeReturn(urls, fromValue, object,special) {
 
-    var obj = $(object)
-    console.log(obj.parent().parent().parent())
-    let json = {};
-    let subJson = [];
-    // $("input[from='" + fromValue + "']").each(function () {
-    //     json[$(this).attr('id')] = $(this).val()
-    // })
-    // $("select[from='" + fromValue + "']").each(function () {
-    //     json[$(this).attr('id')] = $(this).val()
-    // })
-    // $("textarea[from='" + fromValue + "']").each(function () {
-    //     json[$(this).attr('id')] = $(this).val()
-    // })
-    obj.parent().parent().parent().children().each(function (index) {
-        if ($(this).attr("class") === "row form-group") {
-            $(this).children().each(function (index) {
-                if (index === 1) {
-                    $(this).children().each(function (index) {
-                        json[$(this).attr('id')] = $(this).val();
-                    })
-                }
-            })
-        } else if ($(this).attr("type") === "hidden") {
-            json[$(this).attr("id")] = $(this).attr("value")
-        } else {
-            $(this).children().each(function (index) {
-                let subsubjson = []
-                $(this).children().each(function (index) {
-                    if(index===$(this).parent().children().length-1){
-                        return true
-                    }
+    if(special!==null){
+        if(confirm(special)){
+            var obj = $(object)
+            console.log(obj.parent().parent().parent())
+            let json = {};
+            let subJson = [];
+            obj.parent().parent().parent().children().each(function (index) {
+                if ($(this).attr("class") === "row form-group") {
                     $(this).children().each(function (index) {
                         if (index === 1) {
-                            $(this).children().each(function (index){
-                                console.log(index)
-
-                                subsubjson.push($(this).val())
+                            $(this).children().each(function (index) {
+                                json[$(this).attr('id')] = $(this).val();
                             })
                         }
                     })
-                })
-                subJson.push(subsubjson)
+                } else if ($(this).attr("type") === "hidden") {
+                    json[$(this).attr("id")] = $(this).attr("value")
+                } else {
+                    $(this).children().each(function (index) {
+                        let subsubjson = []
+                        $(this).children().each(function (index) {
+                            if(index===$(this).parent().children().length-1){
+                                return true
+                            }
+                            $(this).children().each(function (index) {
+                                if (index === 1) {
+                                    $(this).children().each(function (index){
+                                        console.log(index)
+
+                                        subsubjson.push($(this).val())
+                                    })
+                                }
+                            })
+                        })
+                        subJson.push(subsubjson)
+                    })
+                    json["accessory"] = JSON.stringify(subJson)
+                }
             })
-            json["accessory"] = JSON.stringify(subJson)
+            json["operatorName"] = operatorName.text()
+            console.log(ip)
+            json["ip"] = ip
+            console.log(json)
+            refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+            refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
         }
-    })
-    json["operatorName"] = operatorName.text()
-    console.log(ip)
-    json["ip"] = ip
-    console.log(json)
-    refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
-    refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
+    }
+
 }
 
 function updateAuth(urls, operation) {

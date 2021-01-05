@@ -8,6 +8,7 @@ import org.jdom2.Element;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static Server.Automation.PageUtil.*;
 
@@ -128,7 +129,8 @@ public class XmlMapping {
 //                stringBuilder.append("forward");
 //            }
 
-            stringBuilder.append("','").append(operation).append("',this)\"");
+            stringBuilder.append("','").append(operation).append("',this,'")
+                    .append(element.getAttributeValue("special")).append("')\"");
         }
 
 
@@ -276,7 +278,7 @@ public class XmlMapping {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div>")
                 .append("<div style=\"border-bottom-color: black;border-bottom-width: 1px;border-top-color: " +
-                "black;border-top-width:1px\" id=\"")
+                        "black;border-top-width:1px\" id=\"")
                 .append(element.getAttributeValue("id")).append("\">");
         for (Element child : element.getChildren()) {
             switch (child.getName()) {
@@ -298,7 +300,7 @@ public class XmlMapping {
     }
 
     public static String elementButton(Element element, String operation) {
-        if(element.getAttributeValue("type").equals("addAndRemove")){
+        if (element.getAttributeValue("type").equals("addAndRemove")) {
             return elementAddAndRemoveButton();
         }
         return null;
@@ -306,7 +308,7 @@ public class XmlMapping {
     }
 
 
-    public static String elementAddAndRemoveButton(){
+    public static String elementAddAndRemoveButton() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
                 .append("<div class=\"col col-md-3\"></div>")
@@ -320,6 +322,7 @@ public class XmlMapping {
                 .append("</div>");
         return stringBuilder.toString();
     }
+
     /**
      * 根据页面名获取页面的元素
      *
@@ -604,4 +607,8 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    public static void main(String[] args) {
+        List<Integer> list = new Random().ints().boxed().limit(5000).collect(Collectors.toList());
+        int[] integers = new Random().ints().limit(4).toArray();
+    }
 }
