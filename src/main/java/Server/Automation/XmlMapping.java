@@ -276,8 +276,7 @@ public class XmlMapping {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div>")
-                .append("<div style=\"border-bottom-color: black;border-bottom-width: 1px;border-top-color: " +
-                        "black;border-top-width:1px\" id=\"")
+                .append("<div style=\"border-bottom:1px dotted grey;border-top:1px dotted grey\" id=\"")
                 .append(element.getAttributeValue("id")).append("\">");
         for (Element child : element.getChildren()) {
             switch (child.getName()) {
