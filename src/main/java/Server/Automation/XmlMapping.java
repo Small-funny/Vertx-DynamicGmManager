@@ -604,9 +604,4 @@ public class XmlMapping {
         }
         return stringBuilder.toString();
     }
-
-    public static void main(String[] args) {
-        List<Integer> list = new Random().ints().boxed().limit(5000).collect(Collectors.toList());
-        int[] integers = new Random().ints().limit(4).toArray();
-    }
 }
