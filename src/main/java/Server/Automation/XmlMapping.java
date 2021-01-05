@@ -94,6 +94,7 @@ public class XmlMapping {
      * @param operation 当前表单的操作
      */
     private static String elementInput(Element element, String operation) {
+        String placeholder =element.getAttributeValue("placeholder");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
                 .append("<div class=\"col col-md-3\">")
@@ -119,16 +120,14 @@ public class XmlMapping {
                 .append(element.getAttributeValue("id"))
                 .append("\" from=\"").append(operation)
                 .append("\"");
+        if(!(placeholder==null)){
+            stringBuilder.append(" placeholder=\"").append(placeholder).append("\" ");
+        }
         if ("button".equals(element.getAttributeValue("type"))) {
             stringBuilder.append("value=\"")
                     .append(element.getAttributeValue("value"))
-                    .append("\" onclick=\"changeReturn('/").append(element.getAttributeValue("id"));
-//            if ("userManage".equals(element.getAttributeValue("id"))) {
-//                stringBuilder.append("manager");
-//            } else if ("configManage".equals(element.getAttributeValue("id"))) {
-//                stringBuilder.append("forward");
-//            }
-
+                    .append("\" onclick=\"changeReturn('/")
+                    .append(element.getAttributeValue("id"));
             stringBuilder.append("','").append(operation).append("',this,'")
                     .append(element.getAttributeValue("special")).append("')\"");
         }
