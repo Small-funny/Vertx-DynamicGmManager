@@ -276,7 +276,8 @@ public class XmlMapping {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div>")
-                .append("<div style=\"border-top:1px solid #DCDCDC\" id=\"")
+                .append("<div style=\"border-bottom-color: black;border-bottom-width: 1px;border-top-color: " +
+                        "black;border-top-width:1px\" id=\"")
                 .append(element.getAttributeValue("id")).append("\">");
         for (Element child : element.getChildren()) {
             switch (child.getName()) {
@@ -381,7 +382,7 @@ public class XmlMapping {
             stringBuilder.append("</li>");
         }
         if (VerifyDatabaseHelper.isSupLevel(VerifyDatabaseHelper.tokenToUsername(token))) {
-            stringBuilder.append("<li><a href=\"playerManage\"><i class=\"nav-link-icon\" data-feather=\"anchor\"></i>").append(TYPE_ELEMENT.get("playerManage").getAttributeValue("name")).append("</a><ul>");
+            stringBuilder.append("<li><a href=\"playerManage\"><i class=\"nav-link-icon\" data-feather=\"home\"></i>").append(TYPE_ELEMENT.get("playerManage").getAttributeValue("name")).append("</a><ul>");
             for (Element element : TYPE_ELEMENT.get("playerManage").getChildren()) {
                 stringBuilder.append("<li id =\" ")
                         .append(element.getAttributeValue("name"))
