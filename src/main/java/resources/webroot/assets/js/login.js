@@ -10,17 +10,17 @@ function btn() {
         datatype: "text",
         url: "/login/verifyCode",
         success: function (data) {
-            if (($('#verifyCode').val() !== "")) {
-                if ($('#verifyCode').val().toLowerCase() === data.toLowerCase()) {
+//            if (($('#verifyCode').val() !== "")) {
+//                if ($('#verifyCode').val().toLowerCase() === data.toLowerCase()) {
                     getPublicKey();
-                } else if ($('#verifyCode').val().toLowerCase() !== data.toLowerCase()) {
-                    toastr.error("验证码错误")
-                    document.getElementById("sign in").innerHTML = "Sign in"
-                }
-            } else {
-                document.getElementById("sign in").innerHTML = "Sign in"
-            }
-            changeUrl()
+//                } else if ($('#verifyCode').val().toLowerCase() !== data.toLowerCase()) {
+//                    toastr.error("验证码错误")
+//                    document.getElementById("sign in").innerHTML = "Sign in"
+//                }
+//            } else {
+//                document.getElementById("sign in").innerHTML = "Sign in"
+//            }
+//            changeUrl()
         }
     })
 
@@ -74,9 +74,9 @@ function createToken(usernameEncrypted, passwordEncrypted) {
     })
 }
 
-function changeUrl() {
-    document.getElementById('verifyCodePic').src = "/login/verifyCodePic" + "?time=" + Date.now();
-}
+//function changeUrl() {
+//    document.getElementById('verifyCodePic').src = "/login/verifyCodePic" + "?time=" + Date.now();
+//}
 
 window.onload = function () {
 
