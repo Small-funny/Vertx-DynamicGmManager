@@ -62,6 +62,9 @@ function refreshAjaxPostAlert(url, page, arguments, section) {
         type: "POST",
         dataType: "text",
         url: url,
+        // contentType: false,
+        // processData: false,
+
         data: JSON.stringify({
             'page': page,
             'arguments': arguments
@@ -97,11 +100,11 @@ function changeAside(server, page, list, table, subList) {
     $("#returnContent").html(" ")
 }
 
-function changeReturn(urls, fromValue, object,special) {
+function changeReturn(urls, fromValue, object, special) {
 
-    if(special!=="null"){
-        if(!confirm(special))
-        return true;
+    if (special !== "null") {
+        if (!confirm(special))
+            return true;
     }
     {
         var obj = $(object)
@@ -113,7 +116,21 @@ function changeReturn(urls, fromValue, object,special) {
                 $(this).children().each(function (index) {
                     if (index === 1) {
                         $(this).children().each(function (index) {
-                            json[$(this).attr('id')] = $(this).val();
+                            //json[$(this).attr('id')] = $(this).val();
+                            if ($(this).attr("type") === "file") {
+                                console.log($(this).val())
+                                var reader = new FileReaderSync();
+
+                                reader.readAsBinaryString($(this).get(0).files[0]);
+
+                                reader.onload = function () {
+                                    console.log(this.result)
+                                    console.log($(this).attr("id"))
+                                    json[$(this).attr("id")]= this.result
+                                }
+                            } else {
+                                json[$(this).attr("id")] = $(this).val();
+                            }
                         })
                     }
                 })
@@ -123,14 +140,13 @@ function changeReturn(urls, fromValue, object,special) {
                 $(this).children().each(function (index) {
                     let subsubjson = []
                     $(this).children().each(function (index) {
-                        if(index===$(this).parent().children().length-1){
+                        if (index === $(this).parent().children().length - 1) {
                             return true
                         }
                         $(this).children().each(function (index) {
                             if (index === 1) {
-                                $(this).children().each(function (index){
+                                $(this).children().each(function (index) {
                                     console.log(index)
-
                                     subsubjson.push($(this).val())
                                 })
                             }
@@ -254,4 +270,31 @@ function copyDiv() {
 function deleteDiv(object) {
     var obj = $(object)
     obj.parent().parent().parent().remove();
+}
+
+function uploadFile(url, page, arguments, section) {
+
+    //1.需要先利用FormData内置对象
+    let formDateObj = new FormData();
+    // //2.添加普通键值对
+    // formDateObj.append('username',$('#d1').val());
+    // formDateObj.append('password',$('#d2').val());
+    //3.添加文件对象
+    formDateObj.append('myfile', $('#d3')[0].files[0])
+    //4.将对象基于ajax发送给后端
+    $.ajax({
+        url: url,
+        type: 'post',
+        data: formDateObj,  //直接将对象放在data后面
+
+        //ajax发送文件必须要指定两个参数
+        contentType: false,  //不要使用任何编码，django后端能够自动识别formdata对象
+        processData: false,  //告诉浏览器不要对你的数据进行任何处理
+
+        success: function (args) {
+
+        }
+    })
+
+
 }
