@@ -107,35 +107,53 @@ function changeReturn(urls, fromValue, object, special) {
             return true;
     }
     {
+        let hasSend = false
         var obj = $(object)
         console.log(obj.parent().parent().parent())
         let json = {};
         let subJson = [];
+        json["operatorName"] = operatorName.text()
+        console.log(ip)
+        json["ip"] = ip
         obj.parent().parent().parent().children().each(function (index) {
-            if ($(this).attr("class") === "row form-group") {
+            if ($(this).attr("type") === "hidden") {
+                json[$(this).attr("id")] = $(this).attr("value")
+            } else if ($(this).attr("class") === "row form-group") {
                 $(this).children().each(function (index) {
                     if (index === 1) {
                         $(this).children().each(function (index) {
+                            var idNamename = $(this).attr("id")
                             //json[$(this).attr('id')] = $(this).val();
                             if ($(this).attr("type") === "file") {
-                                console.log($(this).val())
-                                var reader = new FileReaderSync();
+                                var formData = new FormData();
+                                formData.append("file",$(this).get(0).files[0]);
+                                $.ajax({
+                                    url:'http://localhost:8000/upload',
+                                    dataType:'json',
+                                    type:'POST',
+                                    async: false,
+                                    data: formData,
+                                    processData : false, // 使数据不做处理
+                                    contentType : false, // 不要设置Content-Type请求头
+                                    success: function(data){
+                                        alert(data);
+                                        if (data.status == 'ok') {
+                                            alert('上传成功！');
+                                        }
 
-                                reader.readAsBinaryString($(this).get(0).files[0]);
-
-                                reader.onload = function () {
-                                    console.log(this.result)
-                                    console.log($(this).attr("id"))
-                                    json[$(this).attr("id")]= this.result
-                                }
+                                    },
+                                    error:function(response){
+                                        alert(response);
+                                        console.log(response);
+                                    }
+                                });
                             } else {
                                 json[$(this).attr("id")] = $(this).val();
                             }
+                            json[$(this).attr("id")] = $(this).val();
                         })
                     }
                 })
-            } else if ($(this).attr("type") === "hidden") {
-                json[$(this).attr("id")] = $(this).attr("value")
             } else {
                 $(this).children().each(function (index) {
                     let subsubjson = []
@@ -157,14 +175,14 @@ function changeReturn(urls, fromValue, object, special) {
                 json["accessory"] = JSON.stringify(subJson)
             }
         })
-        json["operatorName"] = operatorName.text()
-        console.log(ip)
-        json["ip"] = ip
-        console.log(json)
-        refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
-        refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
-    }
 
+        console.log(json)
+        console.log(hasSend)
+        if (!hasSend) {
+            refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+            refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
+        }
+    }
 }
 
 function updateAuth(urls, operation) {
