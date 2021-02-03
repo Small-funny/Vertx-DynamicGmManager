@@ -3,9 +3,12 @@ package Server.Automation;
 import Server.DatabaseHelper.ManagerDatabaseHelper;
 import Server.DatabaseHelper.VerifyDatabaseHelper;
 import com.alibaba.fastjson.JSON;
+import com.csvreader.CsvReader;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.Element;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -51,7 +54,8 @@ public class XmlMapping {
                 .append("</strong></div>")
                 .append("<div class=\"card-body card-block\">")
                 .append("<form name=\"").append(element.getAttributeValue("name"))
-                .append("\" operation=\"").append(element.getAttributeValue("operation")).append("\" class=\"form-horizontal\">");
+                .append("\" operation=\"").append(element.getAttributeValue("operation"))
+                .append("\" class=\"form-horizontal\">");
         for (Element child : element.getChildren()) {
             switch (child.getName()) {
                 case "input":
@@ -79,8 +83,10 @@ public class XmlMapping {
             }
         }
 
-        stringBuilder.append("<input type=\"hidden\" value=\"").append(element.getAttributeValue("operation")).append("\" name=\"operation\" id=\"operation\" from=\"").append(operation).append("\"/>")
-                .append("<input type=\"hidden\" value=\"").append(route).append("\" name=\"route\" id=\"route\" from=\"").append(operation).append("\"/>")
+        stringBuilder.append("<input type=\"hidden\" value=\"").append(element.getAttributeValue("operation"))
+                .append("\" name=\"operation\" id=\"operation\" from=\"").append(operation).append("\"/>")
+                .append("<input type=\"hidden\" value=\"").append(route)
+                .append("\" name=\"route\" id=\"route\" from=\"").append(operation).append("\"/>")
                 .append("</form>")
                 .append("</div>");
         return stringBuilder.toString();
@@ -94,7 +100,7 @@ public class XmlMapping {
      * @param operation 当前表单的操作
      */
     private static String elementInput(Element element, String operation) {
-        String placeholder =element.getAttributeValue("placeholder");
+        String placeholder = element.getAttributeValue("placeholder");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
                 .append("<div class=\"col col-md-3\">")
@@ -106,13 +112,15 @@ public class XmlMapping {
                 .append("<div class=\"col-12 col-md-9\">")
                 .append("<input class=\"");
         if ("file".equals(element.getAttributeValue("type"))) {
-            stringBuilder.append("form-control-file");
+            stringBuilder.append("form-control-file\"");
+        } else if ("fileDownload".equals(element.getAttributeValue("type"))) {
+            stringBuilder.append("form-control-file\" webkitdirectory directory multiple ");
         } else if ("button".equals(element.getAttributeValue("type"))) {
-            stringBuilder.append("btn btn-outline-light btn-block");
+            stringBuilder.append("btn btn-outline-light btn-block\"");
         } else {
-            stringBuilder.append("form-control");
+            stringBuilder.append("form-control\"");
         }
-        stringBuilder.append("\" type=\"")
+        stringBuilder.append(" type=\"")
                 .append(element.getAttributeValue("type"))
                 .append("\" name=\"")
                 .append(element.getAttributeValue("name"))
@@ -120,7 +128,7 @@ public class XmlMapping {
                 .append(element.getAttributeValue("id"))
                 .append("\" from=\"").append(operation)
                 .append("\"");
-        if(!(placeholder==null)){
+        if (!(placeholder == null)) {
             stringBuilder.append(" placeholder=\"").append(placeholder).append("\" ");
         }
         if ("button".equals(element.getAttributeValue("type"))) {
@@ -211,7 +219,9 @@ public class XmlMapping {
         for (Element child : element.getChildren()) {
             stringBuilder.append("<div class=\"").append(child.getName()).append("\">")
                     .append("<label class=\"form-check-label \">")
-                    .append("<input type=\"").append(child.getName()).append("\" name=\"").append(element.getAttributeValue("name")).append("\" value=\"").append(child.getAttributeValue("value")).append("\" class=\"form-check-input\">")
+                    .append("<input type=\"").append(child.getName()).append("\" name=\"")
+                    .append(element.getAttributeValue("name")).append("\" value=\"")
+                    .append(child.getAttributeValue("value")).append("\" class=\"form-check-input\">")
                     .append(child.getValue())
                     .append("</label>")
                     .append("</div>");
@@ -237,7 +247,8 @@ public class XmlMapping {
         stringBuilder.append("</label>")
                 .append("</div>")
                 .append("<div class=\"col-12 col-md-9\">")
-                .append("<input type=\"file\" name=\"").append(element.getAttributeValue("name")).append("\" id=\"11122333\" class=\"form-file\">")
+                .append("<input type=\"file\" name=\"").append(element.getAttributeValue("name"))
+                .append("\" id=\"11122333\" class=\"form-file\">")
                 .append("</div>")
                 .append("</div>");
         return stringBuilder.toString();
@@ -264,7 +275,8 @@ public class XmlMapping {
                 .append("\" from = \"").append(operation).append("\" class=\"form-control\" autocomplete=\"off\">")
                 .append("<script>\n" + "    lay('#version').html('-v' + laydate.v);\n" + "    laydate.render({\n" + "        elem: '#")
                 .append(element.getAttributeValue("id"))
-                .append("'\n").append("        , type: 'datetime'\n").append("\n").append("    });\n").append("</script>")
+                .append("'\n").append("        , type: 'datetime'\n").append("\n").append("    });\n")
+                .append("</script>")
                 .append("</div>")
                 .append("</div>");
         return stringBuilder.toString();
@@ -382,7 +394,8 @@ public class XmlMapping {
             stringBuilder.append("</li>");
         }
         if (VerifyDatabaseHelper.isSupLevel(VerifyDatabaseHelper.tokenToUsername(token))) {
-            stringBuilder.append("<li><a href=\"playerManage\"><i class=\"nav-link-icon\" data-feather=\"home\"></i>").append(TYPE_ELEMENT.get("playerManage").getAttributeValue("name")).append("</a><ul>");
+            stringBuilder.append("<li><a href=\"playerManage\"><i class=\"nav-link-icon\" data-feather=\"home\"></i>")
+                    .append(TYPE_ELEMENT.get("playerManage").getAttributeValue("name")).append("</a><ul>");
             for (Element element : TYPE_ELEMENT.get("playerManage").getChildren()) {
                 stringBuilder.append("<li id =\" ")
                         .append(element.getAttributeValue("name"))
@@ -431,13 +444,14 @@ public class XmlMapping {
     public static String createConfigsList(String data, String argName, String argNameName) {
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append("<div class=\"card\">")
-                .append("<div class=\"card-header\"><strong>双击选项输入")
+        stringBuilder.append("<div class=\"card\" style=\"border:1px solid;resize:vertical;overflow:auto;\">")
+                .append("<div class=\"card-header\"><strong>双击选项输入 可以拖拽改变长度")
                 .append(argNameName)
                 .append("</strong></div>")
                 .append("<div class=\"card-body card-block\" style=\"width: auto\"><div class=\"row form-group\"><div class=\"col col-md-12\">");
         List<String> list = JSON.parseObject(data, List.class);
-        stringBuilder.append("<select style=\"height:700px\" name=\"multiple-select\" id=\"multiple-select\" multiple=\"\" class=\"form-control\">");
+        stringBuilder
+                .append("<select style=\"height:700px\" name=\"multiple-select\" id=\"multiple-select\" multiple=\"\" class=\"form-control\">");
         for (String s : list) {
             stringBuilder.append("<option ondblclick=\"dlbclick('").append(argName).append("','").append(s).append(
                     "')\" " + "value=\"").append(s).append("\">").append(s).append("</option>");
@@ -455,7 +469,7 @@ public class XmlMapping {
      * @param auth     在str类型下是否有修改的权限
      * @param argsName 构造返回内容所需要的数据
      */
-    public static String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) {
+    public static String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName)  {
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         Date date = calendar.getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd (HH:mm:ss)");
@@ -503,7 +517,8 @@ public class XmlMapping {
                         stringBuilder.append("</td>");
                     }
                     if (USER_MANAGE_PAGES.contains(page)) {
-                        stringBuilder.append("<td><input type=\"checkbox\" name\"deleteCheckbox from=\"deleteCheckbox\" value=\"")
+                        stringBuilder
+                                .append("<td><input type=\"checkbox\" name\"deleteCheckbox from=\"deleteCheckbox\" value=\"")
                                 .append(subTableBody.get(0))
                                 .append("\" onclick=\"updateCheckbox($(this))\" class=\"form-check-input\"/></td>");
 
@@ -512,10 +527,82 @@ public class XmlMapping {
                 }
                 stringBuilder.append("</tbody></table>");
                 if (USER_MANAGE_PAGES.contains(page)) {
-                    stringBuilder.append("<input type=\"button\" class=\"btn btn-outline-light btn-block\" value=\"删除\" onclick=\"updateAuth('/manager','deleteUsers')\"");
+                    stringBuilder
+                            .append("<input type=\"button\" class=\"btn btn-outline-light btn-block\" value=\"删除\" onclick=\"updateAuth('/manager','deleteUsers')\"");
                 }
                 stringBuilder.append("</div></div></div></form>");
 
+            } else if ("download".equals(type)) {
+                if(data==null||"".equals(data)){
+                    stringBuilder.append("不是文件格式");
+                }else {
+                    stringBuilder.append("<div><strong>").append(format).append("</strong></div>");
+                    stringBuilder.append("<table class=\"table table-bordered\">").append("<thead><tr>");
+                    ArrayList<String> rowList =
+                            Arrays.stream(data.split("\n")).map(String::trim)
+                                    .collect(Collectors.toCollection(ArrayList::new));
+                    ArrayList<String> header =
+                            Arrays.stream(rowList.get(0).split(",")).map(String::trim)
+                                    .collect(Collectors.toCollection(ArrayList::new));
+                    for (String s : header) {
+                        stringBuilder.append("<th scope=\"col\">").append(s).append("</th>");
+                    }
+                    stringBuilder.append("</tr></thead><tbody>");
+
+
+                    for (int i = 1; i < rowList.size(); i++) {
+                        stringBuilder.append("<tr>");
+                        ArrayList<String> row =
+                                Arrays.stream(rowList.get(i).split(",")).map(String::trim)
+                                        .collect(Collectors.toCollection(ArrayList::new));
+
+                        for (String s : row) {
+                            stringBuilder.append("<td>");
+                            stringBuilder.append(s);
+                            stringBuilder.append("</td>");
+                        }
+
+                        stringBuilder.append("</tr>");
+                    }
+                }
+//                CsvReader csvReader = null;
+//                try {
+//                    csvReader = new CsvReader(data);
+//                } catch (FileNotFoundException e) {
+//                    e.printStackTrace();
+//                }
+//                stringBuilder.append("<div><strong>").append(format).append("</strong></div>");
+//                stringBuilder.append("<table class=\"table table-bordered\">").append("<thead><tr>");
+//                String[] headers = new String[0];
+//                try {
+//                    headers = csvReader.getHeaders();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                for (String header : headers) {
+//                    stringBuilder.append("<th scope=\"col\">").append(header).append("</th>");
+//                }
+//                stringBuilder.append("</tr></thead><tbody>");
+//                while (true) {
+//                    try {
+//                        if (!csvReader.readRecord()) {
+//                            break;
+//                        }
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    stringBuilder.append("<tr>");
+//                    for (int i = 0; i < headers.length; i++) {
+//                        stringBuilder.append("<td>");
+//                        try {
+//                            stringBuilder.append(csvReader.get(i));
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        }
+//                        stringBuilder.append("</td>");
+//                    }
+//                    stringBuilder.append("</tr>");
+//                }
             } else if ("str".equals(type)) {
                 String route = argsName.get("route");
                 stringBuilder.append(" <div class=\"card\">")
@@ -536,7 +623,8 @@ public class XmlMapping {
 //                            .append("<input type=\"text\" name=\"subPassword\" id=\"subPassword\" " +
 //                                    "class=\"form-control\" from=\"return\"/>")
 //                            .append("</div></div>");
-                    stringBuilder.append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"btn btn-outline-light btn-block\" value=\"修改\"></div></div>")
+                    stringBuilder
+                            .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"btn btn-outline-light btn-block\" value=\"修改\"></div></div>")
                             .append("<input type=\"hidden\" value=\"updateConfigBody\" name=\"operation\" from=\"return\">")
                             .append("<input type=\"hidden\" value=\"")
                             .append(route)
@@ -559,7 +647,8 @@ public class XmlMapping {
             } else if ("checkbox".equals(type)) {
                 //List<String> authList = ManagerDatabaseHelper.selectAuthList(argsName.get("username"), "list", argsName.get("route").split("/")[1]);
                 List<String> authList = JSON.parseArray(data, String.class);
-                List<String> allAuthList = ManagerDatabaseHelper.selectAuthList("root", argsName.get("authType"), argsName.get("route").split("/")[1]);
+                List<String> allAuthList = ManagerDatabaseHelper
+                        .selectAuthList("root", argsName.get("authType"), argsName.get("route").split("/")[1]);
                 stringBuilder.append(" <div class=\"card\">")
                         .append("<div class=\"card-header\" id=\"nowTime\"><strong>" + "操作时间：")
                         .append(format)
@@ -577,12 +666,14 @@ public class XmlMapping {
                     if (authList.contains(s)) {
                         stringBuilder.append("checked=\"checked\" ");
                     }
-                    stringBuilder.append("from=\"updateAuth\" onclick=\"updateCheckbox($(this))\" class=\"form-check-input\">")
+                    stringBuilder
+                            .append("from=\"updateAuth\" onclick=\"updateCheckbox($(this))\" class=\"form-check-input\">")
                             .append(enAuth2zh(s))
                             .append("</label>")
                             .append("</div>");
                 }
-                stringBuilder.append("<input type=\"button\" class=\"btn btn-outline-light btn-block\" value=\"修改\" onclick=\"updateAuth('/manager','updateAuth')\"/>");
+                stringBuilder
+                        .append("<input type=\"button\" class=\"btn btn-outline-light btn-block\" value=\"修改\" onclick=\"updateAuth('/manager','updateAuth')\"/>");
                 stringBuilder.append("</div>")
                         .append("</div>")
                         .append("</div></div></div>");

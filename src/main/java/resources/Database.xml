@@ -2,24 +2,74 @@
     <record>
         <column name="username" value="root" />
         <column name="password" value="root" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDEyNTk5ODUsImV4cCI6MTYwMTI5NTk4NX0.-zt1bWcuJ0O7VWjntQTVLz8bxZU0SzzrFRHsFewpRSk" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTIyNjYxMzIsImV4cCI6MTYxMjMwMjEzMn0.M8FJ5aDTzj8x4FkyGvokgiGogq-O79yR1yTdZWo3BBU" />
         <column name="auth" value="sup">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
-                <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
                 <auth2 type="btn" value="selectConfig" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 type="list" value="databaseManage" />
-                <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
                 <auth2 type="btn" value="selectConfig" />
             </auth1>
             <auth1 name="server" value="master">
                 <auth2 type="list" value="databaseManage" />
-                <auth2 type="list" value="gameManage" />
                 <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
+                <auth2 type="btn" value="selectConfig" />
+            </auth1>
+        </column>
+    </record>
+    <record>
+        <column name="username" value="wendaohan" />
+        <column name="password" value="wendaohan" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTIyNDcyNTcsImV4cCI6MTYxMjI4MzI1N30.5sxNMTzaj6ybqH8Ux_gPocAFK6azP1pb1HYfKEhcQ10" />
+        <column name="auth" value="sup">
+            <auth1 name="server" value="sandbox">
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
+                <auth2 type="btn" value="selectConfig" />
+            </auth1>
+            <auth1 name="server" value="test">
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
+                <auth2 type="btn" value="selectConfig" />
+            </auth1>
+            <auth1 name="server" value="master">
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
+                <auth2 type="btn" value="selectConfig" />
+            </auth1>
+        </column>
+    </record>
+    <record>
+        <column name="username" value="minjionghao" />
+        <column name="password" value="minjionghao" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTIyMzk2NTQsImV4cCI6MTYxMjI3NTY1NH0.50nG4W9KTBQDlTcBUxIQi_kYVszrkeJoOXoFxB-J6q0" />
+        <column name="auth" value="sup">
+            <auth1 name="server" value="sandbox">
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
+                <auth2 type="btn" value="selectConfig" />
+            </auth1>
+            <auth1 name="server" value="test">
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
+                <auth2 type="btn" value="selectConfig" />
+            </auth1>
+            <auth1 name="server" value="master">
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
                 <auth2 type="btn" value="selectConfig" />
             </auth1>
         </column>
@@ -27,7 +77,7 @@
     <record>
         <column name="username" value="admin" />
         <column name="password" value="admin" />
-        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MDAxNjUyMTEsImV4cCI6MTYwMDE2ODgxMX0.xFMd_OMPR4Up8d9jnS3eqbxSyY2Z8LWcan4UDEE2TiY" />
+        <column name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTIyNTQ5NTgsImV4cCI6MTYxMjI5MDk1OH0.e_7x-iuV2Ui12ocG2S9QhP0Bd3hMjY4vwdQLnWLCTQ8" />
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
@@ -51,6 +101,8 @@
         <column name="auth" value="ord">
             <auth1 name="server" value="sandbox">
                 <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="gameManage" />
+                <auth2 type="list" value="configManage" />
             </auth1>
             <auth1 name="server" value="test">
                 <auth2 type="list" value="databaseManage" />
@@ -60,5 +112,74 @@
                 <auth2 type="list" value="configManage" />
             </auth1>
         </column>
+    </record>
+    <record>
+        <cloumn name="username" value="12" />
+        <cloumn name="password" value="222222" />
+        <cloumn name="token" value="token" />
+        <cloumn name="auth" value="ord">
+            <auth1 name="server" value="sandbox" />
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
+    </record>
+    <record>
+        <cloumn name="username" value="jiangyuke" />
+        <cloumn name="password" value="jiangyuke" />
+        <cloumn name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTIyMzk2ODYsImV4cCI6MTYxMjI3NTY4Nn0.jAJABh4GJm76BHPh5z7W0GrqMz6b1cBQFo88FPkTqR0" />
+        <cloumn name="auth" value="ord">
+            <auth1 name="server" value="sandbox">
+                <auth2 type="btn" value="selectConfig" />
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="configManage" />
+            </auth1>
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
+    </record>
+    <record>
+        <cloumn name="username" value="fuziyang" />
+        <cloumn name="password" value="fuziyang" />
+        <cloumn name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTIyMzI1NTYsImV4cCI6MTYxMjI2ODU1Nn0.QKQzoKthaWKCvpGMgZa0bb7tfAMz3wAnVoyYhQxihOA" />
+        <cloumn name="auth" value="ord">
+            <auth1 name="server" value="sandbox">
+                <auth2 type="btn" value="selectConfig" />
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
+            </auth1>
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
+    </record>
+    <record>
+        <cloumn name="username" value="ouyilin" />
+        <cloumn name="password" value="ouyilin" />
+        <cloumn name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTIyNzE2NTAsImV4cCI6MTYxMjMwNzY1MH0.736ODPUraXLVtFnyIrNpuiYUUXGvSxMLogG5yv6MP5I" />
+        <cloumn name="auth" value="ord">
+            <auth1 name="server" value="sandbox">
+                <auth2 type="btn" value="selectConfig" />
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
+            </auth1>
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
+    </record>
+    <record>
+        <cloumn name="username" value="chengwen" />
+        <cloumn name="password" value="chengwen" />
+        <cloumn name="token" value="eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2MTIyNDYyODIsImV4cCI6MTYxMjI4MjI4Mn0.e5arS_rSBHAgBbv8Iz4ABDmWM61OnxNXzpEtl0XudoI" />
+        <cloumn name="auth" value="ord">
+            <auth1 name="server" value="sandbox">
+                <auth2 type="btn" value="selectConfig" />
+                <auth2 type="list" value="databaseManage" />
+                <auth2 type="list" value="configManage" />
+                <auth2 type="list" value="gameManage" />
+            </auth1>
+            <auth1 name="server" value="test" />
+            <auth1 name="server" value="master" />
+        </cloumn>
     </record>
 </database>

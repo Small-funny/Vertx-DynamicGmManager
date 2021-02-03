@@ -128,7 +128,7 @@ function changeReturn(urls, fromValue, object, special) {
                                 var formData = new FormData();
                                 formData.append("file",$(this).get(0).files[0]);
                                 $.ajax({
-                                    url:'http://localhost:8000/upload',
+                                    url:'http://10.0.104.186:9008/upload',
                                     dataType:'json',
                                     type:'POST',
                                     async: false,
@@ -136,15 +136,22 @@ function changeReturn(urls, fromValue, object, special) {
                                     processData : false, // 使数据不做处理
                                     contentType : false, // 不要设置Content-Type请求头
                                     success: function(data){
-                                        alert(data);
-                                        if (data.status == 'ok') {
-                                            alert('上传成功！');
-                                        }
+                                        var dataStr = JSON.stringify(data);
+                                        alert(JSON.parse(dataStr));
+                                        // if (data.code === '1') {
+                                        //     alert('上传成功！');
+                                        // }else{
+                                        //     alert(data.toString());
+                                        // }
 
                                     },
                                     error:function(response){
-                                        alert(response);
-                                        console.log(response);
+                                        console.log("response")
+                                        console.log("response")
+                                        console.log("response"+response.toString());
+                                        console.log("status"+response.status)
+                                        alert(response.toString());
+
                                     }
                                 });
                             } else {

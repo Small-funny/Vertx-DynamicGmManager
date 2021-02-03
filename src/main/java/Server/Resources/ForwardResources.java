@@ -26,11 +26,9 @@ import static Server.Automation.PageUtil.*;
 @SuppressWarnings("unchecked")
 public class ForwardResources {
 
-    private WebClient webClient;
-    private final WebClientOptions options = new WebClientOptions().setUserAgent("My-App/1.2.3").setKeepAlive(false);
+
 
     public void registerResources(Router router, Vertx vertx) {
-        webClient = WebClient.create(vertx, options);
 
         router.post("/forward").handler(this::forward);
     }
@@ -54,7 +52,7 @@ public class ForwardResources {
         String host = SERVER_ELEMENT.get(server).getAttributeValue("host");
         String suffix = SERVER_ELEMENT.get(server).getAttributeValue("url");
         int port = Integer.parseInt(SERVER_ELEMENT.get(server).getAttributeValue("port"));
-
+       WebClient webClient = WebClient.create(routingContext.vertx());
         webClient.post(port, host, suffix).sendJsonObject(jsonObject, ar -> {
             if (ar.succeeded()) {
 
