@@ -128,7 +128,7 @@ function changeReturn(urls, fromValue, object, special) {
                                 var formData = new FormData();
                                 formData.append("file",$(this).get(0).files[0]);
                                 $.ajax({
-                                    url:'http://10.0.104.186:9008/upload',
+                                    url:'http://127.0.0.1:9008/upload',
                                     dataType:'json',
                                     type:'POST',
                                     async: false,
@@ -192,6 +192,87 @@ function changeReturn(urls, fromValue, object, special) {
     }
 }
 
+function downloadFile(urls, fromValue, object, special) {
+
+    if (special !== "null") {
+        if (!confirm(special))
+            return true;
+    }
+    {
+        let hasSend = false
+        var obj = $(object)
+        console.log(obj.parent().parent().parent())
+        let json = {};
+        let subJson = [];
+        json["operatorName"] = operatorName.text()
+        console.log(ip)
+        json["ip"] = ip
+        obj.parent().parent().parent().children().each(function (index) {
+            if ($(this).attr("type") === "hidden") {
+                json[$(this).attr("id")] = $(this).attr("value")
+            } else if ($(this).attr("class") === "row form-group") {
+                $(this).children().each(function (index) {
+                    if (index === 1) {
+                        $(this).children().each(function (index) {
+                            var idNamename = $(this).attr("id")
+                            //json[$(this).attr('id')] = $(this).val();
+                            if ($(this).attr("type") === "file") {
+                            } else {
+                                json[$(this).attr("id")] = $(this).val();
+                            }
+                            json[$(this).attr("id")] = $(this).val();
+                        })
+                    }
+                })
+            } else {
+                $(this).children().each(function (index) {
+                    let subsubjson = []
+                    $(this).children().each(function (index) {
+                        if (index === $(this).parent().children().length - 1) {
+                            return true
+                        }
+                        $(this).children().each(function (index) {
+                            if (index === 1) {
+                                $(this).children().each(function (index) {
+                                    console.log(index)
+                                    subsubjson.push($(this).val())
+                                })
+                            }
+                        })
+                    })
+                    subJson.push(subsubjson)
+                })
+                json["accessory"] = JSON.stringify(subJson)
+            }
+        })
+
+        console.log(json)
+        console.log(hasSend)
+        if (!hasSend) {
+            $.ajax({
+                type: "POST",
+                dataType: "text",
+                url: urls,
+                // contentType: false,
+                // processData: false,
+
+                data: JSON.stringify({
+                    'page': pageName,
+                    'arguments': JSON.stringify(json)
+                }), success: function (data) {
+                    console.log(section)
+                    $("#" + section).html(data)
+                    window.location.href='http://162.14.8.109:8080/download'+data
+                }, error: function () {
+                    toastr.warning("操作失败")
+                }
+            })
+
+            //refreshAjaxPostAlert(urls, pageName, JSON.stringify(json), "returnContent")
+           // refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(json), "userInfo")
+        }
+    }
+}
 function updateAuth(urls, operation) {
     var list = [];
     $("input[checked='checked']").each(function () {

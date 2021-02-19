@@ -59,6 +59,9 @@ public class ForwardResources {
                 JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
                 String type = jsonResult.getString("type");
                 String resultData = jsonResult.getString("data");
+                if("downloadFile".equals(type)){
+                    routingContext.response().end(resultData);
+                }
                 boolean auth;
                 if (server != null) {
                     auth = ManagerDatabaseHelper

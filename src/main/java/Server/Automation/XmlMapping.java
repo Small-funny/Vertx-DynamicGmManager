@@ -3,12 +3,9 @@ package Server.Automation;
 import Server.DatabaseHelper.ManagerDatabaseHelper;
 import Server.DatabaseHelper.VerifyDatabaseHelper;
 import com.alibaba.fastjson.JSON;
-import com.csvreader.CsvReader;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.Element;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -113,16 +110,18 @@ public class XmlMapping {
                 .append("<input class=\"");
         if ("file".equals(element.getAttributeValue("type"))) {
             stringBuilder.append("form-control-file\"");
-        } else if ("fileDownload".equals(element.getAttributeValue("type"))) {
-            stringBuilder.append("form-control-file\" webkitdirectory directory multiple ");
-        } else if ("button".equals(element.getAttributeValue("type"))) {
+        } else if ("button".equals(element.getAttributeValue("type"))||"downloadButton".equals(element.getAttributeValue("type"))) {
             stringBuilder.append("btn btn-outline-light btn-block\"");
         } else {
             stringBuilder.append("form-control\"");
         }
-        stringBuilder.append(" type=\"")
-                .append(element.getAttributeValue("type"))
-                .append("\" name=\"")
+        if ("downloadButton".equals(element.getAttributeValue("type"))) {
+            stringBuilder.append(" type=\"").append("button");
+        } else {
+            stringBuilder.append(" type=\"")
+                    .append(element.getAttributeValue("type"));
+        }
+        stringBuilder.append("\" name=\"")
                 .append(element.getAttributeValue("name"))
                 .append("\" id=\"")
                 .append(element.getAttributeValue("id"))
@@ -135,6 +134,13 @@ public class XmlMapping {
             stringBuilder.append("value=\"")
                     .append(element.getAttributeValue("value"))
                     .append("\" onclick=\"changeReturn('/")
+                    .append(element.getAttributeValue("id"));
+            stringBuilder.append("','").append(operation).append("',this,'")
+                    .append(element.getAttributeValue("special")).append("')\"");
+        } else if ("downloadButton".equals(element.getAttributeValue("type"))) {
+            stringBuilder.append("value=\"")
+                    .append(element.getAttributeValue("value"))
+                    .append("\" onclick=\"downloadFile('/")
                     .append(element.getAttributeValue("id"));
             stringBuilder.append("','").append(operation).append("',this,'")
                     .append(element.getAttributeValue("special")).append("')\"");
@@ -469,7 +475,7 @@ public class XmlMapping {
      * @param auth     在str类型下是否有修改的权限
      * @param argsName 构造返回内容所需要的数据
      */
-    public static String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName)  {
+    public static String createReturnString(String type, String data, boolean auth, HashMap<String, String> argsName) {
         Calendar calendar = Calendar.getInstance(Locale.CHINA);
         Date date = calendar.getTime();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd (HH:mm:ss)");
@@ -533,9 +539,9 @@ public class XmlMapping {
                 stringBuilder.append("</div></div></div></form>");
 
             } else if ("download".equals(type)) {
-                if(data==null||"".equals(data)){
+                if (data == null || "".equals(data)) {
                     stringBuilder.append("不是文件格式");
-                }else {
+                } else {
                     stringBuilder.append("<div><strong>").append(format).append("</strong></div>");
                     stringBuilder.append("<table class=\"table table-bordered\">").append("<thead><tr>");
                     ArrayList<String> rowList =
