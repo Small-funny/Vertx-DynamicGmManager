@@ -36,7 +36,8 @@ function refreshAjaxGet(server, page, section) {
         }), success: function (data) {
             $("#" + section).html(data)
         }, error: function () {
-            toastr.warning("操作失败")
+            window.location.href = "/login"
+//            toastr.warning("登录过期")
         }
     })
 }
@@ -51,8 +52,10 @@ function refreshAjaxPost(url, page, arguments, section) {
             'arguments': arguments
         }), success: function (data) {
             $("#" + section).html(data)
-        }, error: function () {
-            toastr.warning("操作失败")
+        }, error: function (exc) {
+//            toastr.warning(exc.status)
+              window.location.href = "/login"
+//              toastr.warning("登陆过期")
         }
     })
 }
@@ -72,7 +75,8 @@ function refreshAjaxPostAlert(url, page, arguments, section) {
             console.log(section)
             $("#" + section).html(data)
         }, error: function () {
-            toastr.warning("操作失败")
+            window.location.href = "/login"
+//            toastr.warning("登陆过期")
         }
     })
 }
@@ -401,6 +405,4 @@ function uploadFile(url, page, arguments, section) {
 
         }
     })
-
-
 }
