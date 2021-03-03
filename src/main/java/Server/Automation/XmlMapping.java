@@ -451,8 +451,9 @@ public class XmlMapping {
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"card\" style=\"border:1px solid;resize:vertical;overflow:auto;\">")
-                .append("<div class=\"card-header\"><strong>双击选项输入 可以拖拽改变长度")
+                .append("<div class=\"card-header\"><strong>双击选项输入")
                 .append(argNameName)
+                .append(",拖拽右下角改变长度")
                 .append("</strong></div>")
                 .append("<div class=\"card-body card-block\" style=\"width: auto\"><div class=\"row form-group\"><div class=\"col col-md-12\">");
         List<String> list = JSON.parseObject(data, List.class);
