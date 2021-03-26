@@ -131,8 +131,9 @@ function changeReturn(urls, fromValue, object, special) {
                             if ($(this).attr("type") === "file") {
                                 var formData = new FormData();
                                 formData.append("file",$(this).get(0).files[0]);
+                               // formData.append("subPassword",$(this).parent().parent().parent().children().eq(1).children().eq(1).children().eq(0).val())
                                 $.ajax({
-                                    url:'http://127.0.0.1:9008/upload',
+                                    url:'http://10.0.104.186:9007/upload',//这个ip最好是外网ip 内网不知道为什么不好用
                                     dataType:'json',
                                     type:'POST',
                                     async: false,
@@ -195,7 +196,19 @@ function changeReturn(urls, fromValue, object, special) {
         }
     }
 }
-
+// function changeReturn(urls,fromValue,object,special){
+//     let formName = fromValue
+//     console.log(formName)
+//     var formobj = document.getElementById(fromValue)
+//     console.log(formobj)
+//     var formdata = new FormData(formobj)
+//     for (let entry of formdata.entries()) {
+//         console.log(entry[])
+//     }
+//     console.log(formdata.get("name"))
+//     refreshAjaxPostAlert(urls, pageName, JSON.stringify(formdata.entries()), "returnContent")
+//     refreshAjaxPost("/main/userInfo", pageName, JSON.stringify(formdata.entries()), "userInfo")
+// }
 function downloadFile(urls, fromValue, object, special) {
 
     if (special !== "null") {

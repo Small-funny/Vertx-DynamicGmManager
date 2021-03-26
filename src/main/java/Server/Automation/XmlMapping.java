@@ -52,11 +52,12 @@ public class XmlMapping {
                 .append("<div class=\"card-body card-block\">")
                 .append("<form name=\"").append(element.getAttributeValue("name"))
                 .append("\" operation=\"").append(element.getAttributeValue("operation"))
+                .append("\" id=\"").append(element.getAttributeValue("id"))
                 .append("\" class=\"form-horizontal\">");
         for (Element child : element.getChildren()) {
             switch (child.getName()) {
                 case "input":
-                    stringBuilder.append(elementInput(child, operation));
+                    stringBuilder.append(elementInput(child, operation,route));
                     break;
                 case "select":
                     stringBuilder.append(elementSelect(child, operation));
@@ -96,7 +97,7 @@ public class XmlMapping {
      * @param element   页面元素
      * @param operation 当前表单的操作
      */
-    private static String elementInput(Element element, String operation) {
+    private static String elementInput(Element element, String operation,String route) {
         String placeholder = element.getAttributeValue("placeholder");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
@@ -110,7 +111,8 @@ public class XmlMapping {
                 .append("<input class=\"");
         if ("file".equals(element.getAttributeValue("type"))) {
             stringBuilder.append("form-control-file\"");
-        } else if ("button".equals(element.getAttributeValue("type"))||"downloadButton".equals(element.getAttributeValue("type"))) {
+        } else if ("button".equals(element.getAttributeValue("type")) || "downloadButton"
+                .equals(element.getAttributeValue("type"))) {
             stringBuilder.append("btn btn-outline-light btn-block\"");
         } else {
             stringBuilder.append("form-control\"");
@@ -253,6 +255,7 @@ public class XmlMapping {
         stringBuilder.append("</label>")
                 .append("</div>")
                 .append("<div class=\"col-12 col-md-9\">")
+
                 .append("<input type=\"file\" name=\"").append(element.getAttributeValue("name"))
                 .append("\" id=\"11122333\" class=\"form-file\">")
                 .append("</div>")
@@ -300,7 +303,7 @@ public class XmlMapping {
         for (Element child : element.getChildren()) {
             switch (child.getName()) {
                 case "input":
-                    stringBuilder.append(elementInput(child, operation));
+                    stringBuilder.append(elementInput(child, operation,""));
                     break;
                 case "select":
                     stringBuilder.append(elementSelect(child, operation));
@@ -626,11 +629,12 @@ public class XmlMapping {
                 if (auth && CONFIG_MANAGE_PAGES.contains(page)) {
                     stringBuilder.append("<div class=\"row form-group\">");
                     if ("master".equals(argsName.get("route").split("/")[1])) {
-                            stringBuilder.append("<div class=\"col col-md-3\"><label class=\" form-control-label\">二级密码</label></div>")
-                            .append("<div class=\"col-12 col-md-9\">")
-                            .append("<input type=\"text\" name=\"subPassword\" id=\"subPassword\" " +
-                                    "class=\"form-control\" from=\"return\"/>")
-                            .append("</div></div>");
+                        stringBuilder
+                                .append("<div class=\"col col-md-3\"><label class=\" form-control-label\">二级密码</label></div>")
+                                .append("<div class=\"col-12 col-md-9\">")
+                                .append("<input type=\"text\" name=\"subPassword\" id=\"subPassword\" " +
+                                        "class=\"form-control\" from=\"return\"/>")
+                                .append("</div></div>");
                     }
                     stringBuilder
                             .append("<input type=\"button\" name=\"submit\" onclick=\"updateReturn('/forward')\" class=\"btn btn-outline-light btn-block\" value=\"修改\"></div></div>")
