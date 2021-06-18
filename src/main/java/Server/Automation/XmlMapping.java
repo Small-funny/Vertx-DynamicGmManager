@@ -5,7 +5,10 @@ import Server.DatabaseHelper.VerifyDatabaseHelper;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,6 +40,41 @@ public class XmlMapping {
         return stringBuilder.toString();
     }
 
+    //2021.3.29
+
+    /**
+     * 用于获取对应服的ip地址
+     *
+     * @param route
+     * @return
+     */
+    public static String getInetIp(String route) {
+        String[] strings = route.split("/");
+        String serverRoute = strings[1];
+
+        SAXBuilder saxBuilder = new SAXBuilder();
+        Element rootElement = null;
+        try {
+            rootElement = saxBuilder.build("src/main/java/resources/properties.xml").getDocument().getRootElement();
+        } catch (JDOMException | IOException e) {
+            e.printStackTrace();
+        }
+
+        List<Element> servers = rootElement.getChild("servers").getChildren();
+        for (int i = 0; i < servers.size(); i++) {
+            String value = servers.get(i).getAttributeValue("value");
+            if (value.equals(serverRoute)) {
+                String host = servers.get(i).getAttributeValue("host");
+                String port = servers.get(i).getAttributeValue("port");
+                return host + ":" + port;
+
+            } else {
+                continue;
+            }
+        }
+        return null;
+    }
+
     /**
      * 根据xml生成表格控件
      *
@@ -44,6 +82,8 @@ public class XmlMapping {
      * @param route   当前页面服务器和路径
      */
     private static String elementForm(Element element, String route) {
+        //获取对应服务器的ip地址
+        String inetIp = getInetIp(route);
         StringBuilder stringBuilder = new StringBuilder();
         String operation = element.getAttributeValue("operation");
         stringBuilder.append("<div class=\"card-header\"><strong>")
@@ -57,10 +97,10 @@ public class XmlMapping {
         for (Element child : element.getChildren()) {
             switch (child.getName()) {
                 case "input":
-                    stringBuilder.append(elementInput(child, operation,route));
+                    stringBuilder.append(elementInput(child, operation, route));
                     break;
                 case "select":
-                    stringBuilder.append(elementSelect(child, operation));
+                    stringBuilder.append(elementSelect(child, operation, route));
                     break;
                 case "formcheck":
                     stringBuilder.append(elementFormCheck(child));
@@ -75,7 +115,7 @@ public class XmlMapping {
                     stringBuilder.append(elementTime(child, operation));
                     break;
                 case "div":
-                    stringBuilder.append(elementDiv(child, operation));
+                    stringBuilder.append(elementDiv(child, operation,route));
                 default:
                     break;
             }
@@ -85,6 +125,9 @@ public class XmlMapping {
                 .append("\" name=\"operation\" id=\"operation\" from=\"").append(operation).append("\"/>")
                 .append("<input type=\"hidden\" value=\"").append(route)
                 .append("\" name=\"route\" id=\"route\" from=\"").append(operation).append("\"/>")
+                //用于存放对应服ip地址的隐藏域
+                .append("<input type=\"hidden\" value=\"").append(inetIp)
+                .append("\" name=\"inetIp\" id=\"inetIp\" from=\"").append(operation).append("\"/>")
                 .append("</form>")
                 .append("</div>");
         return stringBuilder.toString();
@@ -97,7 +140,7 @@ public class XmlMapping {
      * @param element   页面元素
      * @param operation 当前表单的操作
      */
-    private static String elementInput(Element element, String operation,String route) {
+    private static String elementInput(Element element, String operation, String route) {
         String placeholder = element.getAttributeValue("placeholder");
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
@@ -181,7 +224,8 @@ public class XmlMapping {
      * @param element   页面元素
      * @param operation 当前表单的操作
      */
-    private static String elementSelect(Element element, String operation) {
+    private static String elementSelect(Element element, String operation, String route) {
+        String server = route.split("/")[1];
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("<div class=\"row form-group\">")
                 .append("<div class=\"col col-md-3\">")
@@ -189,22 +233,27 @@ public class XmlMapping {
         stringBuilder.append(element.getAttributeValue("name") == null ? " " : element.getAttributeValue("name"));
         stringBuilder.append("</label>")
                 .append("</div>")
-                .append("<div class=\"col-12 col-md-9\">")
-                .append("<select class=\"form-control\" name=\"")
-                .append(element.getAttributeValue("name"))
-                .append("\" id=\"")
-                .append(element.getAttributeValue("id"))
+                .append("<div class=\"col-12 col-md-9\">");
+        if ("serverAuth".equals(element.getAttributeValue("id"))) {
+            stringBuilder.append("<input class=\"form-control\" type=\"text\" name=\"服务器\" id=\"serverAuth\" " +
+                    "from=\"selectAuthList\" readonly=\"readonly\" value=\""+server+"\"/>");
+        } else {
+            stringBuilder.append("<select class=\"form-control\" name=\"")
+                    .append(element.getAttributeValue("name"))
+                    .append("\" id=\"")
+                    .append(element.getAttributeValue("id"))
 
-                .append("\" from=\"").append(operation)
-                .append("\">");
-        for (Element child : element.getChildren()) {
-            stringBuilder.append("<option value=\"").append(child.getAttributeValue("value")).append("\">")
-                    .append(child.getValue())
-                    .append("</option>");
+                    .append("\" from=\"").append(operation)
+                    .append("\">");
+            for (Element child : element.getChildren()) {
+                stringBuilder.append("<option value=\"").append(child.getAttributeValue("value")).append("\">")
+                        .append(child.getValue())
+                        .append("</option>");
+            }
+            stringBuilder.append("</select>");
         }
-        stringBuilder.append("</select>")
-                .append("</div>")
-                .append("</div>");
+
+        stringBuilder.append("</div>").append("</div>");
 
         return stringBuilder.toString();
     }
@@ -292,7 +341,7 @@ public class XmlMapping {
     }
 
 
-    private static String elementDiv(Element element, String operation) {
+    private static String elementDiv(Element element, String operation, String route) {
 
 
         StringBuilder stringBuilder = new StringBuilder();
@@ -303,10 +352,10 @@ public class XmlMapping {
         for (Element child : element.getChildren()) {
             switch (child.getName()) {
                 case "input":
-                    stringBuilder.append(elementInput(child, operation,""));
+                    stringBuilder.append(elementInput(child, operation, ""));
                     break;
                 case "select":
-                    stringBuilder.append(elementSelect(child, operation));
+                    stringBuilder.append(elementSelect(child, operation, route));
                     break;
                 case "button":
                     stringBuilder.append(elementButton(child, operation));
@@ -356,12 +405,17 @@ public class XmlMapping {
     /**
      * 根据xml生成侧边栏菜单
      *
-     * @param token  用户的token
-     * @param server 当前服务器
+     * @param username 用户的token
+     * @param server   当前服务器
      */
-    public static String createAsideString(String token, String server) {
-        List<String> urlList = VerifyDatabaseHelper.selectAuthority(token, server);
+    public static String createAsideString(String username, String server) {
+        List<String> urlList = VerifyDatabaseHelper.selectAuthority(username, server);
         StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("<div style=\"padding-left:100px\"><a  type=\"button\" class=\"btn " +
+                "btn-primary " +
+                "btn-xs \" style=\"color:white\" href=\"http://"+ entryHost+"/main/login/chooseServer\" " +
+                ">返回主界面</a></div>");
         //从外层div开始 div类是navigation-menu-body
         //这是最外层的ul
         stringBuilder.append("<ul>");
@@ -371,7 +425,8 @@ public class XmlMapping {
             if (!urlList.contains(entry.getValue().getAttributeValue("authorization"))) {
                 continue;
             }
-            if ("playerManage".equals(entry.getKey()) && !"root".equals(VerifyDatabaseHelper.tokenToUsername(token))) {
+            if ("playerManage".equals(entry.getKey()) && !"root"
+                    .equals(VerifyDatabaseHelper.tokenToUsername(username))) {
                 continue;
             }
             stringBuilder.append("<li> <a href=\"");
@@ -402,7 +457,8 @@ public class XmlMapping {
             stringBuilder.append("</ul>");
             stringBuilder.append("</li>");
         }
-        if (VerifyDatabaseHelper.isSupLevel(VerifyDatabaseHelper.tokenToUsername(token))) {
+
+        if (Auth.getAuthMap().get(username)!=null&&"sup".equals(Auth.getAuthMap().get(username).getLevel())) {
             stringBuilder.append("<li><a href=\"playerManage\"><i class=\"nav-link-icon\" data-feather=\"home\"></i>")
                     .append(TYPE_ELEMENT.get("playerManage").getAttributeValue("name")).append("</a><ul>");
             for (Element element : TYPE_ELEMENT.get("playerManage").getChildren()) {

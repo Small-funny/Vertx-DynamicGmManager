@@ -45,17 +45,7 @@
 <!-- end::preloader -->
 <!-- Left Panel -->
 <aside class="navigation left-panel" style="height: 100%;top: 0;width: 16%">
-    <div class="row form-group" style="height:5%; width:100%">
-        <form id="serverSelect" class="form-horizontal" method="get" style="width:100%">
-            <div class="col-12 col-md-9" style="margin-left:20% ;top: 50%;">
-                <select id="selServer" class="form-control" th:utext="${servers}" onchange="submitForm();">
 
-                </select>
-            </div>
-
-        </form>
-    </div>
-    <!-- begin::logo -->
     <div id="logo" style="padding-top: 50px;padding-bottom: 50px">
 
         <img class="logo" src="/webroot/assets/media/image/logo.png" alt="logo">
@@ -71,13 +61,6 @@
         <div>
             <h5>Merge</h5>
             <div class="text-muted" id="operatorName" th:text="${username}"></div>
-            <ul class="nav">
-                <li class="nav-item">
-                    <a onclick="logout()" class="btn nav-link bg-danger-bright" title="Logout" data-toggle="tooltip">
-                        <i data-feather="log-out"></i>
-                    </a>
-                </li>
-            </ul>
         </div>
     </header>
     <!-- end::navigation header -->

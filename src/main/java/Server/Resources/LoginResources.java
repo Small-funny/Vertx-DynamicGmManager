@@ -1,10 +1,10 @@
 package Server.Resources;
 
 import Server.DatabaseHelper.VerifyDatabaseHelper;
-import Server.Verify.VerifyCode;
+import Server.SecretKey.RSAUtil;
 import Server.Verify.Cache;
 import Server.Verify.JwtUtils;
-import Server.SecretKey.RSAUtil;
+import Server.Verify.VerifyCode;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import io.vertx.core.AbstractVerticle;
 import io.vertx.core.json.JsonObject;
@@ -33,11 +33,17 @@ public class LoginResources extends AbstractVerticle {
         router.get("/login/authenticity").handler(this::authenticity);
         router.get("/login/verifyCodePic").handler(this::verifyCodePic);
         router.post("/login/createToken").handler(this::createToken);
+        router.get("/login/testLogin").handler(context -> {
+            context.response().setStatusCode(HttpResponseStatus.OK.code())
+                    .sendFile("src/main/java/resources/templates" +
+                            "/test.html");
+        });
+
     }
 
     /**
      * 发送静态登录页面
-     * 
+     *
      * @param routingContext
      */
     private void login(RoutingContext routingContext) {
@@ -49,7 +55,7 @@ public class LoginResources extends AbstractVerticle {
 
     /**
      * 登出后的数据处理
-     * 
+     *
      * @param routingContext
      */
     private void logout(RoutingContext routingContext) {
@@ -62,7 +68,7 @@ public class LoginResources extends AbstractVerticle {
 
     /**
      * 发送公钥
-     * 
+     *
      * @param routingContext
      */
     private void sendPublicKey(RoutingContext routingContext) {
@@ -75,7 +81,7 @@ public class LoginResources extends AbstractVerticle {
 
     /**
      * 为新登录的用户创建token
-     * 
+     *
      * @param routingContext
      */
     private void createToken(RoutingContext routingContext) {
@@ -93,7 +99,8 @@ public class LoginResources extends AbstractVerticle {
         password = RSAUtil.decrypt(privateKey, password);
 
         if (VerifyDatabaseHelper.verifyIsExisted(username, password)) {
-            String newToken = jwtAuth.generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(TOKEN_TIME_LIMIT));
+            String newToken = jwtAuth
+                    .generateToken(new JsonObject(), new JWTOptions().setExpiresInSeconds(TOKEN_TIME_LIMIT));
             routingContext.response().setStatusCode(HttpResponseStatus.OK.code()).end(newToken);
 
             VerifyDatabaseHelper.updateToken(username, newToken);
@@ -108,7 +115,7 @@ public class LoginResources extends AbstractVerticle {
 
     /**
      * 登录验证
-     * 
+     *
      * @param routingContext
      */
     private void authenticity(RoutingContext routingContext) {
@@ -138,7 +145,7 @@ public class LoginResources extends AbstractVerticle {
 
     /**
      * 发送验证码图片
-     * 
+     *
      * @param routingContext
      */
     private void verifyCodePic(RoutingContext routingContext) {
@@ -182,7 +189,7 @@ public class LoginResources extends AbstractVerticle {
 
     /**
      * 发送验证码
-     * 
+     *
      * @param routingContext
      */
     private void verifyCode(RoutingContext routingContext) {
@@ -194,7 +201,7 @@ public class LoginResources extends AbstractVerticle {
 
     /**
      * 获取文件内的字符串
-     * 
+     *
      * @param fileName
      * @return
      */

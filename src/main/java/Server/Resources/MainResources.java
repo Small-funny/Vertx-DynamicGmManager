@@ -1,18 +1,20 @@
 package Server.Resources;
 
+import Server.Automation.RC4Util;
 import Server.Automation.XmlMapping;
 import Server.DatabaseHelper.VerifyDatabaseHelper;
 import Server.Verify.JwtUtils;
 import com.alibaba.fastjson.JSON;
-import io.vertx.core.AbstractVerticle;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.web.Cookie;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.templ.thymeleaf.ThymeleafTemplateEngine;
 import org.jdom2.Element;
 
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,7 +26,7 @@ import static Server.DatabaseHelper.ManagerDatabaseHelper.allUser;
  * 系统主页路由
  */
 @SuppressWarnings("unchecked")
-public class MainResources extends AbstractVerticle {
+public class MainResources {
 
     ThymeleafTemplateEngine thymeleafTemplateEngine;
     static String serverString;
@@ -51,12 +53,13 @@ public class MainResources extends AbstractVerticle {
      * @param ctx
      */
     private void home(RoutingContext ctx) {
-        serverString = XmlMapping.createServerString("0");
+        //serverString = XmlMapping.createServerString("0");
+        System.out.println("body::" + ctx.getBodyAsString());
         String username = VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(ctx));
         var obj = new JsonObject();
         obj.put("sidePanal", "");
         obj.put("content", "");
-        obj.put("servers", serverString);
+        obj.put("servers", "");
         obj.put("username", username);
         thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
             ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
@@ -70,18 +73,50 @@ public class MainResources extends AbstractVerticle {
      */
     private void mainPage(RoutingContext ctx) {
         var obj = new JsonObject();
+        System.out.println("body" + ctx.getBodyAsString());
+        String body = ctx.getBodyAsString();
+        String token = "default";
+//        String token = body.split("=")[1];
+        Cookie cookie = ctx.getCookie("token");
+        if ("".equals(body) || body == null) {
+            if (cookie == null || cookie.getValue() == null || "".equals(cookie.getValue())) {
+                // TODO: 2021/4/28 FIFAdenglu
+            } else {
+                token = cookie.getValue().split("=")[1];
+            }
+        } else {
+            if (cookie == null || cookie.getValue() == null || "".equals(cookie.getValue())) {
+                // TODO: 2021/4/28 body bushi token
 
-        //侧边栏菜单
-        asideString = XmlMapping.createAsideString(JwtUtils.findToken(ctx), ctx.request().getParam("serverRouter"));
-        String username = VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(ctx));
-        obj.put("sidePanal", asideString);
-        String serverRouter = ctx.request().getParam("serverRouter");
-        serverString = XmlMapping.createServerString(serverRouter);
-        obj.put("servers", serverString);
-        obj.put("username", username);
-        thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
-            ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
-        });
+                token = body.split("=")[1];
+                Cookie newCookie = Cookie.cookie("token", body);
+                newCookie.setMaxAge(1800);
+                newCookie.setPath("/");
+                ctx.addCookie(newCookie);
+            } else {
+                token = body.split("=")[1];
+            }
+        }
+        // TODO: 2021/4/28 jie mi token
+
+
+        System.out.println(token);
+        try {
+            String code = RC4Util.decryRC4(token);
+            String username = code.split("&")[0];
+            asideString = XmlMapping.createAsideString(username, ctx.request().getParam("serverRouter"));
+            //String username = VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(ctx));
+            obj.put("sidePanal", asideString);
+            String serverRouter = ctx.request().getParam("serverRouter");
+            serverString = XmlMapping.createServerString(serverRouter);
+            obj.put("servers", serverString);
+            obj.put("username", username);
+            thymeleafTemplateEngine.render(obj, "src/main/java/resources/templates/home.html", bufferAsyncResult -> {
+                ctx.response().putHeader("content-type", "text/html").end(bufferAsyncResult.result());
+            });
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -124,7 +159,7 @@ public class MainResources extends AbstractVerticle {
         String host = SERVER_ELEMENT.get(server).getAttributeValue("host");
         String suffix = SERVER_ELEMENT.get(server).getAttributeValue("url");
         int port = Integer.parseInt(SERVER_ELEMENT.get(server).getAttributeValue("port"));
-        if ("null".equals(operation)||operation==null) {
+        if ("null".equals(operation) || operation == null) {
             ctx.response().end(" ");
         } else {
             JsonObject jsonObject = new JsonObject();
@@ -158,7 +193,9 @@ public class MainResources extends AbstractVerticle {
             if ("selectUserList".equals(operation)) {
                 List<String> users = allUser();
                 System.out.println(PAGE_ELEMENT.get(page).getAttributeValue("listId"));
-                String argName = PAGE_ELEMENT.get(page).getAttributeValue("listId") == null ? PAGE_ELEMENT.get(page).getChild("form").getChild("input").getAttributeValue("id") : PAGE_ELEMENT.get(page).getAttributeValue("listId");
+                String argName = PAGE_ELEMENT.get(page).getAttributeValue("listId") == null ? PAGE_ELEMENT.get(page)
+                        .getChild("form").getChild("input").getAttributeValue("id") : PAGE_ELEMENT.get(page)
+                        .getAttributeValue("listId");
                 String argNameName = null;
                 for (Element formE : PAGE_ELEMENT.get(page).getChildren()) {
                     for (Element inputE : formE.getChildren()) {
@@ -186,7 +223,9 @@ public class MainResources extends AbstractVerticle {
                 }
                 String finalArgNameName = argNameName;
                 webClient.post(port, host, suffix).sendJsonObject(jsonObject, res -> {
-                    ctx.response().end(XmlMapping.createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data"), argName, finalArgNameName));
+                    ctx.response().end(XmlMapping
+                            .createConfigsList(JSON.parseObject(res.result().bodyAsString()).getString("data"), argName,
+                                    finalArgNameName));
                 });
             }
         }

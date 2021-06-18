@@ -65,7 +65,7 @@ public class VerifyDatabaseHelper {
         List<Element> data = loadDatabase().getChildren();
 
         for (Element user : data) {
-            Element tkElement = user.getChildren().get(INDEX_OF_TOKEN);
+            Element tkElement = user.getChildren().get(0);
             Element authElement = user.getChildren().get(INDEX_OF_AUTH);
             if (token.equals(tkElement.getAttributeValue(DATA_VALUE))) {
                 for (Element serverAuth : authElement.getChildren()) {

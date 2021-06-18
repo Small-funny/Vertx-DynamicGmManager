@@ -56,14 +56,21 @@ function createToken(usernameEncrypted, passwordEncrypted) {
             'password': passwordEncrypted
         }), success: function (data, result, xhr) {
             if (xhr.status === 200) {
+                console.log(usernameEncrypted)
+                console.log(passwordEncrypted)
                 document.cookie = "Token=" + data + ";Path=/"
                 if (document.getElementById("remember").checked === true) {
                     localStorage.setItem("username", $("#username").val());
                     localStorage.setItem("password", $("#password").val());
+                    console.log("username")
+                    console.log(usernameEncrypted)
+                    console.log(passwordEncrypted)
                 } else {
                     $("#password")
                     localStorage.setItem("username", "");
                     localStorage.setItem("password", "");
+                    console.log(usernameEncrypted)
+                    console.log(passwordEncrypted)
                 }
                 window.location.href = "/main/home"
             }

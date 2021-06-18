@@ -1,23 +1,21 @@
 package Server.Resources;
 
+import Server.Automation.Auth;
 import Server.Automation.XmlMapping;
-import Server.DatabaseHelper.ManagerDatabaseHelper;
-import Server.DatabaseHelper.VerifyDatabaseHelper;
+import Server.Verify.Cache;
+import Server.Verify.JwtUtils;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.client.WebClient;
-import io.vertx.ext.web.client.WebClientOptions;
 import lombok.extern.slf4j.Slf4j;
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import Server.Verify.Cache;
-import Server.Verify.JwtUtils;
 
 import java.util.HashMap;
 
-import static Server.Automation.PageUtil.*;
+import static Server.Automation.PageUtil.SERVER_ELEMENT;
 
 /**
  * 数据转发接口
@@ -25,7 +23,6 @@ import static Server.Automation.PageUtil.*;
 @Slf4j
 @SuppressWarnings("unchecked")
 public class ForwardResources {
-
 
 
     public void registerResources(Router router, Vertx vertx) {
@@ -43,6 +40,8 @@ public class ForwardResources {
             String value = data.get(key);
             jsonObject.put(key, value);
         }
+//        String username = routingContext.request().getCookie("realUsername").getValue();
+//        data.put("operatorName", username);
         String url = jsonObject.getString("route");
         String token = JwtUtils.findToken(routingContext);
         Cache.setArgs(token, data);
@@ -52,22 +51,22 @@ public class ForwardResources {
         String host = SERVER_ELEMENT.get(server).getAttributeValue("host");
         String suffix = SERVER_ELEMENT.get(server).getAttributeValue("url");
         int port = Integer.parseInt(SERVER_ELEMENT.get(server).getAttributeValue("port"));
-       WebClient webClient = WebClient.create(routingContext.vertx());
+        WebClient webClient = WebClient.create(routingContext.vertx());
         webClient.post(port, host, suffix).sendJsonObject(jsonObject, ar -> {
             if (ar.succeeded()) {
 
                 JSONObject jsonResult = JSON.parseObject(ar.result().bodyAsString());
                 String type = jsonResult.getString("type");
                 String resultData = jsonResult.getString("data");
-                if("downloadFile".equals(type)){
+                if ("downloadFile".equals(type)) {
                     routingContext.response().end(resultData);
                 }
                 boolean auth;
                 if (server != null) {
-                    auth = ManagerDatabaseHelper
-                            .selectAuthList(VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(routingContext)),
-                                    "btn", server)
-                            .contains(page);
+//                    auth = ManagerDatabaseHelper
+//                            .selectAuthList(VerifyDatabaseHelper.tokenToUsername(JwtUtils.findToken(routingContext)), "btn", server).contains(page);
+                    auth = Auth.getAuthMap().get(data.get("operatorName")).getButtonList().contains(page);
+
                 } else {
                     auth = true;
                 }
@@ -76,9 +75,10 @@ public class ForwardResources {
                 routingContext.response().end(returnString);
             } else {
                 log.info("Wrong :" + ar.cause().getMessage());
-                String returnString = XmlMapping.createReturnString("return","请求失败",false,null);
+                String returnString = XmlMapping.createReturnString("return", "请求失败", false, null);
                 routingContext.response().end(returnString);
             }
         });
+        webClient.close();
     }
 }

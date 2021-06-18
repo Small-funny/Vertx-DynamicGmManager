@@ -1,15 +1,15 @@
 package Server.Resources;
 
-import java.util.*;
-
 import Server.Automation.XmlMapping;
-
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 import static Server.DatabaseHelper.ManagerDatabaseHelper.*;
 
@@ -61,8 +61,9 @@ public class ManagerResources {
             case OPERATION_ADD_USER:
                 username = data.get("username");
                 password = data.get("password");
+                server = data.get("route").split("/")[1];
                 List<String> userInfo = Arrays.asList(username, password, "token");
-                returnResult(routingContext, "return", addUser(userInfo));
+                returnResult(routingContext, "return", addUser(userInfo,server));
                 break;
             case OPERATION_UPDATE_USERINFO:
                 username = data.get("username");
@@ -73,7 +74,7 @@ public class ManagerResources {
                 username = data.get("username");
                 server = data.get("serverAuth");
                 authType = data.get("authType");
-                List<String>resultList = selectAuthList(username, authType, server);
+                List<String> resultList = selectAuthList(username, authType, server);
                 String hashStr = JSON.toJSONString(resultList);
                 returnResult(routingContext, "checkbox", hashStr);
                 break;
@@ -96,13 +97,14 @@ public class ManagerResources {
      * @param resultData
      */
     private void returnResult(RoutingContext routingContext, String type, String resultData) {
-        if ("table" .equals(type)) {
+        if ("table".equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("table", resultData, false, data));
-        } else if ("str" .equals(type)) {
-            routingContext.response().end(XmlMapping.createReturnString("str", JSON.toJSONString(resultData), false, data));
-        } else if ("return" .equals(type)) {
+        } else if ("str".equals(type)) {
+            routingContext.response()
+                    .end(XmlMapping.createReturnString("str", JSON.toJSONString(resultData), false, data));
+        } else if ("return".equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("return", resultData, false, null));
-        } else if ("checkbox" .equals(type)) {
+        } else if ("checkbox".equals(type)) {
             routingContext.response().end(XmlMapping.createReturnString("checkbox", resultData, false, data));
         }
     }

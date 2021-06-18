@@ -105,7 +105,8 @@ function changeAside(server, page, list, table, subList) {
 }
 
 function changeReturn(urls, fromValue, object, special) {
-
+    let inetIp = $("#inetIp").val()
+    let serverIp = 'http://' + inetIp +'/upload'
     if (special !== "null") {
         if (!confirm(special))
             return true;
@@ -133,7 +134,7 @@ function changeReturn(urls, fromValue, object, special) {
                                 formData.append("file",$(this).get(0).files[0]);
                                // formData.append("subPassword",$(this).parent().parent().parent().children().eq(1).children().eq(1).children().eq(0).val())
                                 $.ajax({
-                                    url:'http://10.0.104.186:9007/upload',//这个ip最好是外网ip 内网不知道为什么不好用
+                                    url:serverIp,//这个ip最好是外网ip 内网不知道为什么不好用
                                     dataType:'json',
                                     type:'POST',
                                     async: false,
@@ -394,6 +395,8 @@ function deleteDiv(object) {
     var obj = $(object)
     obj.parent().parent().parent().remove();
 }
+
+
 
 function uploadFile(url, page, arguments, section) {
 

@@ -1,5 +1,7 @@
 package Server.DatabaseHelper;
 
+import Server.Automation.PageUtil;
+import com.alibaba.fastjson.JSON;
 import org.jdom2.Element;
 
 import java.util.ArrayList;
@@ -7,9 +9,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import com.alibaba.fastjson.JSON;
 import static Server.DatabaseHelper.DbConstants.*;
-import static Server.DatabaseHelper.VerifyDatabaseHelper.*;
+import static Server.DatabaseHelper.VerifyDatabaseHelper.isExisted;
+import static Server.DatabaseHelper.VerifyDatabaseHelper.isSupLevel;
 
 /**
  * GM管理系统数据库基本操作帮助类
@@ -64,7 +66,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 删除用户所有相关记录
-     * 
+     *
      * @param username
      * @return
      */
@@ -74,6 +76,7 @@ public class ManagerDatabaseHelper {
             Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
             if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
                 rootData.removeContent(record);
+                break;
             }
         }
         saveXml(rootData);
@@ -94,11 +97,11 @@ public class ManagerDatabaseHelper {
 
     /**
      * 增加新用户
-     * 
+     *
      * @param userInfo
      * @return
      */
-    public static String addUser(List<String> userInfo) {
+    public static String addUser(List<String> userInfo,String server) {
         Element newUser = new Element("record");
         Element rootData = loadDatabase();
 //        userInfo.set(INDEX_OF_USERNAME, userInfo.get(INDEX_OF_USERNAME).toLowerCase());
@@ -116,12 +119,12 @@ public class ManagerDatabaseHelper {
                 }
                 newUser.addContent(column);
             }
-            for (String server : DB_HEADER_SERVER) {
+            //for (String server : DB_HEADER_SERVER) {
                 Element auth = new Element("auth1");
                 auth.setAttribute(DATA_NAME, "server");
                 auth.setAttribute(DATA_VALUE, server);
                 newUser.getChildren().get(INDEX_OF_AUTH).addContent(auth);
-            }
+            //}
             rootData.addContent(newUser);
             saveXml(rootData);
             return "添加成功";
@@ -130,7 +133,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 修改用户密码
-     * 
+     *
      * @param username
      * @param password
      * @return
@@ -154,7 +157,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 按类型获取权限(列表)
-     * 
+     *
      * @param username
      * @param type
      * @param server
@@ -167,22 +170,26 @@ public class ManagerDatabaseHelper {
         for (Element record : data) {
             Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
             Element authElement = record.getChildren().get(INDEX_OF_AUTH);
-            Element serverElement = authElement.getChildren().get(DB_HEADER_SERVER.indexOf(server));
-            if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
-                for (Element auth : serverElement.getChildren()) {
-                    if (type.equals(auth.getAttributeValue(DATA_TYPE))) {
-                        result.add(auth.getAttributeValue(DATA_VALUE));
+            for (Element child : authElement.getChildren()) {
+                if (child.getAttributeValue("value").equals(server)) {
+                    if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
+                        for (Element auth : child.getChildren()) {
+                            if (type.equals(auth.getAttributeValue(DATA_TYPE))) {
+                                result.add(auth.getAttributeValue(DATA_VALUE));
+                            }
+                        }
+                        break;
                     }
                 }
-                break;
             }
+
         }
         return result;
     }
 
     /**
      * 获取所有权限(表格)
-     * 
+     *
      * @param username
      * @param server
      * @return
@@ -222,7 +229,7 @@ public class ManagerDatabaseHelper {
 
     /**
      * 获取权限类型
-     * 
+     *
      * @param username
      * @param server
      * @return key为权限，value为权限type
@@ -260,31 +267,35 @@ public class ManagerDatabaseHelper {
         for (Element record : rootData.getChildren()) {
             Element unameElement = record.getChildren().get(INDEX_OF_USERNAME);
             Element authElement = record.getChildren().get(INDEX_OF_AUTH);
-            Element serverElement = authElement.getChildren().get(DB_HEADER_SERVER.indexOf(server));
-            if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
-                String type = authType.equals(TYPE_AUTH_CATALOG) ? TYPE_AUTH_CONTROL:TYPE_AUTH_CATALOG;
-                System.out.println(type);
-                for (Element auth: serverElement.getChildren()) {
-                    if (auth.getAttributeValue(DATA_TYPE).equals(type)) {
-                        authSettingsOld.add(auth.getAttributeValue(DATA_VALUE));
+            for (Element child : authElement.getChildren()) {
+
+                if (child.getAttributeValue("value").equals(server)){
+                    if (username.toLowerCase().equals(unameElement.getAttributeValue(DATA_VALUE).toLowerCase())) {
+                    String type = authType.equals(TYPE_AUTH_CATALOG) ? TYPE_AUTH_CONTROL : TYPE_AUTH_CATALOG;
+                    System.out.println(type);
+                    for (Element auth : child.getChildren()) {
+                        if (auth.getAttributeValue(DATA_TYPE).equals(type)) {
+                            authSettingsOld.add(auth.getAttributeValue(DATA_VALUE));
+                        }
                     }
-                }
-                serverElement.removeContent();
-                for (String auth: authSettings) {
-                    Element newAuth = new Element("auth2");
-                    newAuth.setAttribute(DATA_TYPE, authType);
-                    newAuth.setAttribute(DATA_VALUE, auth);
-                    serverElement.addContent(newAuth);
-                }
-                for (String auth: authSettingsOld) {
-                    Element newAuth = new Element("auth2");
-                    newAuth.setAttribute(DATA_TYPE, type);
-                    newAuth.setAttribute(DATA_VALUE, auth);
-                    serverElement.addContent(newAuth);
-                }
+                    child.removeContent();
+                    for (String auth : authSettings) {
+                        Element newAuth = new Element("auth2");
+                        newAuth.setAttribute(DATA_TYPE, authType);
+                        newAuth.setAttribute(DATA_VALUE, auth);
+                        child.addContent(newAuth);
+                    }
+                    for (String auth : authSettingsOld) {
+                        Element newAuth = new Element("auth2");
+                        newAuth.setAttribute(DATA_TYPE, type);
+                        newAuth.setAttribute(DATA_VALUE, auth);
+                        child.addContent(newAuth);
+                    }
+                }}
             }
         }
         saveXml(rootData);
+        PageUtil.generateAuthMap();
         return "修改成功";
     }
 }
